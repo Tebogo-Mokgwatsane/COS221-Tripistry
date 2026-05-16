@@ -1,0 +1,94 @@
+nav {
+    position: fixed;
+    top: 0;
+    z-index: 100000;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(1px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+.navbar {
+    display: flex;
+    align-items: center;
+    width: 80%;
+    justify-content: space-between;
+    margin: 0 auto;
+    padding: 18px 0;
+}
+
+ul {
+    list-style-type: none;
+    display: flex;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.logo p {
+    font-weight: 600;
+    font-size: 23px;
+}
+
+.img-container {
+    background-color: rgb(47, 47, 134);
+    padding: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+    
+}
+
+.img-container img {
+    width: 24px;
+    height: 24px;
+}
+
+.middle-section {
+    
+}
+
+.middle-section ul {
+    display: flex;
+    gap: 30px;
+}
+
+.middle-section a {
+    font-family: sans-serif;
+    font-weight: 500;
+    color: rgb(92, 92, 92);
+    font-size: 17px;
+    text-decoration: none;
+}
+
+
+.login-section {
+    display: flex;
+    gap: 20px;
+}
+
+.login-section a {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    cursor: pointer;
+}
+
+
+.sign-in-txt {
+    font-family: sans-serif;
+    font-size: 15px;
+}
+.login-section img {
+    width: 18px;
+}
+
+.signup-btn {
+    font-family: sans-serif;
+    background-color: rgb(255, 119, 0);
+    padding: 8px 14px;
+    border-radius: 15px;
+}
