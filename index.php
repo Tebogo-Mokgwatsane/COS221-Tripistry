@@ -10,36 +10,7 @@
     </head>
 </head>
 <body style="min-height: 10000px;">
-    <nav>
-        <div class="navbar">
-            <div class="logo">
-                <div class="img-container">
-                    <img src="img/icons/compass.svg" alt="Compass Logo">
-                </div>
-                <p>Tripistry</p>
-            </div>
-            <div class="middle-section">
-                <ul>
-                    <li>
-                        <a href="">Home</a>
-                    </li>
-                    <li>
-                        <a href="">Browse</a>
-                    </li>
-                    <li>
-                        <a href="">Favourites</a>
-                    </li>
-                </ul>
-            </div>
-            <div class="login-section">
-                <a>
-                    <img src="img/icons/user.svg" alt="User Icon">
-                    <p class="sign-in-txt">Sign in</p>
-                </a>
-                <a class="signup-btn">Join Tripistry</a>
-            </div>
-        </div>
-    </nav>
+    <?php include("navbar.php"); ?>
 
     <p style="margin-top: 200px; background-color: blue;"> Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit magni quis dolorem repellat sapiente explicabo laborum minus quaerat, aperiam perspiciatis ipsa ea, tempore maiores, fugit provident fuga a aut. Optio iste sapiente culpa a quibusdam obcaecati minima rem consectetur id cum dolores et vitae explicabo saepe quos consequatur earum, distinctio exercitationem, quisquam reiciendis voluptatum architecto autem provident aut. Mollitia, perspiciatis quo. Fugit quos optio culpa at repellendus nostrum impedit possimus mollitia! Minus numquam nostrum, alias possimus rerum rem molestias accusamus quod delectus eos est, cumque culpa autem eius doloribus. Illo sunt debitis ab delectus voluptatibus. Pariatur facilis exercitationem reiciendis odio, eos ex repellendus necessitatibus expedita consequuntur quam labore autem nemo molestias doloremque voluptatem, quibusdam quo nesciunt! Saepe, officiis inventore ut quae temporibus, deleniti facilis ratione voluptates dolorum voluptatibus maxime suscipit alias, veniam architecto reiciendis quisquam. Dolores ex natus eos tenetur autem repellat. Suscipit veritatis asperiores illo. Accusamus qui incidunt, consequuntur maxime unde eius possimus illo nihil quidem eaque quos a soluta architecto animi perferendis. Ad aliquam id numquam ullam modi voluptatibus voluptas sit cum. Ad, reprehenderit! Amet excepturi, sequi sit cupiditate error, expedita sunt dicta minima corrupti possimus tempora a unde, officia doloribus est laudantium animi nemo impedit maxime. Consectetur non natus ipsam facere beatae laboriosam, molestias laborum aspernatur aliquid ipsa labore libero quidem maxime excepturi commodi quasi. Explicabo aperiam, laborum nesciunt assumenda, non accusamus aspernatur adipisci, nihil ratione itaque alias voluptatum ab maxime fugiat reprehenderit dignissimos. Aliquam ab minima delectus. Harum saepe ad sit nam perferendis impedit excepturi, doloremque similique quis delectus dolorum voluptate aliquid ratione voluptatibus rem quam doloribus consequatur error consectetur non minus possimus molestias. Nostrum animi nam non consequatur harum incidunt iste. Laborum sunt, ut vel dolorum exercitationem repellat quam eos hic necessitatibus fugiat eveniet et sit aspernatur enim doloremque maiores, nam saepe incidunt magni ab in ratione. Ab consectetur a facilis nam cupiditate dolor perferendis hic, voluptas ea reprehenderit molestiae harum in obcaecati nihil sequi consequuntur fuga placeat alias dignissimos fugit, iusto reiciendis animi eum quam! Laudantium fugiat facere laborum odio maxime quas ea excepturi odit numquam aut. Reiciendis quaerat earum deleniti rem cumque provident et quas alias, repellat saepe beatae libero facilis, quisquam nesciunt sapiente blanditiis pariatur? Repellendus ab dolore sequi. Atque quia adipisci earum dolorum quis. Alias cumque eligendi qui ea debitis explicabo vero ut ex, recusandae aliquam. Minus atque rerum quisquam architecto, culpa, totam dicta sit quia delectus ipsum accusantium velit ex neque veritatis ipsa assumenda blanditiis est corporis illum expedita quae! Odit necessitatibus non, reprehenderit recusandae dolorum officiis beatae id ducimus! Est, iure recusandae labore incidunt commodi necessitatibus magnam ex soluta quidem, eum voluptate earum eligendi consequuntur quas nulla maiores consequatur et debitis quaerat minus blanditiis voluptatibus saepe fugit vero? Vel doloremque fugiat, quidem laudantium officiis velit enim molestias alias quisquam saepe libero ad placeat natus odit sed blanditiis, mollitia earum ducimus repellendus dolore pariatur. Dolorum omnis quod culpa iste consequatur, molestias obcaecati? Animi eos earum quibusdam sequi laudantium reprehenderit, aliquam aperiam odio debitis corporis obcaecati accusamus harum tempore laborum dolorem?</p>
     

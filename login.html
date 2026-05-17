@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tripistry - Sign in to your account</title>
+    <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <form class="container" id="form">
+        <div class="switch">
+            <div class="slider" id="slider"></div>
+            <button type="button" class="tab active">
+                <img src="img/icons/plane-black.svg" alt="plane" class="icon" id="black-plane">
+                <img src="img/icons/plane-gray.svg" alt="plane" class="icon" id="gray-plane">
+                <p>Traveller</p>
+            </button>
+            <button type="button" class="tab">
+                <img src="img/icons/briefcase-black.svg" alt="plane" class="icon" id="black-brief">
+                <img src="img/icons/briefcase-gray.svg" alt="plane" class="icon" id="gray-brief">
+                <p>Agency</p>
+            </button>
+        </div>
+        <div class="descr">
+            <h1>Welcome back</h1>
+            <p>Sign in to continue with your journey.</p>
+        </div>
+        <div class="field">
+            <label for="email">EMAIL</label>
+            <input type="email" required name="email" id="email" placeholder="email@example.com">
+            <p class="error" id="email-error"></p>
+        </div>
+        <div class="field">
+            <label for="password">PASSWORD</label>
+            <input type="password" required id="password" name="password" placeholder="••••••••">
+            <p class="error" id="password-error"></p>
+        </div>
+        <button type="submit" class="signin-btn">
+            <p>Sign in</p>
+            <img src="img/icons/arrow-right.svg" alt="arrow-right" class="icon">
+        </button>
+        <div class="instead">
+            <p>New user?</p>
+            <a href="signup.html">Create an account</a>
+        </div>
+    </form>
+    <script src="scripts/login.js"></script>
+</body>
+</html>
