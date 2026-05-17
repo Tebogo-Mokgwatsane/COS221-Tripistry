@@ -20,11 +20,11 @@
                 </ul>
             </div>
             <div class="login-section">
-                <a>
+                <a href="login.html">
                     <img src="img/icons/user.svg" alt="User Icon">
                     <p class="sign-in-txt">Sign in</p>
                 </a>
-                <a class="signup-btn">Join Tripistry</a>
+                <a href="signup.html" class="signup-btn">Join Tripistry</a>
             </div>
         </div>
     </nav>
