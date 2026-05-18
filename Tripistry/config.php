@@ -1,7 +1,7 @@
 <?php
 
 $host = "sql103.infinityfree.com";
-$dbname = "if0_41937671_XXX";//Since were hosting and testing on infinityfree.com
+$dbname = "if0_41937671_tripistry";//Since were hosting and testing on infinityfree.com
 $user = "if0_41937671";
 
 if (defined('USE_LOCAL_CONFIG') && USE_LOCAL_CONFIG) {
