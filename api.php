@@ -92,7 +92,7 @@ class API {
         if ($success) {
             header("Content-Type: text/html; charset=utf-8");
             echo "<script>
-                prompt('🧳Registration Successful!\\n);
+                prompt('🧳Registration Successful!\\n');
                 window.location.href = 'login.html';
             </script>";
             exit;
