@@ -48,7 +48,7 @@ class API {
         ]);
         exit;
     }
-    
+
     // Registering user ====================
     private function registerUser($data) {
         if (empty($data['email']) || empty($data['password']) || empty($data['user_type'])) {
@@ -97,12 +97,9 @@ class API {
         $apiKey = bin2hex(random_bytes(16));
 
         // Insert user
-        /*$stmt = $this->mysqli->prepare("INSERT INTO user (username, email, password_hash, user_type, api_key)
+        $stmt = $this->mysqli->prepare("INSERT INTO user (username, email, password_hash, user_type, api_key)
                                      VALUES (?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssss", $data['username'], $data['email'], $hashed, $data['user_type'], $apiKey);*/
-        $stmt = $this->mysqli->prepare("INSERT INTO user (username, email, password_hash, user_type)
-                                     VALUES (?, ?, ?, ?)");
-        $stmt->bind_param("ssss", $data['username'], $data['email'], $hashed, $data['user_type']);
+        $stmt->bind_param("sssss", $data['username'], $data['email'], $hashed, $data['user_type'], $apiKey);
         $success = $stmt->execute();
         $stmt->close();
 
@@ -127,12 +124,7 @@ class API {
         $stmt->close();
 
         if (!$user || !password_verify($data['password'], $user['password_hash'])) {
-            if (!$user){
-                $this->jsonResponse("error", "Invalid email");
-            }
-            else {
-                $this->jsonResponse("error", "Invalid password");
-            }
+            $this->jsonResponse("error", "Invalid Credentials");
         }
 
         session_start();
@@ -142,7 +134,8 @@ class API {
         //Return API key in response
         $this->jsonResponse("success", "Login successful", [
             "apikey" => $user['api_key'],
-            "username"   => $user['username']
+            "username"   => $user['username'],
+            "user_type"   => $user['user_type']
         ]);
     }}
  
