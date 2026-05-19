@@ -22,23 +22,64 @@ form.addEventListener("submit", (e) => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
     
-    if (fname.value.length < 2 || lname.value.length < 2){
+    let isValid = true;
+
+    if (fname.value.trim().length < 2 || lname.value.trim().length < 2){
         fnameError.textContent = "First and last name need to be at least 2 characters long"
-    } else {
-        fnameError.textContent = "";
-        if (!emailRegex.test(email.value)){
-            emailError.textContent = "Enter a valid email address";
+        isValid = false;
+    } 
+    else {fnameError.textContent = "";}
+
+    if (!emailRegex.test(email.value)){
+        emailError.textContent = "Enter a valid email address";
+        isValid = false;
+    } 
+    else {emailError.textContent = "";}
+
+    if (!passwordRegex.test(password.value)){
+        passwordError.textContent = "Password should be at least 8 characters long, contain upper and lower case letters, at least one digit and one symbol."
+        passwordError.style.marginBottom = "15px";
+        isValid = false;
+    } 
+
+    if (!isValid) return;
+
+    //  sending data to api
+    const formData = {
+        type: "Register",
+        username: fname.value.trim() + " " + lname.value.trim(),
+        email: email.value.trim(),
+        password: password.value,
+        user_type: activeTab
+    };
+
+    fetch('api.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.status === "success") {
+
+            //localStorage??
+            localStorage.setItem('user', JSON.stringify({
+                username: formData.username,
+                email: formData.email,
+                user_type: formData.user_type
+            }));
+
+            alert("🧳Registration Successful!");
+            window.location.href = "login.html";
         } else {
-            emailError.textContent = "";
-            if (!passwordRegex.test(password.value)){
-                passwordError.textContent = "Password should be at least 8 characters long, contain upper and lower case letters, at least one digit and one symbol."
-                passwordError.style.marginBottom = "15px";
-            } else {
-                
-            }
+            alert(data.message || "Registration failed");
         }
-    }
-})
+    })
+    .catch(err => {
+        console.error(err);
+        alert("Error. Please try again.");
+    });
+});
 
 tabs.forEach((tab, index) => {
 
