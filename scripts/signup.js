@@ -14,7 +14,7 @@ const lnameError = document.getElementById("lname-error");
 const emailError = document.getElementById("email-error");
 const passwordError = document.getElementById("password-error");
 
-let activeTab = "traveller";
+let activeTab = "traveller";// or travel_agent. currently only traveller reflects in db
 
 form.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -50,7 +50,7 @@ form.addEventListener("submit", (e) => {
         username: fname.value.trim() + " " + lname.value.trim(),
         email: email.value.trim(),
         password: password.value,
-        user_type: activeTab
+        user_type: activeTab // "traveller" or "travel_agent" based on active tab
     };
 
     fetch('api.php', {
@@ -94,7 +94,7 @@ tabs.forEach((tab, index) => {
             grayPlane.style.display = "inline-block";
             grayBrief.style.display = "none";
             blackBrief.style.display = "inline-block";
-            activeTab = "agency";
+            activeTab = "agency";//"travel_agent"; as per db
 
         } else {
             slider.classList.remove("right");
