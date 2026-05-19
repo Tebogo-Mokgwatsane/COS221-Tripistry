@@ -56,6 +56,109 @@
             </div>
         </div>
     </div>
+    <div class="section reviews">
+        <p class="r">REVIEWS</p>
+        <h1>Loved by travellers </h1>
+        <div class="reviews-section-cards">
+            <div class="card">
+                <div class="stars">
+                    <svg width="20" height="20" viewBox="0 0 100 100">
+                        <polygon points="50,5 61,35 95,35 67,57 78,90 50,72 22,90 33,57 5,35 39,35" fill="orange" stroke="black" stroke-width="0"/>
+                    </svg>
+                    <svg width="20" height="20" viewBox="0 0 100 100">
+                        <polygon points="50,5 61,35 95,35 67,57 78,90 50,72 22,90 33,57 5,35 39,35" fill="orange" stroke="black" stroke-width="0"/>
+                    </svg>
+                    <svg width="20" height="20" viewBox="0 0 100 100">
+                        <polygon points="50,5 61,35 95,35 67,57 78,90 50,72 22,90 33,57 5,35 39,35" fill="orange" stroke="black" stroke-width="0"/>
+                    </svg>
+                    <svg width="20" height="20" viewBox="0 0 100 100">
+                        <polygon points="50,5 61,35 95,35 67,57 78,90 50,72 22,90 33,57 5,35 39,35" fill="orange" stroke="black" stroke-width="0"/>
+                    </svg>
+                    <svg width="20" height="20" viewBox="0 0 100 100">
+                        <polygon points="50,5 61,35 95,35 67,57 78,90 50,72 22,90 33,57 5,35 39,35" fill="orange" stroke="black" stroke-width="0"/>
+                    </svg>
+                </div>
+                <p class="review">"Tripistry made comparing 30+ packages effortless. I saved R5000 on my trip to Cape Town"</p>
+                <div class="details">
+                    <p class="initials">JD</p>
+                    <div>
+                        <p class="username">John Doe</p>
+                        <p class="vacation-type">Solo Trip</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="stars">
+                    <svg width="20" height="20" viewBox="0 0 100 100">
+                        <polygon points="50,5 61,35 95,35 67,57 78,90 50,72 22,90 33,57 5,35 39,35" fill="orange" stroke="black" stroke-width="0"/>
+                    </svg>
+                    <svg width="20" height="20" viewBox="0 0 100 100">
+                        <polygon points="50,5 61,35 95,35 67,57 78,90 50,72 22,90 33,57 5,35 39,35" fill="orange" stroke="black" stroke-width="0"/>
+                    </svg>
+                    <svg width="20" height="20" viewBox="0 0 100 100">
+                        <polygon points="50,5 61,35 95,35 67,57 78,90 50,72 22,90 33,57 5,35 39,35" fill="orange" stroke="black" stroke-width="0"/>
+                    </svg>
+                    <svg width="20" height="20" viewBox="0 0 100 100">
+                        <polygon points="50,5 61,35 95,35 67,57 78,90 50,72 22,90 33,57 5,35 39,35" fill="orange" stroke="black" stroke-width="0"/>
+                    </svg>
+                    <svg width="20" height="20" viewBox="0 0 100 100">
+                        <polygon points="50,5 61,35 95,35 67,57 78,90 50,72 22,90 33,57 5,35 39,35" fill="orange" stroke="black" stroke-width="0"/>
+                    </svg>
+                </div>
+                <p class="review">"The transparent pricing and verified reviews helped us pick the perfect family resort."</p>
+                <div class="details">
+                    <p class="initials">MJ</p>
+                    <div>
+                        <p class="username">Michael Jackson</p>
+                        <p class="vacation-type">Family Trip</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="stars">
+                    <svg width="20" height="20" viewBox="0 0 100 100">
+                        <polygon points="50,5 61,35 95,35 67,57 78,90 50,72 22,90 33,57 5,35 39,35" fill="orange" stroke="black" stroke-width="0"/>
+                    </svg>
+                    <svg width="20" height="20" viewBox="0 0 100 100">
+                        <polygon points="50,5 61,35 95,35 67,57 78,90 50,72 22,90 33,57 5,35 39,35" fill="orange" stroke="black" stroke-width="0"/>
+                    </svg>
+                    <svg width="20" height="20" viewBox="0 0 100 100">
+                        <polygon points="50,5 61,35 95,35 67,57 78,90 50,72 22,90 33,57 5,35 39,35" fill="orange" stroke="black" stroke-width="0"/>
+                    </svg>
+                    <svg width="20" height="20" viewBox="0 0 100 100">
+                        <polygon points="50,5 61,35 95,35 67,57 78,90 50,72 22,90 33,57 5,35 39,35" fill="orange" stroke="black" stroke-width="0"/>
+                    </svg>
+                    <svg width="20" height="20" viewBox="0 0 100 100">
+                        <polygon points="50,5 61,35 95,35 67,57 78,90 50,72 22,90 33,57 5,35 39,35" fill="orange" stroke="black" stroke-width="0"/>
+                    </svg>
+                </div>
+                <p class="review">"From the first to the last day of my trip, every single detail was perfect"</p>
+                <div class="details">
+                    <p class="initials">AS</p>
+                    <div>
+                        <p class="username">Angelica Schuyler</p>
+                        <p class="vacation-type">Honeymoon</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="section cta">
+        <div class="cta-container">
+            <div class="cta-overlay"></div>
+            <div class="cta-content">
+                <h1>Your next chapter is waiting.</h1>
+                <p>Sign up as a Travellor to discover, or as an Agency to grow your business.</p>
+                <div class="buttons">
+                    <button id="traveller-btn">I'm a Traveller</button>
+                    <button id="agency-btn">I'm an Agency</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        &copy; 2026 Tripistry. All rights reserved.
+    </footer>
 
 </body>
 </html>
