@@ -765,3 +765,7 @@ SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
 -- Dump completed on 2026-05-13  0:43:09
+
+-- Add api_key column to user table
+ALTER TABLE user 
+ADD COLUMN api_key VARCHAR(32) UNIQUE NULL;
