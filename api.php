@@ -40,10 +40,23 @@ class API {
         }
     }
 
+    private function jsonResponse($status, $message, $data = []) {
+        echo json_encode([
+            "status" => $status,
+            "message" => $message,
+            "data" => $data
+        ]);
+        exit;
+    }
+    
     // Registering user ====================
     private function registerUser($data) {
-        if (empty($data['username']) || empty($data['email']) || empty($data['password']) || empty($data['user_type'])) {
+        if (empty($data['email']) || empty($data['password']) || empty($data['user_type'])) {
             $this->jsonResponse("error", "All fields are required");
+        }
+
+        if (empty($data['username'])) {
+            $this->jsonResponse("error", "Username is required");
         }
 
         if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
@@ -55,24 +68,25 @@ class API {
             $this->jsonResponse("error", "Password must be 8+ chars with upper, lower, number and symbol");
         }
 
-        // Check if email OR username exists
-        $stmt = $this->mysqli->prepare("SELECT user_id FROM user WHERE email = ? OR username = ?");
-        $stmt->bind_param("ss", $data['email'], $data['username']);
+        // Check if email exists
+        $stmt = $this->mysqli->prepare("SELECT user_id FROM user WHERE email = ?");
+        $stmt->bind_param("s", $data['email']);
         $stmt->execute();
         $stmt->store_result();
         if ($stmt->num_rows > 0) {
             $stmt->close();
-            $stmt->bind_param("s", $data['email']);
-            $stmt->execute();
-            $stmt->store_result();
-            if ($stmt->num_rows > 0) {
-                $stmt->close();
-                $this->jsonResponse("error", "Email already registered");
-            }
-            else {
-                $stmt->close();
-                $this->jsonResponse("error", "Username already taken");
-            }
+            $this->jsonResponse("error", "Email already registered");
+        }
+        $stmt->close();
+        
+        // Check if username already exists
+        $stmt = $this->mysqli->prepare("SELECT user_id FROM user WHERE username = ?");
+        $stmt->bind_param("s", $data['username']);
+        $stmt->execute();
+        $stmt->store_result();
+        if ($stmt->num_rows > 0) {
+            $stmt->close();
+            $this->jsonResponse("error", "Username already taken");
         }
         $stmt->close();
 
@@ -83,19 +97,17 @@ class API {
         $apiKey = bin2hex(random_bytes(16));
 
         // Insert user
-        $stmt = $this->mysqli->prepare("INSERT INTO user (username, email, password_hash, user_type, api_key)
+        /*$stmt = $this->mysqli->prepare("INSERT INTO user (username, email, password_hash, user_type, api_key)
                                      VALUES (?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssss", $data['username'], $data['email'], $hashed, $data['user_type'], $apiKey);
+        $stmt->bind_param("sssss", $data['username'], $data['email'], $hashed, $data['user_type'], $apiKey);*/
+        $stmt = $this->mysqli->prepare("INSERT INTO user (username, email, password_hash, user_type)
+                                     VALUES (?, ?, ?, ?)");
+        $stmt->bind_param("ssss", $data['username'], $data['email'], $hashed, $data['user_type']);
         $success = $stmt->execute();
         $stmt->close();
 
         if ($success) {
-            header("Content-Type: text/html; charset=utf-8");
-            echo "<script>
-                prompt('🧳Registration Successful!\\n');
-                window.location.href = 'login.html';
-            </script>";
-            exit;
+            $this->jsonResponse("success", "Registration Successful!");
         } else {
             $this->jsonResponse("error", "Failed to register user");
         }
