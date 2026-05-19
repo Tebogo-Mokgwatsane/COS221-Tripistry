@@ -7,6 +7,7 @@
     <head>
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/navbar.css">
+        <link rel="stylesheet" href="css/slideshow.css">
     </head>
 </head>
 <body >
