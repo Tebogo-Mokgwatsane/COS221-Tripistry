@@ -25,13 +25,18 @@ form.addEventListener("submit", (e) => {
     if (fname.value.length < 2 || lname.value.length < 2){
         fnameError.textContent = "First and last name need to be at least 2 characters long"
     } else {
-
-    }
-    if (!emailRegex.test(email.value)){
-        emailError.textContent = "Enter a valid email address";
-    } else {
-        emailError.textContent = "";
-        // TODO: make request
+        fnameError.textContent = "";
+        if (!emailRegex.test(email.value)){
+            emailError.textContent = "Enter a valid email address";
+        } else {
+            emailError.textContent = "";
+            if (!passwordRegex.test(password.value)){
+                passwordError.textContent = "Password should be at least 8 characters long, contain upper and lower case letters, at least one digit and one symbol."
+                passwordError.style.marginBottom = "15px";
+            } else {
+                
+            }
+        }
     }
 })
 
