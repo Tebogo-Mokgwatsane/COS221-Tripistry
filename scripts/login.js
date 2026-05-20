@@ -9,6 +9,7 @@ const email = document.getElementById("email");
 const password = document.getElementById("password");
 const emailError = document.getElementById("email-error");
 const passwordError = document.getElementById("password-error");
+const welcome = document.getElementById("welcome");
 
 let activeTab = "traveller";
 
@@ -40,6 +41,7 @@ tabs.forEach((tab, index) => {
             grayBrief.style.display = "none";
             blackBrief.style.display = "inline-block";
             activeTab = "agency";
+            welcome.textContent = "Welcome back, partner"
 
         } else {
             slider.classList.remove("right");
@@ -48,6 +50,7 @@ tabs.forEach((tab, index) => {
             grayBrief.style.display = "inline-block";
             blackBrief.style.display = "none";
             activeTab = "traveller"
+            welcome.textContent = "Welcome back"
         }
 
     });

@@ -13,13 +13,32 @@ const fnameError = document.getElementById("fname-error");
 const lnameError = document.getElementById("lname-error");
 const emailError = document.getElementById("email-error");
 const passwordError = document.getElementById("password-error");
+const travellerForm = document.getElementById("traveller-form");
+const agencyForm = document.getElementById("agency-form");
 
 let activeTab = "traveller";
+
+const type = localStorage.getItem("type");
+if (type !== null){
+    if (type === "agency"){
+        tabs.forEach(t => t.classList.remove("active"));
+        tabs[1].classList.add("active");
+        localStorage.removeItem("type");
+        slider.classList.add("right");
+        blackPlane.style.display = "none";
+        grayPlane.style.display = "inline-block";
+        grayBrief.style.display = "none";
+        blackBrief.style.display = "inline-block";
+        activeTab = "agency";
+        agencyForm.style.display = "block";
+        travellerForm.style.display = "none";
+    }
+}
 
 form.addEventListener("submit", (e) => {
     e.preventDefault();
 
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const emailRegex = /^[a-zA-Z0-9._% +-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
     
     if (fname.value.length < 2 || lname.value.length < 2){
@@ -54,6 +73,8 @@ tabs.forEach((tab, index) => {
             grayBrief.style.display = "none";
             blackBrief.style.display = "inline-block";
             activeTab = "agency";
+            agencyForm.style.display = "block";
+            travellerForm.style.display = "none";
 
         } else {
             slider.classList.remove("right");
@@ -61,7 +82,9 @@ tabs.forEach((tab, index) => {
             grayPlane.style.display = "none";
             grayBrief.style.display = "inline-block";
             blackBrief.style.display = "none";
-            activeTab = "traveller"
+            activeTab = "traveller";
+            agencyForm.style.display = "none";
+            travellerForm.style.display = "block";
         }
 
     });
