@@ -18,7 +18,7 @@
         <div class="content">
             <h1>Compare. Book. <span class="gradient-text">Travel Smarter. <span></h1>
             <p>Browse and compare travel packages from multiple agencies, and book your perfect trip in seconds.</p>
-            <button>
+            <button id="start-exploring">
                 <span>Start Exploring</span>
                 <img src="img/icons/arrow-right-white.svg" alt="Arrow right">
             </button>
@@ -159,6 +159,6 @@
     <footer>
         &copy; 2026 Tripistry. All rights reserved.
     </footer>
-
+    <script src="scripts/script.js"></script>
 </body>
 </html>

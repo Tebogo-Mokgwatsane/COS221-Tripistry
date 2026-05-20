@@ -168,3 +168,6 @@ body {
     margin-bottom: 6px;
 }
 
+#agency-form {
+    display: none;
+}
