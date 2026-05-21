@@ -1,3 +1,4 @@
+// some elements for DOM manipulation
 const tabs = document.querySelectorAll(".tab");
 const slider = document.getElementById("slider");
 const blackPlane = document.getElementById("black-plane");
@@ -15,8 +16,89 @@ const emailError = document.getElementById("email-error");
 const passwordError = document.getElementById("password-error");
 const travellerForm = document.getElementById("traveller-form");
 const agencyForm = document.getElementById("agency-form");
+const agencyName = document.getElementById("agency-name");
+const agencyEmail = document.getElementById("agency-email");
+const agencyPassword = document.getElementById("agency-password");
+const registrationNum = document.getElementById("registration-num");
+
+// functions to handle switching user login and signup
 
 let activeTab = "traveller";// or travel_agent. currently only traveller reflects in db
+
+const switchToTraveller = () => {
+    slider.classList.remove("right");
+    blackPlane.style.display = "inline-block";
+    grayPlane.style.display = "none";
+    grayBrief.style.display = "inline-block";
+    blackBrief.style.display = "none";
+    activeTab = "traveller";
+    agencyForm.style.display = "none";
+    travellerForm.style.display = "block";
+    fname.required = true;
+    lname.required = true;
+    email.required = true;
+    password.required = true;
+    agencyName.required = false;
+    agencyEmail.required = false;
+    agencyPassword.required = false;
+    agencyEmail.required = false;
+}
+
+const switchToAgency = () => {
+    slider.classList.add("right");
+    blackPlane.style.display = "none";
+    grayPlane.style.display = "inline-block";
+    grayBrief.style.display = "none";
+    blackBrief.style.display = "inline-block";
+    activeTab = "travel_agent";
+    agencyForm.style.display = "block";
+    travellerForm.style.display = "none";
+    fname.required = false;
+    lname.required = false;
+    email.required = false;
+    password.required = false;
+    agencyName.required = true;
+    agencyEmail.required = true;
+    agencyPassword.required = true;
+    agencyEmail.required = true;
+}
+
+const signup = async (formData) => {
+    const res = await fetch('/api.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+    });
+
+    const data = await res.json();
+
+    if (data.status === "success"){
+        console.log(data);
+    } else {
+        console.log(data);
+    }
+    // .then(data => {
+    //     if (data.status === "success") {
+
+    //         //localStorage??
+    //         localStorage.setItem('user', JSON.stringify({
+    //             username: formData.username,
+    //             email: formData.email,
+    //             user_type: formData.user_type
+    //         }));
+
+    //         alert("🧳Registration Successful!");
+    //         window.location.href = "login.html";
+    //     } else {
+    //         alert(data.message || "Registration failed");
+    //     }
+    // })
+    // .catch(err => {
+    //     console.error(err);
+    //     alert("Error. Please try again.");
+    // });
+}
+
 
 const type = localStorage.getItem("type");
 if (type !== null){
@@ -24,14 +106,7 @@ if (type !== null){
         tabs.forEach(t => t.classList.remove("active"));
         tabs[1].classList.add("active");
         localStorage.removeItem("type");
-        slider.classList.add("right");
-        blackPlane.style.display = "none";
-        grayPlane.style.display = "inline-block";
-        grayBrief.style.display = "none";
-        blackBrief.style.display = "inline-block";
-        activeTab = "agency";
-        agencyForm.style.display = "block";
-        travellerForm.style.display = "none";
+        switchToAgency();
     }
 }
 
@@ -41,63 +116,42 @@ form.addEventListener("submit", (e) => {
     const emailRegex = /^[a-zA-Z0-9._% +-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
     
-    let isValid = true;
 
     if (fname.value.trim().length < 2 || lname.value.trim().length < 2){
         fnameError.textContent = "First and last name need to be at least 2 characters long"
-        isValid = false;
-    } 
-    else {fnameError.textContent = "";}
+    } else {
+        fnameError.textContent = "";
+        if (!emailRegex.test(email.value)){
+            emailError.textContent = "Enter a valid email address";
+        } else {
+            emailError.textContent = "";
+            if (!passwordRegex.test(password.value)){
+                passwordError.textContent = "Password should be at least 8 characters long, contain upper and lower case letters, at least one digit and one symbol."
+                passwordError.style.marginBottom = "15px";
+            } else {
+                passwordError.textContent = "";
+                passwordError.style.marginBottom = "0";
 
-    if (!emailRegex.test(email.value)){
-        emailError.textContent = "Enter a valid email address";
-        isValid = false;
-    } 
-    else {emailError.textContent = "";}
+                const formData = {
+                    type: "Register",
+                    username: fname.value.trim() + " " + lname.value.trim(),
+                    email: email.value.trim(),
+                    password: password.value,
+                    user_type: activeTab // "traveller" or "travel_agent" based on active tab
+                };
 
-    if (!passwordRegex.test(password.value)){
-        passwordError.textContent = "Password should be at least 8 characters long, contain upper and lower case letters, at least one digit and one symbol."
-        passwordError.style.marginBottom = "15px";
-        isValid = false;
-    } 
+                signup(formData);
+            }
+        }
+    
+    }
 
-    if (!isValid) return;
+
 
     //  sending data to api
-    const formData = {
-        type: "Register",
-        username: fname.value.trim() + " " + lname.value.trim(),
-        email: email.value.trim(),
-        password: password.value,
-        user_type: activeTab // "traveller" or "travel_agent" based on active tab
-    };
+    
 
-    fetch('api.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.status === "success") {
-
-            //localStorage??
-            localStorage.setItem('user', JSON.stringify({
-                username: formData.username,
-                email: formData.email,
-                user_type: formData.user_type
-            }));
-
-            alert("🧳Registration Successful!");
-            window.location.href = "login.html";
-        } else {
-            alert(data.message || "Registration failed");
-        }
-    })
-    .catch(err => {
-        console.error(err);
-        alert("Error. Please try again.");
-    });
+    
 });
 
 tabs.forEach((tab, index) => {
@@ -108,24 +162,9 @@ tabs.forEach((tab, index) => {
         tab.classList.add("active");
 
         if(index === 1){
-            slider.classList.add("right");
-            blackPlane.style.display = "none";
-            grayPlane.style.display = "inline-block";
-            grayBrief.style.display = "none";
-            blackBrief.style.display = "inline-block";
-            activeTab = "agency";
-            agencyForm.style.display = "block";
-            travellerForm.style.display = "none";
-
+            switchToAgency();
         } else {
-            slider.classList.remove("right");
-            blackPlane.style.display = "inline-block";
-            grayPlane.style.display = "none";
-            grayBrief.style.display = "inline-block";
-            blackBrief.style.display = "none";
-            activeTab = "traveller";
-            agencyForm.style.display = "none";
-            travellerForm.style.display = "block";
+            switchToTraveller();
         }
 
     });
