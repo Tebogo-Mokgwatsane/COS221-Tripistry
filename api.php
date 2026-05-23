@@ -4,7 +4,8 @@
 header("Content-Type: application/json");
 
 define('USE_LOCAL_CONFIG', true);
-require_once 'Tripistry/config.php';
+//require_once 'Tripistry/config.php';
+require_once 'config.php';
     
     class API {
     private $mysqli; // mysqli connection
@@ -70,10 +71,31 @@ require_once 'Tripistry/config.php';
             $this->jsonResponse("error", "Password must be 8+ chars with upper, lower, number and symbol");
         }
 
-        if ($data['user_type'] === 'agency') {
+        $userType = $data['user_type'];
+        $username = $data['username'] ?? '';
+
+        // Agency specific validation
+        if ($userType === "agency" || $userType === "travel_agent") {
             if (empty($data['registration_num'])) {
-                $this->jsonResponse("error", "Business registration number is required for agencies");
+                $this->jsonResponse("error", "Registration number is required for agencies");
             }
+
+            // Check if registration number is valid in reg_numbers table
+            $stmt = $this->mysqli->prepare("SELECT id FROM reg_numbers WHERE registration_num = ? AND status = 'valid' LIMIT 1");
+            $stmt->bind_param("s", $data['registration_num']);
+            $stmt->execute();
+            $stmt->store_result();
+
+            if ($stmt->num_rows === 0) {
+                $stmt->close();
+                $this->jsonResponse("error", "Invalid or unlicensed registration number");
+                $stmt = $this->mysqli->prepare("INSERT INTO reg_numbers (registration_num)
+                                     VALUES (?)");
+                $stmt->bind_param("s", $data['registration_num']);
+                $stmt->execute();
+                $stmt->store_result();
+            }
+            $stmt->close();
         }
 
         // Check if email exists
@@ -87,14 +109,14 @@ require_once 'Tripistry/config.php';
         }
         $stmt->close();
         
-        // Check if username already exists
+        // Check if username already exists (db has a constraint that doesnt allow dublicate usernames so for now This stops the error from the db being thrown)
         $stmt = $this->mysqli->prepare("SELECT user_id FROM user WHERE username = ?");
         $stmt->bind_param("s", $data['username']);
         $stmt->execute();
         $stmt->store_result();
         if ($stmt->num_rows > 0) {
             $stmt->close();
-            $this->jsonResponse("error", "Username already taken");
+            $this->jsonResponse("error", "Username \"" . $data['username'] . "\" is already taken");
         }
         $stmt->close();
 
@@ -104,10 +126,11 @@ require_once 'Tripistry/config.php';
         // Generate API key
         $apiKey = bin2hex(random_bytes(16));
 
+        $reg_num = isset($data['registration_num']) ? trim($data['registration_num']) : null;
         // Insert user
-        $stmt = $this->mysqli->prepare("INSERT INTO user (username, email, password_hash, user_type, api_key)
-                                     VALUES (?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssss", $data['username'], $data['email'], $hashed, $data['user_type'], $apiKey);
+        $stmt = $this->mysqli->prepare("INSERT INTO user (username, email, password_hash, user_type, api_key, registration_num)
+                                     VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssssss", $username, $data['email'], $hashed, $userType, $apiKey, $reg_num);
         $success = $stmt->execute();
         $stmt->close();
 
@@ -124,7 +147,7 @@ require_once 'Tripistry/config.php';
             $this->jsonResponse("error", "Email and password required");
         }
 
-        $stmt = $this->mysqli->prepare("SELECT user_id, email, password_hash, api_key FROM user WHERE email = ?");
+        $stmt = $this->mysqli->prepare("SELECT user_id, username, email, password_hash, user_type, registration_num, api_key FROM user WHERE email = ?");
         $stmt->bind_param("s", $data['email']);
         $stmt->execute();
         $result = $stmt->get_result();
