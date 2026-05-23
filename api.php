@@ -6,7 +6,7 @@ header("Content-Type: application/json");
 define('USE_LOCAL_CONFIG', true);
 require_once 'Tripistry/config.php';
     
-    class API {
+class API {
     private $mysqli; // mysqli connection
 
     public function __construct() {

@@ -6,19 +6,6 @@
                 </div>
                 <p>Tripistry</p>
             </div>
-            <div class="middle-section">
-                <ul>
-                    <li>
-                        <a href="">Home</a>
-                    </li>
-                    <li>
-                        <a href="">Browse</a>
-                    </li>
-                    <li>
-                        <a href="">Favourites</a>
-                    </li>
-                </ul>
-            </div>
             <div class="login-section">
                 <a href="login.html">
                     <img src="img/icons/user.svg" alt="User Icon">
@@ -28,3 +15,5 @@
             </div>
         </div>
     </nav>
+
+<script src="scripts/navbar.js"></script>

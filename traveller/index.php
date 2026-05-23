@@ -4,9 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tripistry - Traveller Dashboard</title>
+    <link rel="stylesheet" href="../css/navbar.css">
+    <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-
+    <?php include("navbar.php"); ?>
     <div class="container" style="margin-top: 100px; padding: 20px;">
         <h1>Welcome back, Traveller! 👋</h1>
         <search>
