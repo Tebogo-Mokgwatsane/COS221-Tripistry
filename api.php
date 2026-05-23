@@ -70,6 +70,12 @@ require_once 'Tripistry/config.php';
             $this->jsonResponse("error", "Password must be 8+ chars with upper, lower, number and symbol");
         }
 
+        if ($data['user_type'] === 'agency') {
+            if (empty($data['registration_num'])) {
+                $this->jsonResponse("error", "Business registration number is required for agencies");
+            }
+        }
+
         // Check if email exists
         $stmt = $this->mysqli->prepare("SELECT user_id FROM user WHERE email = ?");
         $stmt->bind_param("s", $data['email']);
