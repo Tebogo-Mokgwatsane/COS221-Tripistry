@@ -18,11 +18,13 @@ $host = $_ENV['DB_HOST'] ?? '';
 $dbname = $_ENV['DB_NAME'] ?? '';
 $user = $_ENV['DB_USER'] ?? '';
 $pass = $_ENV['DB_PASS'] ?? '';
+$port = $_ENV['DB_PORT'] ?? '';
 
-$mysqli = new mysqli($host, $user, $pass, $dbname);
+//$mysqli = new mysqli($host, $user, $pass, $dbname);
+$mysqli = new mysqli($host, $user, $pass, $dbname, $port);
 
 if ($mysqli->connect_error) {
-    die("Database connection failed: " . $mysqli->connect_error);
+    die("Connection failed: " . $mysqli->connect_error . " (Port: $port)");
 }
 
 $mysqli->set_charset("utf8mb4");

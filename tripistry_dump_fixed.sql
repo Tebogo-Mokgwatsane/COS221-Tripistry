@@ -769,3 +769,24 @@ SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
 -- Add api_key column to user table
 ALTER TABLE user 
 ADD COLUMN api_key VARCHAR(32) UNIQUE NULL;
+
+-- Add registration_num column to user table
+ALTER TABLE user
+ADD COLUMN registration_num VARCHAR(100) NULL AFTER user_type;
+
+-- Valid Reg Table
+CREATE TABLE IF NOT EXISTS reg_numbers (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    registration_num VARCHAR(50) UNIQUE NOT NULL,
+    status ENUM('valid', 'invalid') DEFAULT 'invalid',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+INSERT INTO reg_numbers (registration_num, status) 
+VALUES 
+('REG123456', 'valid'),
+('REG789012', 'valid'),
+('REG345678', 'valid');
+
+ALTER TABLE user 
+ADD FOREIGN KEY (registration_num) REFERENCES reg_numbers(registration_num);

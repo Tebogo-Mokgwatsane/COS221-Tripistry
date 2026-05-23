@@ -66,7 +66,7 @@ function handleLogin() {
         return;
     }
 
-    fetch('../api.php', {
+    fetch('api.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -76,6 +76,16 @@ function handleLogin() {
         })
     })
     .then(res => res.json())
+    /*.then(res => {//debugging
+    return res.text().then(text => {
+        try {
+            return JSON.parse(text);
+        } catch (err) {
+            console.error("The raw server login response was:", text);
+            throw new Error("Server did not return valid JSON");
+        }
+    });
+    })*/
     .then(data => {
         if (data.status === "success") {
 
