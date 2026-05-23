@@ -88,11 +88,19 @@ function handleLogin() {
     })*/
     .then(data => {
         if (data.status === "success") {
+            const selectedType = activeTab;                    // "traveller" or "agency" to correspond with slider in html
+            const userType = data.data.user_type;
+
+            //User type should match selected tab
+            if ((selectedType === "traveller" && userType !== "traveller") || (selectedType === "agency" && (userType !== "travel_agent"))) {
+                alert("Wrong account type. Please select the correct tab.");
+                return;
+            }
 
             // Save to localStorage
             localStorage.setItem('user', JSON.stringify({
                 username: data.data.username,
-                user_type: data.data.user_type
+                user_type: userType
             }));
 
             // Store API key in cookie
@@ -100,7 +108,7 @@ function handleLogin() {
 
             alert("Welcome back, " + data.data.username + "!");
 
-            if (data.data.user_type === "travel_agent") {
+            if (userType === "travel_agent") {
                 window.location.href = "Tripistry/agent.html";
             } else {
                 window.location.href = "Tripistry/traveller.html";

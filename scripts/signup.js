@@ -107,6 +107,8 @@ form.addEventListener("submit", (e) => {
         } else {passwordError.textContent = ""; passwordError.style.marginBottom = "0";}
 
         formData.username = fname + " " + lname;
+        formData.fname= fname;
+        formData.lname= lname;
         formData.email = email;
         formData.password = password;
 
@@ -125,6 +127,7 @@ form.addEventListener("submit", (e) => {
         formData.email = email;
         formData.password = password;
         formData.registration_num = regNum;
+        formData.agency_name = agencyName;
     }
 
     //Sending data to api
@@ -133,8 +136,8 @@ form.addEventListener("submit", (e) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
     })
-    .then(res => res.json())
-    /*.then(res => {//debugging
+    //.then(res => res.json())
+    .then(res => {//debugging
     return res.text().then(text => {
         try {
             return JSON.parse(text);
@@ -143,7 +146,7 @@ form.addEventListener("submit", (e) => {
             throw new Error("Server did not return valid JSON");
         }
     });
-    })*/
+    })
     .then(data => {
         if (data.status === "success") {
             localStorage.setItem('user', JSON.stringify({
