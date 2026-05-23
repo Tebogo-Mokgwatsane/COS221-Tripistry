@@ -43,7 +43,7 @@ require_once 'Tripistry/config.php';
     }
 
     private function jsonResponse($status, $message, $data = []) {
-        echo json_encode([
+        echo json_encode([  
             "status" => $status,
             "message" => $message,
             "data" => $data
