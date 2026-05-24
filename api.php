@@ -46,6 +46,14 @@ require_once 'config.php';
         }
     }
 
+    private function success($data){
+        $this->jsonResponse("success", "Request successful", $data);
+    } 
+
+    private function error($data, $code = 400){
+        $this->jsonResponse("error", "Request failed", $data, $code);
+    } 
+
     private function jsonResponse($status, $message, $data = [], $code = 200) {
         if ($code===200 || $status === "success") {
             $status = "success";
