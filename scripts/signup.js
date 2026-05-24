@@ -128,7 +128,7 @@ form.addEventListener("submit", (e) => {
     }
 
     //Sending data to api
-    fetch('api.php', {
+    fetch('http://localhost/COS221-Tripistry/api.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
