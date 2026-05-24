@@ -471,7 +471,16 @@ class API {
         $this->jsonResponse("success", "Favourites retrieved", $favourites);
     }
 
+    public function getflights(){
+        $stmt = $this->mysqli->query("SELECT flight_id, airline_name, Price, departure_airport, arrival_airport,dept_date,arrival_datetime,classes,img_url FROM flight");
+        $flights = [];
+        while ($row = $stmt->fetch_assoc()) {
+            $flights[] = $row;
+        }
+        return $flights;
+
     }
+}
  
 // Run API
 $api = new API();
