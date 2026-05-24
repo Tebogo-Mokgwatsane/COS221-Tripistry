@@ -5,9 +5,12 @@ function handlePayment()
     var amount = localStorage.getItem("bookingTotalPrice");
     var reference = document.getElementById("reference").value;
     var selectedMethod = document.querySelector('input[name="method"]:checked');
+    var quantity=localStorage.getItem("Quantity");
+
     console.log("Booking_id from localStorage:", booking_id);
     console.log("Amount from localStorage:", amount);
     console.log("Number amount:", Number(amount));
+    console.log("quantity:", (quantity));
 
     if (booking_id == null || booking_id == "")
     {
@@ -53,6 +56,7 @@ function handlePayment()
 
                     localStorage.removeItem("Booking_id");
                     localStorage.removeItem("bookingTotalPrice");
+                    localStorage.removeItem("Quantity");
                 }
                 else
                 {
@@ -82,11 +86,11 @@ function handlePayment()
     var body = {
         type: "Payment",
         Method: method,
+        Quantity:quantity,
         Booking_id: Number(booking_id),
         amount: Number(amount),
         Reference: reference
     };
-
     req.send(JSON.stringify(body));
 }
 

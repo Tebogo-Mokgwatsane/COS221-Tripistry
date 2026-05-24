@@ -27,6 +27,7 @@ function checkBooking()
         response.style.color = "red";
         return;
     }
+    localStorage.setItem("Quantity",quantity);
     var req = new XMLHttpRequest();
     req.onreadystatechange = function()
     {
@@ -114,7 +115,6 @@ function confirmBooking()
             console.log(req.responseText);
             if (req.status == 200)
             {
-
                 var ob = JSON.parse(req.responseText);
 
                 if (ob.status == "success")
@@ -127,6 +127,7 @@ function confirmBooking()
                     localStorage.setItem("bookingResponse", JSON.stringify(ob));
                     localStorage.setItem("bookingTotalPrice",ob.data.total_price);
                     localStorage.setItem("Booking_id",booking);
+                    
                 }
                 else
                 {
@@ -219,7 +220,7 @@ function packageInfo()
 
     var body = 
     {
-        type: "Pacakgeinfo",
+        type: "Packageinfo",
         package_id: package_id
     };
 
