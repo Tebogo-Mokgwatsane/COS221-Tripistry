@@ -1,11 +1,13 @@
 <nav>
         <div class="navbar">
-            <div class="logo">
-                <div class="img-container">
-                    <img src="img/icons/compass.svg" alt="Compass Logo">
+            <a href="/">
+                <div class="logo">
+                    <div class="img-container">
+                        <img src="img/icons/compass.svg" alt="Compass Logo">
+                    </div>
+                    <p>Tripistry</p>
                 </div>
-                <p>Tripistry</p>
-            </div>
+            </a>
             <div class="login-section">
                 <a href="login.html">
                     <img src="img/icons/user.svg" alt="User Icon">

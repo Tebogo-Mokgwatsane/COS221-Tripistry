@@ -64,14 +64,19 @@
                     </li>
                 </ul>
             </div>
-            <div class="login-section">
-                <a href="login.html">
+            <div class="login-section" id="login-section">
+                <div id="username-container">
                     <img src="../img/icons/user.svg" alt="User Icon">
-                    <p class="sign-in-txt">Sign in</p>
-                </a>
-                <a href="signup.html" class="signup-btn">Join Tripistry</a>
+                    <p class="sign-in-txt" id="username"></p>
+                </div>
+                <button href="signup.html" class="logout-btn" >
+                    <img src="../img/icons/log-out.svg" alt="Logout icon" id="logout-img-default">
+                    <img src="../img/icons/log-out-white.svg" alt="Logout icon" id="logout-img-hover">
+                    <span>Logout</span>
+                </button>
             </div>
         </div>
     </nav>
 
 <script src="../scripts/navbar.js"></script>
+<script src="../scripts/traveller.js"></script>

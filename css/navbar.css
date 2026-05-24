@@ -47,10 +47,6 @@ ul {
     height: 24px;
 }
 
-.middle-section {
-    
-}
-
 .middle-section ul {
     display: flex;
     gap: 30px;
@@ -59,9 +55,14 @@ ul {
 .middle-section a, #explore-btn {
     font-family: sans-serif;
     font-weight: 500;
-    color: rgb(92, 92, 92);
+    color: rgb(22, 22, 22);
     font-size: 17px;
     text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.middle-section a:hover, #explore-btn:hover {
+    color: rgb(10, 72, 130);
 }
 
 
@@ -70,11 +71,15 @@ ul {
     gap: 20px;
 }
 
-.login-section a {
+.login-section a, #username-container {
     display: flex;
     gap: 6px;
     align-items: center;
     cursor: pointer;
+}
+
+#username-container {
+    cursor: default;
 }
 
 
@@ -86,11 +91,19 @@ ul {
     width: 18px;
 }
 
+
+
+
 .signup-btn {
     font-family: sans-serif;
     background-color: rgb(255, 119, 0);
     padding: 8px 14px;
     border-radius: 15px;
+    transition: all 0.2s ease;
+}
+
+.signup-btn:hover {
+    background-color: rgb(255, 140, 39)
 }
 
 #explore-btn {
@@ -122,8 +135,6 @@ ul {
     gap: 0px ;
 }
 
-.explore-btn div .explore-dropdown li {
-}
 
 .explore-btn div .explore-dropdown li a {
     display: flex;
@@ -140,4 +151,40 @@ ul {
 
 .explore-btn img {
     width: 20px;
+}
+
+.logout-btn {
+    background-color: transparent;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 15px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.logout-btn img {
+    width: 16px;
+}
+
+.logout-btn:hover {
+    background-color: rgb(255, 123, 0);
+}
+
+.logout-btn:hover span {
+    color: white;
+    
+}
+#logout-img-hover {
+    display: none;
+}
+
+.logout-btn:hover #logout-img-hover {
+    display: inline;
+}
+
+.logout-btn:hover #logout-img-default {
+    display: none;
 }
