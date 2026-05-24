@@ -25,7 +25,7 @@ require_once 'config.php';
         }
 
         if (!isset($input['type']) || empty($input['type'])) {
-            $this->jsonResponse("error", "Missing 'type' parameter");
+            $this->jsonResponse("error", "Missing 'type' parameter", [], 400);
         }
 
         $type = $input['type'];
@@ -37,15 +37,26 @@ require_once 'config.php';
             case "Login":
                 $this->loginUser($input);
                 break;
+            case "Search":
+                $this->searchPackages($input);
+                break;
             default:
                 $this->jsonResponse("error", "Unknown request type");
                 break;
         }
     }
 
-    private function jsonResponse($status, $message, $data = []) {
+    private function jsonResponse($status, $message, $data = [], $code = 200) {
+        if ($code===200 || $status === "success") {
+            $status = "success";
+        } else {
+            $status = "error";
+            $code = 400; // Default
+        }
+        http_response_code($code);
         echo json_encode([
             "status" => $status,
+            "timestamp" => time(),
             "message" => $message,
             "data" => $data
         ]);
@@ -186,7 +197,7 @@ require_once 'config.php';
         $stmt->close();
 
         if (!$user || !password_verify($data['password'], $user['password_hash'])) {
-            $this->jsonResponse("error", "Invalid Credentials");
+            $this->jsonResponse("error", "Invalid Credentials", [], 401);
         }
 
         session_start();
@@ -199,7 +210,48 @@ require_once 'config.php';
             "username"   => $user['username'],
             "user_type"   => $user['user_type']
         ]);
-    }}
+    }
+
+    // Searching for packages ====================
+    private function searchPackages($data) {
+        if (empty($data['query'])) {
+            $this->jsonResponse("error", "Search query is required", [], 400);//Debugg
+        }
+
+        $query = "%" . $data['query'] . "%";
+
+        $stmt = $this->mysqli->prepare("
+            SELECT DISTINCT p.title, p.package_id, p.description as package_description, p.price, p.quantity, 
+                   d.description as destination_description, d.city, d.country,
+                   a.name as attraction_name, a.description as attraction_description
+            FROM package p
+            LEFT JOIN destination d ON p.dest_id = d.dest_id
+            LEFT JOIN attraction a ON p.dest_id = a.dest_id
+            WHERE p.title LIKE ? 
+                OR p.description LIKE ? 
+                OR d.description LIKE ? 
+                OR d.city LIKE ? 
+                OR d.country LIKE ?
+            ORDER BY p.price ASC
+            LIMIT 20
+        ");
+
+        $stmt->bind_param("sssss", $query, $query, $query, $query, $query);
+        $stmt->execute();
+        $result = $stmt->get_result();
+    
+        $packages = [];
+        while ($row = $result->fetch_assoc()) {
+            $packages[] = $row;
+        }
+        $stmt->close();
+
+        $this->jsonResponse("success", "Search completed", [
+            "packages" => $packages,
+            "count" => count($packages)
+        ]);
+    }
+}
  
 // Run API
 $api = new API();
