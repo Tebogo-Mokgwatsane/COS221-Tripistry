@@ -66,7 +66,7 @@ function handleLogin() {
         return;
     }
 
-    fetch('../api.php', {
+    fetch('http://localhost/COS221-Tripistry/api.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -91,9 +91,9 @@ function handleLogin() {
             alert("Welcome back, " + data.data.username + "!");
 
             if (data.data.user_type === "travel_agent") {
-                window.location.href = "Tripistry/agent.html";
+                window.location.href = "agency/";
             } else {
-                window.location.href = "Tripistry/traveller.html";
+                window.location.href = "traveller/";
             }
 
         } else {

@@ -1,0 +1,79 @@
+.package-page {
+    margin-top: 150px;
+}
+
+.back {
+    color: gray;
+    font-weight: 500;
+    display: flex;
+    gap: 5px;
+    text-decoration: none;
+    margin-bottom: 30px;
+}
+
+.back:hover {
+    color: rgb(75, 75, 75);
+}
+
+.back img {
+    width: 16px;
+}
+
+.package-img-container {
+    background-image: url("https://alpsinsight.com/wp-content/uploads/2018/12/14SPsk0091.jpg");
+    width: 100%;
+    height: 550px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    border-top-left-radius: 50px;
+    border-top-right-radius: 50px;
+    position: relative;
+    display: flex;
+    align-items:end;
+    justify-content: space-between;
+    padding: 50px;
+}
+
+.package-overlay {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);border-top-left-radius: 50px;
+    border-top-left-radius: 50px;
+    border-top-right-radius: 50px;
+}
+
+.package-details {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.package-details, .package-price {
+    z-index: 10;
+}
+
+.package-details h1 {
+    color: white;
+    font-size: 45px;
+    font-weight: bold;
+}
+
+.top-details, .bottom-details {
+    display: flex;
+    gap: 15px;
+}
+
+.package-sticker {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.package-sticker span {
+    color: white;
+}
+
+.package-sticker img {
+    width: 18px;
+}
