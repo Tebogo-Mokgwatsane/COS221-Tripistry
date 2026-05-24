@@ -206,7 +206,7 @@ const renderPackages = (packagesArray, firstRender = false) => {
     packagesArray.forEach((package) => {
         const packageCard = document.createElement("div");
         const packageLink = document.createElement("a");
-        packageLink.href = `package.html?package_id=${package.package_id}`
+        packageLink.href = `package.php?package_id=${package.package_id}`
         packageCard.classList.add("package-card");
         packageCard.innerHTML = `
             <div class="card-img-container">
