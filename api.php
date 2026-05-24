@@ -2,15 +2,8 @@
 
     
 header("Content-Type: application/json");
-<<<<<<< HEAD
-//define('USE_LOCAL_CONFIG', true);
-require_once 'Tripistry/config.php';
-=======
 
-define('USE_LOCAL_CONFIG', true);
-//require_once 'Tripistry/config.php';
 require_once 'config.php';
->>>>>>> 2f81d49730598e7780d57c064b6e42b90dfde178
     
 class API {
     private $mysqli; // mysqli connection
@@ -227,20 +220,12 @@ class API {
         }
     }
 
-    // Logging in user ====================
     private function loginUser($data) {
         if (empty($data['email']) || empty($data['password'])) {
             $this->jsonResponse("error", "Email and password required");
         }
-<<<<<<< HEAD
         //changed to match database
-        $stmt = $this->mysqli->prepare(
-    "SELECT user_id, username, email, password_hash, api_key, user_type FROM user WHERE email = ?"
-);
-=======
-
-        $stmt = $this->mysqli->prepare("SELECT user_id, username, email, password_hash, user_type, registration_num, api_key FROM user WHERE email = ?");
->>>>>>> 2f81d49730598e7780d57c064b6e42b90dfde178
+        $stmt = $this->mysqli->prepare("SELECT user_id, username, email, password_hash, api_key, user_type FROM user WHERE email = ?");
         $stmt->bind_param("s", $data['email']);
         $stmt->execute();
         $result = $stmt->get_result();

@@ -75,8 +75,49 @@ const handleLogin = async () => {
         })
     });
 
+    const data = await res.json();
+
+    if (data.status === "success") {
+        console.log("It works")
+            const selectedType = activeTab;                    // "traveller" or "agency" to correspond with slider in html
+            const userType = data.data.user_type;
+
+            //User type should match selected tab
+            if ((selectedType === "traveller" && userType !== "traveller") || (selectedType === "agency" && (userType !== "travel_agent"))) {
+                alert("Wrong account type. Please select the correct tab.");
+                return;
+            }
+
+            // Save to localStorage
+            localStorage.setItem('user', JSON.stringify({
+                username: data.data.username,
+                user_type: userType
+            }));
+
+            // Store API key in cookie
+            document.cookie = `apiKey=${data.data.apikey}; path=/; max-age=18000`;//expires in 5hrs
+
+            alert("Welcome back, " + data.data.username + "!");
+
+
+            if (data.data.user_type === "travel_agent") {
+                window.location.href = "agency/";
+
+            if (userType === "travel_agent") {
+                window.location.href = "traveller/";
+
+            } else {
+                window.location.href = "traveller/";
+            }
+
+        } else {
+            alert(data.message || "Login failed");
+        }
+
+    }
+
     
-    console.log(res);
+    console.log(data);
     // .then(res => res.json())
     // /*.then(res => {//debugging
     // return res.text().then(text => {
