@@ -72,7 +72,7 @@ form.addEventListener("submit", (e) => {
         user_type: activeTab // "traveller" or "travel_agent" based on active tab
     };
 
-    fetch('api.php', {
+    fetch('http://localhost/COS221-Tripistry/api.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
