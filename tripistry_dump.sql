@@ -31,6 +31,7 @@ CREATE TABLE `accommodation` (
   `rating` decimal(2,1) DEFAULT NULL CHECK (`rating` between 0.0 and 5.0),
   `price_per_night` decimal(10,2) NOT NULL CHECK (`price_per_night` >= 0),
   `description` text DEFAULT NULL,
+  `img_url` varchar(500) DEFAULT NULL,
   PRIMARY KEY (`acc_id`),
   KEY `dest_id` (`dest_id`),
   CONSTRAINT `1` FOREIGN KEY (`dest_id`) REFERENCES `destination` (`dest_id`) ON UPDATE CASCADE
@@ -45,10 +46,10 @@ SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
 LOCK TABLES `accommodation` WRITE;
 /*!40000 ALTER TABLE `accommodation` DISABLE KEYS */;
 INSERT INTO `accommodation` VALUES
-(1,1,'The Table Bay Hotel','Hotel',5.0,3500.00,'Five-star hotel at the V&A Waterfront with views of Table Mountain.'),
-(2,1,'Long Street Backpackers','Hostel',3.5,350.00,'Budget-friendly hostel in the heart of Cape Town.'),
-(3,2,'Zanzibar Beach Resort','Resort',4.5,2800.00,'Beachfront resort on the turquoise shores of Zanzibar.'),
-(4,4,'Nairobi Serena Hotel','Hotel',4.5,4200.00,'Luxury hotel in the heart of Nairobi near Uhuru Park.');
+(1,1,'The Table Bay Hotel','Hotel',5.0,3500.00,'Five-star hotel at the V&A Waterfront with views of Table Mountain.',NULL),
+(2,1,'Long Street Backpackers','Hostel',3.5,350.00,'Budget-friendly hostel in the heart of Cape Town.',NULL),
+(3,2,'Zanzibar Beach Resort','Resort',4.5,2800.00,'Beachfront resort on the turquoise shores of Zanzibar.',NULL),
+(4,4,'Nairobi Serena Hotel','Hotel',4.5,4200.00,'Luxury hotel in the heart of Nairobi near Uhuru Park.',NULL);
 /*!40000 ALTER TABLE `accommodation` ENABLE KEYS */;
 UNLOCK TABLES;
 COMMIT;
@@ -106,6 +107,7 @@ CREATE TABLE `attraction` (
   `rating` decimal(2,1) DEFAULT NULL CHECK (`rating` between 0.0 and 5.0),
   `opening_time` time DEFAULT NULL,
   `closing_time` time DEFAULT NULL,
+  `img_url` varchar(500) DEFAULT NULL,
   PRIMARY KEY (`att_id`),
   KEY `dest_id` (`dest_id`),
   CONSTRAINT `1` FOREIGN KEY (`dest_id`) REFERENCES `destination` (`dest_id`) ON UPDATE CASCADE,
@@ -121,10 +123,10 @@ SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
 LOCK TABLES `attraction` WRITE;
 /*!40000 ALTER TABLE `attraction` DISABLE KEYS */;
 INSERT INTO `attraction` VALUES
-(1,1,'Table Mountain Aerial Cableway','Nature',390.00,'Iconic cable car ride to the top of Table Mountain.',4.9,'08:00:00','18:00:00'),
-(2,1,'Robben Island','Cultural',450.00,'Historic island and UNESCO World Heritage Site.',4.7,'09:00:00','17:00:00'),
-(3,2,'Stone Town Tour','Cultural',80.00,'Guided walking tour through Zanzibar\'s historic Stone Town.',4.6,'08:00:00','20:00:00'),
-(4,4,'Nairobi National Park','Wildlife',600.00,'Game reserve within the city limits of Nairobi.',4.8,'06:00:00','18:00:00');
+(1,1,'Table Mountain Aerial Cableway','Nature',390.00,'Iconic cable car ride to the top of Table Mountain.',4.9,'08:00:00','18:00:00',NULL),
+(2,1,'Robben Island','Cultural',450.00,'Historic island and UNESCO World Heritage Site.',4.7,'09:00:00','17:00:00',NULL),
+(3,2,'Stone Town Tour','Cultural',80.00,'Guided walking tour through Zanzibar\'s historic Stone Town.',4.6,'08:00:00','20:00:00',NULL),
+(4,4,'Nairobi National Park','Wildlife',600.00,'Game reserve within the city limits of Nairobi.',4.8,'06:00:00','18:00:00',NULL);
 /*!40000 ALTER TABLE `attraction` ENABLE KEYS */;
 UNLOCK TABLES;
 COMMIT;
@@ -205,6 +207,53 @@ COMMIT;
 SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
 
 --
+-- Table structure for table `businessregistration`
+--
+
+DROP TABLE IF EXISTS `businessregistration`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `businessregistration` (
+  `reg_id` int(11) NOT NULL AUTO_INCREMENT,
+  `reg_number` varchar(50) NOT NULL,
+  `status` enum('valid','taken') NOT NULL DEFAULT 'valid',
+  `used_by` int(11) DEFAULT NULL,
+  PRIMARY KEY (`reg_id`),
+  UNIQUE KEY `uq_reg_number` (`reg_number`),
+  KEY `fk_breg_agent` (`used_by`),
+  CONSTRAINT `fk_breg_agent` FOREIGN KEY (`used_by`) REFERENCES `travelagent` (`agent_id`) ON DELETE SET NULL
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `businessregistration`
+--
+
+SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+LOCK TABLES `businessregistration` WRITE;
+/*!40000 ALTER TABLE `businessregistration` DISABLE KEYS */;
+INSERT INTO `businessregistration` VALUES
+(1,'SA-2023-001234','valid',NULL),
+(2,'SA-2023-005678','valid',NULL),
+(3,'SA-2023-009012','valid',NULL),
+(4,'SA-2024-001111','valid',NULL),
+(5,'SA-2024-002222','valid',NULL),
+(6,'SA-2024-003333','valid',NULL),
+(7,'SA-2024-004444','valid',NULL),
+(8,'SA-2024-005555','valid',NULL),
+(9,'SA-2024-006666','valid',NULL),
+(10,'SA-2024-007777','valid',NULL),
+(11,'SA-2025-000001','valid',NULL),
+(12,'SA-2025-000002','valid',NULL),
+(13,'SA-2025-000003','valid',NULL),
+(14,'SA-2025-000004','valid',NULL),
+(15,'SA-2025-000005','valid',NULL);
+/*!40000 ALTER TABLE `businessregistration` ENABLE KEYS */;
+UNLOCK TABLES;
+COMMIT;
+SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+--
 -- Table structure for table `destination`
 --
 
@@ -216,6 +265,7 @@ CREATE TABLE `destination` (
   `city` varchar(100) NOT NULL,
   `country` varchar(100) NOT NULL,
   `description` text DEFAULT NULL,
+  `img_url` varchar(500) DEFAULT NULL,
   PRIMARY KEY (`dest_id`),
   UNIQUE KEY `uq_destination` (`city`,`country`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
@@ -229,11 +279,43 @@ SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
 LOCK TABLES `destination` WRITE;
 /*!40000 ALTER TABLE `destination` DISABLE KEYS */;
 INSERT INTO `destination` VALUES
-(1,'Cape Town','South Africa','Mother City - mountains, beaches and world-class cuisine.'),
-(2,'Zanzibar','Tanzania','Tropical island paradise with white sandy beaches and spice history.'),
-(3,'Johannesburg','South Africa','The city of gold - vibrant culture and urban energy.'),
-(4,'Nairobi','Kenya','Gateway to the Masai Mara and East African wildlife.');
+(1,'Cape Town','South Africa','Mother City - mountains, beaches and world-class cuisine.',NULL),
+(2,'Zanzibar','Tanzania','Tropical island paradise with white sandy beaches and spice history.',NULL),
+(3,'Johannesburg','South Africa','The city of gold - vibrant culture and urban energy.',NULL),
+(4,'Nairobi','Kenya','Gateway to the Masai Mara and East African wildlife.',NULL);
 /*!40000 ALTER TABLE `destination` ENABLE KEYS */;
+UNLOCK TABLES;
+COMMIT;
+SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+--
+-- Table structure for table `favourite`
+--
+
+DROP TABLE IF EXISTS `favourite`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `favourite` (
+  `favourite_id` int(11) NOT NULL AUTO_INCREMENT,
+  `traveller_id` int(11) NOT NULL,
+  `package_id` int(11) NOT NULL,
+  `added_at` datetime NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`favourite_id`),
+  UNIQUE KEY `uq_favourite` (`traveller_id`,`package_id`),
+  KEY `fk_favourite_package` (`package_id`),
+  CONSTRAINT `fk_favourite_package` FOREIGN KEY (`package_id`) REFERENCES `package` (`package_id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_favourite_traveller` FOREIGN KEY (`traveller_id`) REFERENCES `traveller` (`traveller_id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `favourite`
+--
+
+SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+LOCK TABLES `favourite` WRITE;
+/*!40000 ALTER TABLE `favourite` DISABLE KEYS */;
+/*!40000 ALTER TABLE `favourite` ENABLE KEYS */;
 UNLOCK TABLES;
 COMMIT;
 SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
@@ -254,6 +336,7 @@ CREATE TABLE `flight` (
   `arrival_datetime` datetime NOT NULL,
   `classes` set('Economy','Business','First') NOT NULL DEFAULT 'Economy',
   `price` decimal(10,2) NOT NULL CHECK (`price` >= 0),
+  `img_url` varchar(500) DEFAULT NULL,
   PRIMARY KEY (`flight_id`),
   CONSTRAINT `CONSTRAINT_1` CHECK (`arrival_datetime` > `dept_date`),
   CONSTRAINT `CONSTRAINT_2` CHECK (`departure_airport` <> `arrival_airport`)
@@ -268,10 +351,10 @@ SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
 LOCK TABLES `flight` WRITE;
 /*!40000 ALTER TABLE `flight` DISABLE KEYS */;
 INSERT INTO `flight` VALUES
-(1,'South African Airways','JNB','CPT','2026-07-10 08:00:00','2026-07-10 10:00:00','Economy,Business',1200.00),
-(2,'Kenya Airways','JNB','NBO','2026-08-01 06:30:00','2026-08-01 11:00:00','Economy',3500.00),
-(3,'Precision Air','DAR','ZNZ','2026-08-05 13:00:00','2026-08-05 14:00:00','Economy',850.00),
-(4,'Airlink','CPT','JNB','2026-07-17 16:00:00','2026-07-17 18:00:00','Economy,Business',1100.00);
+(1,'South African Airways','JNB','CPT','2026-07-10 08:00:00','2026-07-10 10:00:00','Economy,Business',1200.00,NULL),
+(2,'Kenya Airways','JNB','NBO','2026-08-01 06:30:00','2026-08-01 11:00:00','Economy',3500.00,NULL),
+(3,'Precision Air','DAR','ZNZ','2026-08-05 13:00:00','2026-08-05 14:00:00','Economy',850.00,NULL),
+(4,'Airlink','CPT','JNB','2026-07-17 16:00:00','2026-07-17 18:00:00','Economy,Business',1100.00,NULL);
 /*!40000 ALTER TABLE `flight` ENABLE KEYS */;
 UNLOCK TABLES;
 COMMIT;
@@ -432,6 +515,35 @@ COMMIT;
 SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
 
 --
+-- Table structure for table `packageattraction`
+--
+
+DROP TABLE IF EXISTS `packageattraction`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `packageattraction` (
+  `package_id` int(11) NOT NULL,
+  `att_id` int(11) NOT NULL,
+  PRIMARY KEY (`package_id`,`att_id`),
+  KEY `att_id` (`att_id`),
+  CONSTRAINT `1` FOREIGN KEY (`package_id`) REFERENCES `package` (`package_id`) ON DELETE CASCADE,
+  CONSTRAINT `2` FOREIGN KEY (`att_id`) REFERENCES `attraction` (`att_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `packageattraction`
+--
+
+SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+LOCK TABLES `packageattraction` WRITE;
+/*!40000 ALTER TABLE `packageattraction` DISABLE KEYS */;
+/*!40000 ALTER TABLE `packageattraction` ENABLE KEYS */;
+UNLOCK TABLES;
+COMMIT;
+SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+--
 -- Table structure for table `packageflight`
 --
 
@@ -552,6 +664,7 @@ CREATE TABLE `restaurant` (
   `fee` decimal(10,2) DEFAULT 0.00 CHECK (`fee` >= 0),
   `description` text DEFAULT NULL,
   `rating` decimal(2,1) DEFAULT NULL CHECK (`rating` between 0.0 and 5.0),
+  `img_url` varchar(500) DEFAULT NULL,
   PRIMARY KEY (`res_id`),
   KEY `dest_id` (`dest_id`),
   CONSTRAINT `1` FOREIGN KEY (`dest_id`) REFERENCES `destination` (`dest_id`) ON UPDATE CASCADE
@@ -566,10 +679,10 @@ SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
 LOCK TABLES `restaurant` WRITE;
 /*!40000 ALTER TABLE `restaurant` DISABLE KEYS */;
 INSERT INTO `restaurant` VALUES
-(1,1,'The Test Kitchen','Fine Dining',850.00,'Award-winning restaurant in the Old Biscuit Mill.',4.9),
-(2,1,'Mama Africa','Local Cuisine',250.00,'Traditional African cuisine in the heart of Cape Town.',4.5),
-(3,2,'The Rock Restaurant','Seafood',600.00,'Unique restaurant built on a rock in the Indian Ocean.',4.8),
-(4,4,'Carnivore Restaurant','Barbecue',750.00,'Famous Nairobi restaurant serving exotic meats.',4.6);
+(1,1,'The Test Kitchen','Fine Dining',850.00,'Award-winning restaurant in the Old Biscuit Mill.',4.9,NULL),
+(2,1,'Mama Africa','Local Cuisine',250.00,'Traditional African cuisine in the heart of Cape Town.',4.5,NULL),
+(3,2,'The Rock Restaurant','Seafood',600.00,'Unique restaurant built on a rock in the Indian Ocean.',4.8,NULL),
+(4,4,'Carnivore Restaurant','Barbecue',750.00,'Famous Nairobi restaurant serving exotic meats.',4.6,NULL);
 /*!40000 ALTER TABLE `restaurant` ENABLE KEYS */;
 UNLOCK TABLES;
 COMMIT;
@@ -663,7 +776,9 @@ CREATE TABLE `travelagent` (
   `agency_name` varchar(100) NOT NULL,
   `phone_number` varchar(20) DEFAULT NULL,
   `website` varchar(255) DEFAULT NULL,
+  `registration_number` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`agent_id`),
+  UNIQUE KEY `registration_number` (`registration_number`),
   CONSTRAINT `1` FOREIGN KEY (`agent_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -676,8 +791,8 @@ SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
 LOCK TABLES `travelagent` WRITE;
 /*!40000 ALTER TABLE `travelagent` DISABLE KEYS */;
 INSERT INTO `travelagent` VALUES
-(1,'Sunway Travels','+27 11 234 5678','www.sunwaytravels.co.za'),
-(2,'Globe Hopper Tours','+27 21 987 6543','www.globehopper.co.za');
+(1,'Sunway Travels','+27 11 234 5678','www.sunwaytravels.co.za',NULL),
+(2,'Globe Hopper Tours','+27 21 987 6543','www.globehopper.co.za',NULL);
 /*!40000 ALTER TABLE `travelagent` ENABLE KEYS */;
 UNLOCK TABLES;
 COMMIT;
@@ -731,9 +846,10 @@ CREATE TABLE `user` (
   `password_hash` varchar(255) NOT NULL,
   `user_type` enum('traveller','travel_agent') NOT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `api_key` varchar(64) DEFAULT NULL,
   PRIMARY KEY (`user_id`),
-  UNIQUE KEY `username` (`username`),
-  UNIQUE KEY `email` (`email`)
+  UNIQUE KEY `email` (`email`),
+  UNIQUE KEY `api_key` (`api_key`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -745,11 +861,11 @@ SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
 INSERT INTO `user` VALUES
-(1,'sunway_travels','info@sunwaytravels.co.za','f44d1ac9bf0c69b083380b86dbdf3b73797150e3cca4820ac399f7917e607647','travel_agent','2026-05-12 23:59:45'),
-(2,'globehopper','hello@globehopper.co.za','d423f9d5a1398e656b5d0e97f76dac25ca901542daa1018a88d34dfccb4a8de9','travel_agent','2026-05-12 23:59:45'),
-(3,'katlego_t','katlego@mail.com','9b8769a4a742959a2d0298c36fb70623f2dfacda8436237df08d8dfd5b37374c','traveller','2026-05-12 23:59:45'),
-(4,'thabo_m','thabo@mail.com','1d4598d1949b47f7f211134b639ec32238ce73086a83c2f745713b3f12f817e5','traveller','2026-05-12 23:59:45'),
-(5,'lerato_d','lerato@mail.com','9dbd5c893b5b573a1aa909c8cade58df194310e411c590d9fb0d63431841fd67','traveller','2026-05-12 23:59:45');
+(1,'sunway_travels','info@sunwaytravels.co.za','f44d1ac9bf0c69b083380b86dbdf3b73797150e3cca4820ac399f7917e607647','travel_agent','2026-05-12 23:59:45','93cfc0dfcd553d526a258b70ec7bfef7'),
+(2,'globehopper','hello@globehopper.co.za','d423f9d5a1398e656b5d0e97f76dac25ca901542daa1018a88d34dfccb4a8de9','travel_agent','2026-05-12 23:59:45','97f3affa44b008274ae6533c953a1f49'),
+(3,'katlego_t','katlego@mail.com','9b8769a4a742959a2d0298c36fb70623f2dfacda8436237df08d8dfd5b37374c','traveller','2026-05-12 23:59:45','4a22690e858b02ddc4f197b07ee5448a'),
+(4,'thabo_m','thabo@mail.com','1d4598d1949b47f7f211134b639ec32238ce73086a83c2f745713b3f12f817e5','traveller','2026-05-12 23:59:45','b73dcdf83b331d060e57cdb92ea37ddd'),
+(5,'lerato_d','lerato@mail.com','9dbd5c893b5b573a1aa909c8cade58df194310e411c590d9fb0d63431841fd67','traveller','2026-05-12 23:59:45','9c939e4d026ad78491fbe36e54d8d80c');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 COMMIT;
@@ -764,4 +880,4 @@ SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2026-05-13  0:43:09
+-- Dump completed on 2026-05-24 15:54:25

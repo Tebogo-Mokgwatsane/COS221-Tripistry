@@ -36,13 +36,13 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="browse/flights.html">
+                                    <a href="browse/flights/flights.php">
                                         <img src="../img/icons/plane-black.svg" alt="Plane">
                                         Flights
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="browse/accommodations.html">
+                                    <a href="../browse/accommodations/accommodations.php">
                                         <img src="../img/icons/bed.svg" alt="Bed icon">
                                         Accommodations
                                     </a>

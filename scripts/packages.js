@@ -1,7 +1,9 @@
 const user = JSON.parse(localStorage.getItem("user")) || {};
 
 const packagesUsername = document.getElementById("packages-username");
-packagesUsername.textContent = user.name;
+if (packagesUsername) {
+    packagesUsername.textContent = user.username || "Traveller";
+}
 
 //logic for filtering by group/solo packages
 const groupBtn = document.getElementById("group-btn");

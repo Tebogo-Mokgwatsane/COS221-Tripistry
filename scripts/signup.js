@@ -136,8 +136,8 @@ form.addEventListener("submit", (e) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
     })
-    //.then(res => res.json())
-    .then(res => {//debugging
+    /*.then(res => res.json())
+    /*.then(res => {//debugging
     return res.text().then(text => {
         try {
             return JSON.parse(text);
@@ -146,6 +146,15 @@ form.addEventListener("submit", (e) => {
             throw new Error("Server did not return valid JSON");
         }
     });
+    })*/
+    .then(res => res.text())
+    .then(text => {
+        console.log("Raw Response:", text);   // ← Debug
+        try {
+            return JSON.parse(text);
+        } catch (e) {
+            throw new Error("Invalid JSON response");
+        }
     })
     .then(data => {
         if (data.status === "success") {

@@ -75,8 +75,8 @@ function handleLogin() {
             password: password
         })
     })
-    .then(res => res.json())
-    /*.then(res => {//debugging
+    //.then(res => res.json())
+    .then(res => {//debugging
     return res.text().then(text => {
         try {
             return JSON.parse(text);
@@ -85,7 +85,7 @@ function handleLogin() {
             throw new Error("Server did not return valid JSON");
         }
     });
-    })*/
+    })
     .then(data => {
         if (data.status === "success") {
             const selectedType = activeTab;                    // "traveller" or "agency" to correspond with slider in html
@@ -109,9 +109,9 @@ function handleLogin() {
             alert("Welcome back, " + data.data.username + "!");
 
             if (userType === "travel_agent") {
-                window.location.href = "Tripistry/agent.html";
+                window.location.href = "agency/index.html";
             } else {
-                window.location.href = "Tripistry/traveller.html";
+                window.location.href = "traveller/index.php";
             }
 
         } else {

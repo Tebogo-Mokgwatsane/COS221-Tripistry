@@ -40,6 +40,9 @@ require_once 'config.php';
             case "Search":
                 $this->searchPackages($input);
                 break;
+            case "Accommodations":
+                $this->getAccommodations($input);
+                break;
             default:
                 $this->jsonResponse("error", "Unknown request type");
                 break;
@@ -74,15 +77,15 @@ require_once 'config.php';
     // Registering user ====================
     private function registerUser($data) {
         if (empty($data['email']) || empty($data['password']) || empty($data['user_type'])) {
-            $this->jsonResponse("error", "All fields are required");
+            $this->jsonResponse("error", "All fields are required", [], 400);
         }
 
         if (empty($data['username'])) {
-            $this->jsonResponse("error", "Username is required");
+            $this->jsonResponse("error", "Username is required", [], 400);
         }
 
         if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
-            $this->jsonResponse("error", "Invalid email address");
+            $this->jsonResponse("error", "Invalid email address", [], 400);
         }
 
         $passRegex = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/";
@@ -96,29 +99,29 @@ require_once 'config.php';
         // Agency specific validation
         if ($userType === "agency" || $userType === "travel_agent") {
             if (empty($data['registration_num'])) {
-                $this->jsonResponse("error", "Registration number is required for agencies");
+                $this->jsonResponse("error", "Registration number is required for agencies", [], 400);
             }
 
             // Check if registration number is valid in reg_numbers table
-            $stmt = $this->mysqli->prepare("SELECT id FROM reg_numbers WHERE registration_num = ? AND status = 'valid'");
+            $stmt = $this->mysqli->prepare("SELECT reg_id FROM businessregistration WHERE reg_number = ? AND status = 'valid'");
             $stmt->bind_param("s", $data['registration_num']);
             $stmt->execute();
             $stmt->store_result();
 
             if ($stmt->num_rows === 0) {
                 $stmt->close();
-                $this->jsonResponse("error", "Invalid or unlicensed registration number");
+                $this->jsonResponse("error", "Invalid or unlicensed registration number", [], 400);
             }
             else //If valid, check if not taken
             {
                 $stmt->close();
-                $stmt = $this->mysqli->prepare("SELECT user_id FROM user WHERE registration_num = ?");
-                $stmt->bind_param("s", $data['registration_num']);
+                $stmt = $this->mysqli->prepare("SELECT reg_id FROM businessregistration WHERE (used_by IS NOT NULL AND reg_number = ?) OR (reg_number = ? AND status = 'taken')");
+                $stmt->bind_param("ss", $data['registration_num'], $data['registration_num']);
                 $stmt->execute();
                 $stmt->store_result();
                 if ($stmt->num_rows > 0) {
                     $stmt->close();
-                    $this->jsonResponse("error", "Registration number already in use by another account");
+                    $this->jsonResponse("error", "Registration number already in use by another account", [], 409);
                 }
             }
             $stmt->close();
@@ -131,20 +134,20 @@ require_once 'config.php';
         $stmt->store_result();
         if ($stmt->num_rows > 0) {
             $stmt->close();
-            $this->jsonResponse("error", "Email already registered");
+            $this->jsonResponse("error", "Email already registered", [], 409);
         }
         $stmt->close();
         
-        // Check if username already exists (db has a constraint that doesnt allow dublicate usernames so for now This stops the error from the db being thrown)
+        /*// Check if username already exists (db has a constraint that doesnt allow dublicate usernames so for now This stops the error from the db being thrown)
         $stmt = $this->mysqli->prepare("SELECT user_id FROM user WHERE username = ?");
         $stmt->bind_param("s", $data['username']);
         $stmt->execute();
         $stmt->store_result();
         if ($stmt->num_rows > 0) {
             $stmt->close();
-            $this->jsonResponse("error", "Username \"" . $data['username'] . "\" is already taken");
+            $this->jsonResponse("error", "Username \"" . $data['username'] . "\" is already taken", [], 409);
         }
-        $stmt->close();
+        $stmt->close();*/
 
         // Hash password
         $hashed = password_hash($data['password'], PASSWORD_DEFAULT);
@@ -154,9 +157,9 @@ require_once 'config.php';
 
         $reg_num = isset($data['registration_num']) ? trim($data['registration_num']) : null;
         // Insert user
-        $stmt = $this->mysqli->prepare("INSERT INTO user (username, email, password_hash, user_type, api_key, registration_num)
-                                     VALUES (?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("ssssss", $username, $data['email'], $hashed, $userType, $apiKey, $reg_num);
+        $stmt = $this->mysqli->prepare("INSERT INTO user (username, email, password_hash, user_type, api_key)
+                                     VALUES (?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssss", $username, $data['email'], $hashed, $userType, $apiKey);
         $success = $stmt->execute();
         $userId = $this->mysqli->insert_id;
         $stmt->close();
@@ -173,31 +176,35 @@ require_once 'config.php';
         else // Agency
         { 
             $agencyName = $data['agency_name'] ?? $username;
-            $stmt = $this->mysqli->prepare("INSERT INTO travelagent (agent_id, agency_name) 
-                                            VALUES (?, ?)");
-            $stmt->bind_param("is", $userId, $agencyName);
+            $stmt = $this->mysqli->prepare("INSERT INTO travelagent (agent_id, agency_name, registration_number) 
+                                            VALUES (?, ?, ?)");
+            $stmt->bind_param("iss", $userId, $agencyName, $reg_num);
             $stmt->execute();
 
-            $stmt = $this->mysqli->prepare("UPDATE reg_numbers SET status = 'invalid' WHERE registration_num = ?");
+            $stmt = $this->mysqli->prepare("UPDATE businessregistration SET status = 'taken' WHERE reg_number = ?");
             $stmt->bind_param("s", $reg_num);
             $success2 = $stmt->execute();
             $stmt->close();
         }
 
         if ($success || $success2) {
-            $this->jsonResponse("success", "Registration Successful!");
+            $this->jsonResponse("success", "Registration Successful!", [
+                "apikey" => $apiKey,
+                "username" => $username,
+                "user_type" => $userType
+            ], 201);
         } else {
-            $this->jsonResponse("error", "Failed to register user");
+            $this->jsonResponse("error", "Failed to register user", [], 500);
         }
     }
 
     // Logging in user ====================
     private function loginUser($data) {
         if (empty($data['email']) || empty($data['password'])) {
-            $this->jsonResponse("error", "Email and password required");
+            $this->jsonResponse("error", "Email and password required", [], 400);
         }
 
-        $stmt = $this->mysqli->prepare("SELECT user_id, username, email, password_hash, user_type, registration_num, api_key FROM user WHERE email = ?");
+        $stmt = $this->mysqli->prepare("SELECT user_id, username, email, password_hash, user_type, api_key FROM user WHERE email = ?");
         $stmt->bind_param("s", $data['email']);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -217,7 +224,7 @@ require_once 'config.php';
             "apikey" => $user['api_key'],
             "username"   => $user['username'],
             "user_type"   => $user['user_type']
-        ]);
+        ], 200);
     }
 
     // Searching for packages ====================
@@ -235,13 +242,13 @@ require_once 'config.php';
             p.description,
             p.price,
             p.quantity,
-            COALESCE(p.image_url, 'https://via.placeholder.com/300x200') as image_url,
+            'https://via.placeholder.com/300x200' as image_url,
             (p.quantity > 0) as in_stock,
             4.8 as rating,
             ta.agency_name as agency,
             CONCAT(d.city, ', ', d.country) as location,
             'Group' as package_type,
-            p.nights
+            '5 nights' as nights
         FROM package p
         LEFT JOIN destination d ON p.dest_id = d.dest_id
         LEFT JOIN travelagent ta ON p.agent_id = ta.agent_id
@@ -267,6 +274,31 @@ require_once 'config.php';
         $this->jsonResponse("success", "Search completed", [
             "packages" => $packages
         ]);
+    }
+
+    // Get Accommodations ====================
+    public function getAccommodations() {
+        $result = $this->mysqli->query("
+            SELECT 
+                a.acc_id,
+                a.acc_name,
+                a.acc_type,
+                a.rating,
+                a.price_per_night,
+                a.description,
+                a.img_url,
+                aa.city,
+                aa.country
+            FROM accommodation a
+            LEFT JOIN accommodationaddress aa ON a.acc_id = aa.acc_id
+            ORDER BY a.price_per_night ASC
+        ");
+
+        $accommodations = [];
+        while ($row = $result->fetch_assoc()) {
+            $accommodations[] = $row;
+        }
+        $this->jsonResponse("success", "Accommodations retrieved", $accommodations);
     }
 }
  
