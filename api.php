@@ -81,7 +81,7 @@ require_once 'config.php';
             }
 
             // Check if registration number is valid in reg_numbers table
-            $stmt = $this->mysqli->prepare("SELECT id FROM reg_numbers WHERE registration_num = ? AND status = 'valid' LIMIT 1");
+            $stmt = $this->mysqli->prepare("SELECT id FROM reg_numbers WHERE registration_num = ? AND status = 'valid'");
             $stmt->bind_param("s", $data['registration_num']);
             $stmt->execute();
             $stmt->store_result();
@@ -89,11 +89,18 @@ require_once 'config.php';
             if ($stmt->num_rows === 0) {
                 $stmt->close();
                 $this->jsonResponse("error", "Invalid or unlicensed registration number");
-                $stmt = $this->mysqli->prepare("INSERT INTO reg_numbers (registration_num)
-                                     VALUES (?)");
+            }
+            else //If valid, check if not taken
+            {
+                $stmt->close();
+                $stmt = $this->mysqli->prepare("SELECT user_id FROM user WHERE registration_num = ?");
                 $stmt->bind_param("s", $data['registration_num']);
                 $stmt->execute();
                 $stmt->store_result();
+                if ($stmt->num_rows > 0) {
+                    $stmt->close();
+                    $this->jsonResponse("error", "Registration number already in use by another account");
+                }
             }
             $stmt->close();
         }
@@ -132,9 +139,33 @@ require_once 'config.php';
                                      VALUES (?, ?, ?, ?, ?, ?)");
         $stmt->bind_param("ssssss", $username, $data['email'], $hashed, $userType, $apiKey, $reg_num);
         $success = $stmt->execute();
+        $userId = $this->mysqli->insert_id;
         $stmt->close();
 
-        if ($success) {
+        // Insert into specific table
+        if ($userType === "traveller") {
+            $fname = $data['fname'] ?? '';
+            $lname = $data['lname'] ?? '';
+            $stmt = $this->mysqli->prepare("INSERT INTO traveller (traveller_id, first_name, last_name, type) 
+                                            VALUES (?, ?, ?, 'Solo')");
+            $stmt->bind_param("iss", $userId, $fname, $lname);
+            $stmt->execute();
+        } 
+        else // Agency
+        { 
+            $agencyName = $data['agency_name'] ?? $username;
+            $stmt = $this->mysqli->prepare("INSERT INTO travelagent (agent_id, agency_name) 
+                                            VALUES (?, ?)");
+            $stmt->bind_param("is", $userId, $agencyName);
+            $stmt->execute();
+
+            $stmt = $this->mysqli->prepare("UPDATE reg_numbers SET status = 'invalid' WHERE registration_num = ?");
+            $stmt->bind_param("s", $reg_num);
+            $success2 = $stmt->execute();
+            $stmt->close();
+        }
+
+        if ($success || $success2) {
             $this->jsonResponse("success", "Registration Successful!");
         } else {
             $this->jsonResponse("error", "Failed to register user");
