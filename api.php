@@ -229,19 +229,29 @@ require_once 'config.php';
         $query = "%" . $data['query'] . "%";
 
         $stmt = $this->mysqli->prepare("
-            SELECT DISTINCT p.title, p.package_id, p.description as package_description, p.price, p.quantity, 
-                   d.description as destination_description, d.city, d.country,
-                   a.name as attraction_name, a.description as attraction_description
-            FROM package p
-            LEFT JOIN destination d ON p.dest_id = d.dest_id
-            LEFT JOIN attraction a ON p.dest_id = a.dest_id
-            WHERE p.title LIKE ? 
-                OR p.description LIKE ? 
-                OR d.description LIKE ? 
-                OR d.city LIKE ? 
-                OR d.country LIKE ?
-            ORDER BY p.price ASC
-            LIMIT 20
+        SELECT 
+            p.package_id as id,
+            p.title,
+            p.description,
+            p.price,
+            p.quantity,
+            COALESCE(p.image_url, 'https://via.placeholder.com/300x200') as image_url,
+            (p.quantity > 0) as in_stock,
+            4.8 as rating,
+            ta.agency_name as agency,
+            CONCAT(d.city, ', ', d.country) as location,
+            'Group' as package_type,
+            p.nights
+        FROM package p
+        LEFT JOIN destination d ON p.dest_id = d.dest_id
+        LEFT JOIN travelagent ta ON p.agent_id = ta.agent_id
+        WHERE p.title LIKE ? 
+           OR p.description LIKE ? 
+           OR d.city LIKE ? 
+           OR d.country LIKE ?
+           OR ta.agency_name LIKE ?
+        ORDER BY p.price ASC
+        LIMIT 20
         ");
 
         $stmt->bind_param("sssss", $query, $query, $query, $query, $query);
@@ -255,8 +265,7 @@ require_once 'config.php';
         $stmt->close();
 
         $this->jsonResponse("success", "Search completed", [
-            "packages" => $packages,
-            "count" => count($packages)
+            "packages" => $packages
         ]);
     }
 }
