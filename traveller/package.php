@@ -22,7 +22,7 @@
                         <span>In Stock</span>
                     </div>
                     <div class="group-package package-sticker">
-                        <img src="../img/icons/users.svg" alt="Users">
+                        <img src="../img/icons/users-white.svg" alt="Users">
                         <span>Group Package</span>
                     </div>
                     <div class="location package-sticker">
@@ -37,7 +37,7 @@
                             <polygon points="50,5 61,35 95,35 67,57 78,90 50,72 22,90 33,57 5,35 39,35" fill="orange"/>
                         </svg> 
                         <span>4.9</span>
-                        <span>(84 reviews)</span>
+                        <span class="reviews-count">(84 reviews)</span>
                     </div>
                     <div class="duration package-sticker">
                         <img src="../img/icons/clock-white.svg" alt="Clock">

@@ -38,7 +38,7 @@
 .package-overlay {
     position: absolute;
     inset: 0;
-    background-color: rgba(0, 0, 0, 0.5);border-top-left-radius: 50px;
+    background-color: rgba(0, 0, 0, 0.6);border-top-left-radius: 50px;
     border-top-left-radius: 50px;
     border-top-right-radius: 50px;
 }
@@ -64,6 +64,36 @@
     gap: 15px;
 }
 
+.top-details div {
+    padding: 5px 12px;
+    border-radius: 30px;
+}
+
+.in-stock {
+    background-color: rgba(4, 171, 71, 0.9);
+}
+
+.out-of-stock {
+    background-color: rgb(239, 31, 31);
+}
+
+.group-package {
+    border: 1px solid #2ac6ff;
+    width: fit-content;
+    background-color: rgba(0, 106, 255, 0.871);
+}
+
+.solo-package {
+    border: 1px solid rgb(250, 80, 18);
+    width: fit-content;
+    background-color: rgba(250, 80, 18, 0.9);
+}
+
+.location {
+    border: 1px solid #ccc;
+    background-color: rgb(128, 128, 128, 0.9);
+}
+
 .package-sticker {
     display: flex;
     align-items: center;
@@ -76,4 +106,8 @@
 
 .package-sticker img {
     width: 18px;
+}
+
+.package-details .bottom-details .package-rating .reviews-count {
+    color: rgb(217, 216, 216);
 }

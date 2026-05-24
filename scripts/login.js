@@ -57,7 +57,7 @@ tabs.forEach((tab, index) => {
 
 });
 
-function handleLogin() {
+const handleLogin = async () => {
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value.trim();
 
@@ -65,8 +65,7 @@ function handleLogin() {
         alert("Please fill in all fields");
         return;
     }
-
-    fetch('http://localhost/COS221-Tripistry/api.php', {
+    const res = await fetch('api.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -74,34 +73,60 @@ function handleLogin() {
             email: email,
             password: password
         })
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.status === "success") {
-
-            // Save to localStorage
-            localStorage.setItem('user', JSON.stringify({
-                username: data.data.username,
-                user_type: data.data.user_type
-            }));
-
-            // Store API key in cookie
-            document.cookie = `apiKey=${data.data.apikey}; path=/; max-age=18000`;//expires in 5hrs
-
-            alert("Welcome back, " + data.data.username + "!");
-
-            if (data.data.user_type === "travel_agent") {
-                window.location.href = "agency/";
-            } else {
-                window.location.href = "traveller/";
-            }
-
-        } else {
-            alert(data.message || "Login failed");
-        }
-    })
-    .catch(err => {
-        console.error(err);
-        alert("Error connecting to server. Please try again.");
     });
+
+    
+    console.log(res);
+    // .then(res => res.json())
+    // /*.then(res => {//debugging
+    // return res.text().then(text => {
+    //     try {
+    //         return JSON.parse(text);
+    //     } catch (err) {
+    //         console.error("The raw server login response was:", text);
+    //         throw new Error("Server did not return valid JSON");
+    //     }
+    // });
+    // // })*/
+    // .then(data => {
+    //     if (data.status === "success") {
+    //         const selectedType = activeTab;                    // "traveller" or "agency" to correspond with slider in html
+    //         const userType = data.data.user_type;
+
+    //         //User type should match selected tab
+    //         if ((selectedType === "traveller" && userType !== "traveller") || (selectedType === "agency" && (userType !== "travel_agent"))) {
+    //             alert("Wrong account type. Please select the correct tab.");
+    //             return;
+    //         }
+
+    //         // Save to localStorage
+    //         localStorage.setItem('user', JSON.stringify({
+    //             username: data.data.username,
+    //             user_type: userType
+    //         }));
+
+    //         // Store API key in cookie
+    //         document.cookie = `apiKey=${data.data.apikey}; path=/; max-age=18000`;//expires in 5hrs
+
+    //         alert("Welcome back, " + data.data.username + "!");
+
+
+    //         if (data.data.user_type === "travel_agent") {
+    //             window.location.href = "agency/";
+
+    //         if (userType === "travel_agent") {
+    //             window.location.href = "Tripistry/agent.html";
+
+    //         } else {
+    //             window.location.href = "traveller/";
+    //         }
+
+    //     } else {
+    //         alert(data.message || "Login failed");
+    //     }
+    // })
+    // .catch(err => {
+    //     console.error(err);
+    //     alert("Error connecting to server. Please try again.");
+    // });
 }

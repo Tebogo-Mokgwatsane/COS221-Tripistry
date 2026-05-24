@@ -2,8 +2,15 @@
 
     
 header("Content-Type: application/json");
+<<<<<<< HEAD
 //define('USE_LOCAL_CONFIG', true);
 require_once 'Tripistry/config.php';
+=======
+
+define('USE_LOCAL_CONFIG', true);
+//require_once 'Tripistry/config.php';
+require_once 'config.php';
+>>>>>>> 2f81d49730598e7780d57c064b6e42b90dfde178
     
 class API {
     private $mysqli; // mysqli connection
@@ -118,10 +125,38 @@ class API {
             $this->jsonResponse("error", "Password must be 8+ chars with upper, lower, number and symbol");
         }
 
-        if ($data['user_type'] === 'agency') {
+        $userType = $data['user_type'];
+        $username = $data['username'] ?? '';
+
+        // Agency specific validation
+        if ($userType === "agency" || $userType === "travel_agent") {
             if (empty($data['registration_num'])) {
-                $this->jsonResponse("error", "Business registration number is required for agencies");
+                $this->jsonResponse("error", "Registration number is required for agencies");
             }
+
+            // Check if registration number is valid in reg_numbers table
+            $stmt = $this->mysqli->prepare("SELECT id FROM reg_numbers WHERE registration_num = ? AND status = 'valid'");
+            $stmt->bind_param("s", $data['registration_num']);
+            $stmt->execute();
+            $stmt->store_result();
+
+            if ($stmt->num_rows === 0) {
+                $stmt->close();
+                $this->jsonResponse("error", "Invalid or unlicensed registration number");
+            }
+            else //If valid, check if not taken
+            {
+                $stmt->close();
+                $stmt = $this->mysqli->prepare("SELECT user_id FROM user WHERE registration_num = ?");
+                $stmt->bind_param("s", $data['registration_num']);
+                $stmt->execute();
+                $stmt->store_result();
+                if ($stmt->num_rows > 0) {
+                    $stmt->close();
+                    $this->jsonResponse("error", "Registration number already in use by another account");
+                }
+            }
+            $stmt->close();
         }
 
         // Check if email exists
@@ -135,14 +170,14 @@ class API {
         }
         $stmt->close();
         
-        // Check if username already exists
+        // Check if username already exists (db has a constraint that doesnt allow dublicate usernames so for now This stops the error from the db being thrown)
         $stmt = $this->mysqli->prepare("SELECT user_id FROM user WHERE username = ?");
         $stmt->bind_param("s", $data['username']);
         $stmt->execute();
         $stmt->store_result();
         if ($stmt->num_rows > 0) {
             $stmt->close();
-            $this->jsonResponse("error", "Username already taken");
+            $this->jsonResponse("error", "Username \"" . $data['username'] . "\" is already taken");
         }
         $stmt->close();
 
@@ -153,14 +188,39 @@ class API {
         // Generate API key
         $apiKey = bin2hex(random_bytes(16));
 
+        $reg_num = isset($data['registration_num']) ? trim($data['registration_num']) : null;
         // Insert user
-        $stmt = $this->mysqli->prepare("INSERT INTO user (username, email, password_hash, user_type, api_key)
-                                     VALUES (?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssss", $data['username'], $data['email'], $hashed, $data['user_type'], $apiKey);
+        $stmt = $this->mysqli->prepare("INSERT INTO user (username, email, password_hash, user_type, api_key, registration_num)
+                                     VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssssss", $username, $data['email'], $hashed, $userType, $apiKey, $reg_num);
         $success = $stmt->execute();
+        $userId = $this->mysqli->insert_id;
         $stmt->close();
 
-        if ($success) {
+        // Insert into specific table
+        if ($userType === "traveller") {
+            $fname = $data['fname'] ?? '';
+            $lname = $data['lname'] ?? '';
+            $stmt = $this->mysqli->prepare("INSERT INTO traveller (traveller_id, first_name, last_name, type) 
+                                            VALUES (?, ?, ?, 'Solo')");
+            $stmt->bind_param("iss", $userId, $fname, $lname);
+            $stmt->execute();
+        } 
+        else // Agency
+        { 
+            $agencyName = $data['agency_name'] ?? $username;
+            $stmt = $this->mysqli->prepare("INSERT INTO travelagent (agent_id, agency_name) 
+                                            VALUES (?, ?)");
+            $stmt->bind_param("is", $userId, $agencyName);
+            $stmt->execute();
+
+            $stmt = $this->mysqli->prepare("UPDATE reg_numbers SET status = 'invalid' WHERE registration_num = ?");
+            $stmt->bind_param("s", $reg_num);
+            $success2 = $stmt->execute();
+            $stmt->close();
+        }
+
+        if ($success || $success2) {
             $this->jsonResponse("success", "Registration Successful!");
         } else {
             $this->jsonResponse("error", "Failed to register user");
@@ -172,10 +232,15 @@ class API {
         if (empty($data['email']) || empty($data['password'])) {
             $this->jsonResponse("error", "Email and password required");
         }
+<<<<<<< HEAD
         //changed to match database
         $stmt = $this->mysqli->prepare(
     "SELECT user_id, username, email, password_hash, api_key, user_type FROM user WHERE email = ?"
 );
+=======
+
+        $stmt = $this->mysqli->prepare("SELECT user_id, username, email, password_hash, user_type, registration_num, api_key FROM user WHERE email = ?");
+>>>>>>> 2f81d49730598e7780d57c064b6e42b90dfde178
         $stmt->bind_param("s", $data['email']);
         $stmt->execute();
         $result = $stmt->get_result();

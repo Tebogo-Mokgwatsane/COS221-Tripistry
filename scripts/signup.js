@@ -81,7 +81,7 @@ form.addEventListener("submit", (e) => {
         user_type: activeTab
     };
 
-    const emailRegex = /^[a-zA-Z0-9._% +-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
 
     if (activeTab === "traveller") {
@@ -95,18 +95,20 @@ form.addEventListener("submit", (e) => {
             return;
         } else {fnameError.textContent = "";}
 
-        if (!emailRegex.test(email.value)){
+        if (!emailRegex.test(email)){
             emailError.textContent = "Enter a valid email address";
             return;
         } else {emailError.textContent = "";}
 
-        if (!passwordRegex.test(password.value)){
+        if (!passwordRegex.test(password)){
             passwordError.textContent = "Password should be at least 8 characters long, contain upper and lower case letters, at least one digit and one symbol."
             passwordError.style.marginBottom = "15px";
             return;
         } else {passwordError.textContent = ""; passwordError.style.marginBottom = "0";}
 
         formData.username = fname + " " + lname;
+        formData.fname= fname;
+        formData.lname= lname;
         formData.email = email;
         formData.password = password;
 
@@ -125,6 +127,7 @@ form.addEventListener("submit", (e) => {
         formData.email = email;
         formData.password = password;
         formData.registration_num = regNum;
+        formData.agency_name = agencyName;
     }
 
     //Sending data to api
@@ -133,7 +136,17 @@ form.addEventListener("submit", (e) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
     })
-    .then(res => res.json())
+    //.then(res => res.json())
+    .then(res => {//debugging
+    return res.text().then(text => {
+        try {
+            return JSON.parse(text);
+        } catch (err) {
+            console.error("The raw server login response was:", text);
+            throw new Error("Server did not return valid JSON");
+        }
+    });
+    })
     .then(data => {
         if (data.status === "success") {
             localStorage.setItem('user', JSON.stringify({
