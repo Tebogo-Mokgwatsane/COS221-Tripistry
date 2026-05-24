@@ -3,7 +3,7 @@
     
 header("Content-Type: application/json");
 //define('USE_LOCAL_CONFIG', true);
-require_once 'Tripistry/config.php';
+require_once 'config.php';
     
 class API {
     private $mysqli; // mysqli connection
@@ -483,6 +483,6 @@ class API {
 }
  
 // Run API
-$api = new API();
-$api->handleRequest();
+// $api = new API();
+// $api->handleRequest();
 ?> 

@@ -16,6 +16,6 @@
                 <a href="signup.html" class="signup-btn">Join Tripistry</a>
             </div>
         </div>
-    </nav>
+</nav>
 
 <script src="scripts/navbar.js"></script>

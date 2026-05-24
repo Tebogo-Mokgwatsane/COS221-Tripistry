@@ -1,14 +1,3 @@
-<?php 
- include ("../../api.php");
-
- $api = new API();
- $flights = $api->getflights();
-
- header('Content-Type: application/json');
- echo json_encode($flights);
-
-
-?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -22,7 +11,8 @@
 </head>
 <body>
     <?php include ("../../navbar.php"); ?>
-    <div class="flight-grid" id="flights">
+    <div id="flights" class="flight-grid" >
+       
     </div>
 
 </body>
