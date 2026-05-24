@@ -42,7 +42,7 @@ soloBtn.addEventListener("click", (e) => {
 // some mock data
 let packages = [
   {
-    id: 1,
+    package_id: 1,
     image_url: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e",
     in_stock: true,
     rating: 4.9,
@@ -54,7 +54,7 @@ let packages = [
     price: 6125
   },
   {
-    id: 2,
+    package_id: 2,
     image_url: "https://images.unsplash.com/photo-1516026672322-bc52d61a55d5",
     in_stock: false,
     rating: 4.7,
@@ -66,7 +66,7 @@ let packages = [
     price: 9850
   },
   {
-    id: 3,
+    package_id: 3,
     image_url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
     in_stock: true,
     rating: 4.8,
@@ -78,7 +78,7 @@ let packages = [
     price: 4999
   },
   {
-    id: 4,
+    package_id: 4,
     image_url: "https://images.unsplash.com/photo-1493246507139-91e8fad9978e",
     in_stock: true,
     rating: 5.0,
@@ -90,7 +90,7 @@ let packages = [
     price: 2450
   },
   {
-    id: 5,
+    package_id: 5,
     image_url: "https://images.unsplash.com/photo-1521295121783-8a321d551ad2",
     in_stock: true,
     rating: 4.6,
@@ -102,7 +102,7 @@ let packages = [
     price:5300
   },
   {
-    id: 6,
+    package_id: 6,
     image_url: "https://images.unsplash.com/photo-1470770841072-f978cf4d019e",
     in_stock: true,
     rating: 4.9,
@@ -114,7 +114,7 @@ let packages = [
     price: 8700
   },
   {
-    id: 7,
+    package_id: 7,
     image_url: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee",
     in_stock: true,
     rating: 4.5,
@@ -126,7 +126,7 @@ let packages = [
     price: 1799
   },
   {
-    id: 8,
+    package_id: 8,
     image_url: "https://images.unsplash.com/photo-1469474968028-56623f02e42e",
     in_stock: false,
     rating: 4.8,
@@ -205,6 +205,8 @@ const renderPackages = (packagesArray, firstRender = false) => {
 
     packagesArray.forEach((package) => {
         const packageCard = document.createElement("div");
+        const packageLink = document.createElement("a");
+        packageLink.href = `package.html?package_id=${package.package_id}`
         packageCard.classList.add("package-card");
         packageCard.innerHTML = `
             <div class="card-img-container">
@@ -243,12 +245,14 @@ const renderPackages = (packagesArray, firstRender = false) => {
                 <div>
                     <p class="package-from">FROM</p>
                     <div class="package-price">
-                        <span>R${package.price.toLocaleString()}</span>/pp
+                        <p><span>R${package.price.toLocaleString()}</span>/pp</p>
+                        <button id="explore-btn">Explore </button>
                     </div>
                 </div>
             </div>
         `;
-        cardsContainer.appendChild(packageCard);
+        packageLink.appendChild(packageCard);
+        cardsContainer.appendChild(packageLink);
 
     })
 }
