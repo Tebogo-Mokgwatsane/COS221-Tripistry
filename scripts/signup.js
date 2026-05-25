@@ -131,7 +131,7 @@ form.addEventListener("submit", (e) => {
     }
 
     //Sending data to api
-    fetch('http://localhost/COS221-Tripistry/api.php', {
+    fetch('api.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
@@ -162,10 +162,13 @@ form.addEventListener("submit", (e) => {
                 username: formData.username,
                 user_type: formData.user_type
             }));
-            alert("Registration works");//For testing purposes
-            window.location.href = "login.html";
+            if (formData.user_type === "traveller"){
+                window.location.href = "traveller/";
+            } else if (formData.user_type === "travel_agent"){
+                window.location.href = "agency/";
+            }
         } else {
-            alert(data.message || "Registration failed");//for testing purposes
+            passwordError.textContent = data.data;
         }
     })
     .catch(err => {

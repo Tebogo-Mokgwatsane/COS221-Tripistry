@@ -409,6 +409,7 @@ CREATE TABLE `package` (
   `price` decimal(10,2) NOT NULL CHECK (`price` > 0),
   `expiry_date` date NOT NULL,
   `quantity` int(11) NOT NULL CHECK (`quantity` >= 0),
+  `image_url` varchar(255) NOT NULL,
   `status` enum('active','inactive','sold_out') NOT NULL DEFAULT 'active',
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`package_id`),

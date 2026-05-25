@@ -1,3 +1,5 @@
+localStorage.removeItem("user");
+
 const user = JSON.parse(localStorage.getItem("user")) || {};
 
 const packagesUsername = document.getElementById("packages-username");
@@ -313,7 +315,6 @@ const renderPackages = (packagesArray, firstRender = false) => {
                     <p class="package-from">FROM</p>
                     <div class="package-price">
                         <p><span>R${package.price.toLocaleString()}</span>/pp</p>
-                        <button id="explore-btn">Explore </button>
                     </div>
                 </div>
             </div>
