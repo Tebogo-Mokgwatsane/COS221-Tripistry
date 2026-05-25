@@ -1,25 +1,16 @@
 let flights = [];
 
-fetch('get_flights.php')
-    .then( status => {
-        if (!status.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return status.json();
+const loadPage = (page = 1) => {
+  fetch(`get_flights.php?page=${page}`)
+    .then((status) => status.json())
+    .then((response) => {
+      if (response.status !== "success") throw new Error(response.message);
+      flights = response.data;
+      showFlights(flights);
+      updatePaginationButtons(response.currentPage, response.totalPages);
     })
-    .then(response => {
-        if (response.status !== 'success') {
-            throw new Error('API error: ' + response.message);
-        }
-        return response.data;
-    })
-    .then(data => {
-        flights = data;
-        showFlights(flights);
-    })
-    .catch(error => {
-        console.error('Error fetching flights:', error);
-    });
+    .catch((error) => console.error("Error:", error));
+};
 
 const showFlights = (flights) => {
     const flightsContainer = document.getElementById("flights");
@@ -27,9 +18,8 @@ const showFlights = (flights) => {
 
     flights.forEach(flight => {
         const flightDiv = document.createElement("div");
-        flightDiv.classList.add("flight");
+        flightDiv.classList.add("flight-item");
         flightDiv.innerHTML = `
-        <div class="flight-item" >
             <img class="flight-image" src="${flight.img_url}" alt="${flight.airline_name}">
             <div class="flight-info">
                 <h1>${flight.airline_name}</h1>
@@ -40,11 +30,22 @@ const showFlights = (flights) => {
                 <p>Arrival: ${flight.arrival_date}</p>
                 <p>Class: ${flight.classes}</p>
             </div>
-        </div>
         `;
         flightsContainer.appendChild(flightDiv);
     });
 }
+
+ const updatePaginationButtons = (current, total) => {
+  document.getElementById("prevBtn").disabled = current === 1;
+  document.getElementById("nextBtn").disabled = current === total;
+  document.getElementById("pageInfo").textContent =
+    `Page ${current} of ${total}`;
+
+  document.getElementById("prevBtn").onclick = () => loadPage(current - 1);
+  document.getElementById("nextBtn").onclick = () => loadPage(current + 1);
+ };
+
+loadPage(1);
 
 
 
