@@ -49,6 +49,9 @@ require_once 'config.php';
             case "Restaurants":
                 $this->getRestaurants();
                 break;
+            case "Flights":
+                $this->getFlights();
+                break;
             default:
                 $this->jsonResponse("error", "Unknown request type");
                 break;
@@ -296,6 +299,11 @@ require_once 'config.php';
     private function getRestaurants() {
         $result = $this->mysqli->query("SELECT r.*, ra.city, ra.country FROM restaurant r LEFT JOIN restaurantaddress ra ON r.res_id = ra.res_id ORDER BY r.fee ASC");
         $this->jsonResponse("success", "Restaurants retrieved", $result->fetch_all(MYSQLI_ASSOC));
+    }
+
+    private function getFlights() {
+        $result = $this->mysqli->query("SELECT f.*, da.city as departure_city, da.country as departure_country, aa.city as arrival_city, aa.country as arrival_country FROM flight f LEFT JOIN airport da ON f.departure_airport_id = da.airport_id LEFT JOIN airport aa ON f.arrival_airport_id = aa.airport_id ORDER BY f.price ASC");
+        $this->jsonResponse("success", "Flights retrieved", $result->fetch_all(MYSQLI_ASSOC));
     }
 }
  

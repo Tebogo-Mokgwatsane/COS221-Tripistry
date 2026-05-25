@@ -8,16 +8,10 @@ function loadAccommodations() {
             type: "Accommodations"
         })
     })
-    //.then(res => res.json())
-    .then(res => {//debugging
-    return res.text().then(text => {
-        try {
-            return JSON.parse(text);
-        } catch (err) {
-            console.error("The raw server login response was:", text);
-            throw new Error("Server did not return valid JSON");
-        }
-    });
+    .then(res => res.text())
+    .then(text => {
+        console.log("Raw Response (Accommodations):", text);
+        return JSON.parse(text);
     })
     .then(data => {
         if (data.status === "success") {
