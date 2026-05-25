@@ -1,13 +1,12 @@
-
-.flight-grid {
+.destinations-grid {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     gap: 20px;
     margin-top: 200px;
 }
 
-/* Individual flight item */
-.flight-item {
+/* Individual destination item */
+.destination-item {
     background-color: #fff;
     border-radius: 8px;
     overflow: hidden;
@@ -21,29 +20,29 @@ h1 {
     margin: 100px 0;
 }
 
-.flight-item:hover {
+.destination-item:hover {
     transform: translateY(-10px);
     box-shadow: 0 4px 15px rgba(108, 119, 243, 0.476);
 }
 
-.flight-info {
+.destination-info {
     padding: 15px;
 }
 
-.flight-item img {
+.destination-item img {
     width: 100%;
     height: 200px;
     object-fit: cover;
     /* display: block; */
 }
 
-.flight-item h1 {
+.destination-item h1 {
     margin: 15px;
     font-size: 1.2em;
     color: #333;
 }
 
-.flight-item p {
+.destination-item p {
     margin: 0 15px 15px 15px;
     color: #666;
     font-size: 0.95em;

@@ -11,12 +11,38 @@
 </head>
 <body>
     <?php include ("../../navbar.php"); ?>
-    <div id="flights" class="flight-grid" >
-       
+    <div class="filter-container">
+    <div class="filter-group">
+        <label>Airline:</label>
+        <select id="airlineFilter">
+            <option value="">All Airlines</option>
+        </select>
     </div>
-
-</body>
+    <div class="filter-group">
+        <label>Price Range:</label>
+        <input type="range" id="priceFilter" min="0" max="5000" value="5000">
+        <span id="priceDisplay">$5000</span>
+    </div>
+    <div class="filter-group">
+        <label>From:</label>
+        <select id="fromFilter">
+            <option value="">All Airports</option>
+        </select>
+    </div>
+    <div class="filter-group">
+        <label>To:</label>
+        <select id="toFilter">
+            <option value="">All Airports</option>
+        </select>
+    </div>
+</div>
+    <div id="flights" class="flight-grid" >
+    </div>
+    </div>
 <script src="flights.js"></script>
+<script src="scripts/navbar.js"></script>
+</body>
+
 </html>
 
 

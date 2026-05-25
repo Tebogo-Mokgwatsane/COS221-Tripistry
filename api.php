@@ -472,17 +472,33 @@ class API {
     }
 
     public function getflights(){
-        $stmt = $this->mysqli->query("SELECT flight_id, airline_name, Price, departure_airport, arrival_airport,dept_date,arrival_datetime,classes,img_url FROM flight");
+        $stmt = $this->mysqli->query("SELECT flight_id, airline_name, Price, departure_airport, arrival_airport,
+            DATE_FORMAT(dept_date,'%d %b %Y') as dept_date,
+            DATE_FORMAT(dept_date,'%H %i') as dept_time,
+            DATE_FORMAT(arrival_datetime,'%d %b %Y') as arrival_date,
+            DATE_FORMAT(arrival_datetime,'%H %i') as arrival_time,
+            classes,img_url FROM flight");
         $flights = [];
         while ($row = $stmt->fetch_assoc()) {
             $flights[] = $row;
         }
         return $flights;
-
     }
+
+    public function getDestinations(){
+        $stmt = $this->mysqli->query("SELECT dest_id, city, country, description, img_url FROM destination");
+        $destinations = [];
+        while ($row = $stmt->fetch_assoc()) {
+            $destinations[] = $row;
+        }
+        return $destinations;
+    }
+
+
 }
- 
 // Run API
-// $api = new API();
-// $api->handleRequest();
+if (basename(__FILE__) === basename($_SERVER['SCRIPT_FILENAME'])) {
+    $api = new API();
+    $api->handleRequest();
+}
 ?> 

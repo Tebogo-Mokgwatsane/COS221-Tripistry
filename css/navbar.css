@@ -4,7 +4,7 @@ nav {
     z-index: 100000;
     width: 100%;
     background: rgb(255, 255, 255);
-    /* backdrop-filter: blur(1px); */
+    backdrop-filter: blur(1px); 
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 .navbar {

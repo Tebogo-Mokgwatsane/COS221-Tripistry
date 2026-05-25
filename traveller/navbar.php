@@ -36,7 +36,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="browse/flights.html">
+                                    <a href="../browsing/flights/flights.php">
                                         <img src="../img/icons/plane-black.svg" alt="Plane">
                                         Flights
                                     </a>
