@@ -1,5 +1,4 @@
 // first check if a user is logged in, if it is you redirect to the appropriate page
-localStorage.setItem("user", JSON.stringify({name: "Manqoba", user_type: "traveller"}))
 const user = JSON.parse(localStorage.getItem("user"));
 console.log(user);
 if (user !== null){
