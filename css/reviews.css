@@ -1,29 +1,33 @@
 /* ============================================================
-   reviews.css — matches Tripistry style
+   reviews.css — matches traveller dashboard style
    ============================================================ */
 
+* { font-family: "Inter", Arial, sans-serif; }
+
+/* ── Page layout ── */
 .reviews-page {
-    width: 80%;
-    margin: 0 auto;
-    padding-bottom: 80px;
+    margin-top: 100px;
+    padding: 20px;
     min-height: 100vh;
 }
 
-.page-header {
-    padding: 120px 0 40px;
-    text-align: center;
+.search-section {
+    margin-bottom: 30px;
 }
 
-.page-header h1 {
-    font-size: 40px;
-    font-family: serif;
-    margin-top: 8px;
+.search-section h1 {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 6px;
 }
 
-.page-header .sub {
-    color: rgb(90, 90, 90);
-    font-size: 18px;
-    margin-top: 8px;
+.search-section h1 span {
+    color: rgb(0, 106, 255);
+}
+
+.search-section .sub {
+    color: gray;
+    font-size: 15px;
 }
 
 /* ── Loading ── */
@@ -33,194 +37,140 @@
     align-items: center;
     gap: 12px;
     padding: 60px 0;
-    color: rgb(90, 90, 90);
+    color: gray;
 }
 
 .spinner {
     width: 36px;
     height: 36px;
-    border: 3px solid rgb(218, 218, 218);
-    border-top-color: blue;
+    border: 3px solid #ccc;
+    border-top-color: rgb(0, 106, 255);
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
 }
 
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* ── Empty state — matches .second-section-cards .card div style ── */
+/* ── Empty state ── */
 .empty-state {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 15px;
+    gap: 14px;
     padding: 80px 20px;
-    color: rgb(90, 90, 90);
     text-align: center;
+    color: gray;
 }
 
-.empty-state div {
-    padding: 15px;
-    background-color: blue;
-    border-radius: 100%;
-    width: fit-content;
-    display: flex;
-    justify-content: center;
-    box-shadow: 0 0 30px 10px rgba(66, 153, 230, 0.25);
-}
-
-.empty-state div img {
-    width: 28px;
-    height: 28px;
-}
-
-.empty-state h2 {
-    font-size: 28px;
-}
-
-.empty-state p {
-    color: rgb(90, 90, 90);
-    font-size: 18px;
-}
+.empty-state img  { width: 48px; opacity: 0.4; }
+.empty-state h2   { font-size: 22px; color: rgb(22, 22, 22); }
+.empty-state p    { font-size: 15px; }
 
 .cta-btn {
-    padding: 14px 28px;
-    background: linear-gradient(90deg, rgb(255, 149, 0), rgb(255, 47, 0));
+    padding: 10px 24px;
+    background-color: rgb(0, 106, 255);
     color: white;
-    border-radius: 50px;
+    border-radius: 20px;
     text-decoration: none;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: bold;
     transition: all 0.2s ease;
-    margin-top: 10px;
+    margin-top: 6px;
 }
 
-.cta-btn:hover {
-    transform: scale(1.05);
-}
+.cta-btn:hover { background-color: rgb(0, 85, 210); }
 
-/* ── Booking card — matches .second-section-cards .card ── */
+/* ── Booking card — matches .package-card style ── */
 .booking-card {
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    background-color: white;
+    padding: 20px 24px;
+    margin-bottom: 16px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: white;
-    border-radius: 20px;
-    border: 1px solid rgb(218, 218, 218);
-    padding: 25px 30px;
-    margin-bottom: 20px;
     transition: all 0.3s ease;
 }
 
 .booking-card:hover {
     transform: translateY(-1px);
-    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 12px 15px rgba(0, 0, 0, 0.15);
 }
 
-.booking-left {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
+/* Left side */
+.booking-left { display: flex; flex-direction: column; gap: 10px; }
 
-.booking-dest {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-}
-
-.booking-dest div {
-    padding: 10px;
-    background-color: blue;
-    border-radius: 100%;
-    width: fit-content;
-    display: flex;
-    justify-content: center;
-    box-shadow: 0 0 20px 6px rgba(66, 153, 230, 0.25);
-}
-
-.booking-dest div img {
-    width: 20px;
-    height: 20px;
-}
+.booking-dest { display: flex; align-items: center; gap: 12px; }
 
 .booking-dest h3 {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: bold;
-    margin-bottom: 3px;
+    margin-bottom: 2px;
 }
 
-.dest-text {
-    color: rgb(90, 90, 90);
-    font-size: 15px;
-}
+.dest-text { color: rgb(0, 106, 255); font-size: 14px; }
 
-.booking-meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-}
+.booking-meta { display: flex; flex-wrap: wrap; gap: 16px; }
 
-.meta-item {
-    font-size: 14px;
-    color: rgb(90, 90, 90);
-}
+.meta-item { font-size: 13px; color: gray; }
 
 /* Right side */
 .booking-right {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    gap: 10px;
-    min-width: 170px;
+    gap: 8px;
+    min-width: 160px;
 }
 
-.booking-price {
-    font-size: 24px;
-    font-weight: bold;
-}
+.booking-price { font-size: 20px; font-weight: bold; }
 
+/* Status badges — matches availability style */
 .booking-status {
+    border-radius: 25px;
+    padding: 4px 12px;
     font-size: 13px;
-    font-weight: 600;
-    padding: 4px 14px;
-    border-radius: 50px;
-    text-transform: capitalize;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }
 
-.status-confirmed { background: #dcfce7; color: #166534; }
-.status-pending   { background: #fef9c3; color: #854d0e; }
-.status-cancelled { background: #fee2e2; color: #991b1b; }
+.status-confirmed { background-color: rgba(4, 171, 98, 0.9); color: white; }
+.status-pending   { background-color: rgba(255, 149, 0, 0.9); color: white; }
+.status-cancelled { background-color: rgb(217, 52, 52);       color: white; }
 
+/* Review button — matches .checked filter button */
 .review-btn {
-    padding: 10px 20px;
-    background: linear-gradient(90deg, rgb(255, 149, 0), rgb(255, 47, 0));
+    padding: 8px 16px;
+    border-radius: 20px;
+    background-color: rgb(0, 106, 255);
     color: white;
-    border: none;
-    border-radius: 50px;
-    font-size: 15px;
+    border: 1px solid rgb(0, 106, 255);
+    font-size: 13px;
     font-weight: bold;
     cursor: pointer;
     transition: all 0.2s ease;
 }
 
-.review-btn:hover {
-    transform: scale(1.05);
-}
+.review-btn:hover { background-color: rgb(0, 85, 210); }
 
 .reviewed-badge {
-    font-size: 14px;
-    color: #166534;
-    font-weight: 600;
-    background: #dcfce7;
+    font-size: 13px;
+    font-weight: bold;
+    color: rgb(4, 171, 98);
+    background-color: rgba(4, 171, 98, 0.1);
     padding: 6px 14px;
-    border-radius: 50px;
+    border-radius: 20px;
+    border: 1px solid rgba(4, 171, 98, 0.3);
 }
 
-/* ── Modal — matches .container card style ── */
+/* ── Modal — matches .filters card style ── */
 .modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.65);
+    background: rgba(0, 0, 0, 0.55);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -230,50 +180,49 @@
 
 .modal {
     background: white;
-    border-radius: 30px;
-    padding: 40px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    padding: 36px;
     width: 100%;
-    max-width: 520px;
+    max-width: 500px;
     position: relative;
-    border: 1px solid rgb(175, 175, 175);
-    box-shadow: 0 2px 8px rgba(8, 8, 66, 0.2);
+    box-shadow: 0 12px 15px rgba(0, 0, 0, 0.15);
 }
 
 .modal h2 {
-    font-size: 28px;
-    font-family: serif;
+    font-size: 22px;
+    font-weight: bold;
     margin-bottom: 4px;
 }
 
 .modal-package-name {
-    color: rgb(90, 90, 90);
-    font-size: 16px;
-    margin-bottom: 25px;
+    color: gray;
+    font-size: 14px;
+    margin-bottom: 24px;
 }
 
 .modal-close {
     position: absolute;
-    top: 18px;
-    right: 24px;
+    top: 16px;
+    right: 20px;
     background: none;
     border: none;
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     cursor: pointer;
-    color: rgb(90, 90, 90);
+    color: gray;
+}
+
+/* Label — matches .filters .label */
+.label {
+    color: rgb(121, 121, 121);
+    font-size: 14px;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 8px;
 }
 
 /* Star picker */
-.star-picker {
-    margin-bottom: 20px;
-}
-
-.star-picker label {
-    display: block;
-    font-size: 13px;
-    font-weight: 600;
-    color: rgb(99, 99, 99);
-    margin-bottom: 8px;
-}
+.star-picker { margin-bottom: 20px; }
 
 .star-picker .stars {
     display: flex;
@@ -282,77 +231,66 @@
 }
 
 .star {
-    font-size: 2.2rem;
-    color: rgb(218, 218, 218);
+    font-size: 2rem;
+    color: #ccc;
     cursor: pointer;
     transition: color 0.15s, transform 0.1s;
 }
 
 .star.hovered,
 .star.selected { color: orange; }
+.star:hover    { transform: scale(1.15); }
 
-.star:hover { transform: scale(1.15); }
+.rating-label  { font-size: 13px; color: gray; min-height: 18px; }
 
-.rating-label {
-    font-size: 14px;
-    color: rgb(90, 90, 90);
-    min-height: 18px;
-}
+/* Textarea — matches .search-container input style */
+.modal-field        { margin-bottom: 12px; }
 
-/* Textarea — matches .field input style */
-.field {
-    display: flex;
-    flex-direction: column;
-    gap: 7px;
-    margin-bottom: 6px;
+.modal-field textarea {
     width: 100%;
-}
-
-.field label {
-    font-weight: 600;
-    color: rgb(99, 99, 99);
-    font-size: 13px;
-}
-
-.field textarea {
     padding: 12px 16px;
-    border-radius: 20px;
-    border: 1px solid rgb(175, 175, 175);
-    box-shadow: 0 0 2px 1px rgba(0,0,0,0.1);
-    font-size: 16px;
+    border-radius: 12px;
+    border: 1px solid #ccc;
+    font-size: 15px;
     resize: vertical;
     outline: none;
-    font-family: Arial, sans-serif;
+    font-family: "Inter", Arial, sans-serif;
     transition: border-color 0.2s;
 }
 
-.field textarea:focus {
-    border-color: blue;
+.modal-field textarea:focus { border-color: rgb(0, 106, 255); }
+
+.char-count {
+    text-align: right;
+    font-size: 12px;
+    color: gray;
+    margin-top: 4px;
 }
 
-/* Submit — matches .signin-btn */
-.signin-btn {
-    padding: 13px 0;
-    border: none;
-    background: linear-gradient(90deg, rgb(255, 149, 0), rgb(255, 47, 0));
-    font-size: 16px;
-    border-radius: 50px;
+.modal-error {
+    color: rgb(217, 52, 52);
+    font-size: 13px;
+    min-height: 18px;
+    margin: 6px 0;
+}
+
+/* Submit button — matches .checked button */
+.submit-btn {
+    width: 100%;
+    padding: 12px 0;
+    background-color: rgb(0, 106, 255);
+    color: white;
+    border: 1px solid rgb(0, 106, 255);
+    border-radius: 20px;
+    font-size: 15px;
+    font-weight: bold;
     cursor: pointer;
     transition: all 0.2s ease;
-    display: flex;
-    gap: 6px;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    margin-top: 10px;
-    color: white;
-    font-weight: bold;
+    margin-top: 6px;
 }
 
-.signin-btn:hover { transform: scale(1.02); }
-.signin-btn:disabled { background: rgb(200,200,200); cursor: not-allowed; transform: none; }
-.signin-btn img { height: 18px; }
-.signin-btn p { color: white; }
+.submit-btn:hover    { background-color: rgb(0, 85, 210); }
+.submit-btn:disabled { background-color: #ccc; cursor: not-allowed; border-color: #ccc; }
 
-.star-display        { color: rgb(218, 218, 218); font-size: 1rem; }
+.star-display        { color: #ccc; font-size: 0.95rem; }
 .star-display.filled { color: orange; }
