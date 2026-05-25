@@ -1,0 +1,160 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f5f8fc;
+    color: #222;
+}
+
+/* Heading */
+h1 {
+    text-align: center;
+    color: #0b4f8a;
+    margin-top: 45px;
+    margin-bottom: 25px;
+    font-size: 34px;
+}
+
+/* Payment form card */
+.paymentForm {
+    width: 85%;
+    max-width: 700px;
+    margin: 0 auto;
+    background: white;
+    padding: 32px;
+    border-radius: 15px;
+    border-top: 6px solid #f28c28;
+    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.12);
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    font-weight: bold;
+    color: #333;
+}
+
+/* Payment radio button section */
+#paymentMethod {
+    margin-top: 12px;
+    padding: 15px;
+    border: 1px solid #cbd6e2;
+    border-radius: 10px;
+    background: #fbfdff;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    align-items: center;
+}
+
+#paymentMethod input[type="radio"] {
+    accent-color: #f28c28;
+    cursor: pointer;
+}
+
+#paymentMethod label {
+    font-weight: normal;
+    color: #333;
+    cursor: pointer;
+}
+
+/* Reference input */
+input[type="text"] {
+    width: 100%;
+    padding: 12px;
+    margin-top: 7px;
+    border: 1px solid #cbd6e2;
+    border-radius: 8px;
+    font-size: 15px;
+    outline: none;
+    background: #fbfdff;
+}
+
+input[type="text"]:focus {
+    border-color: #0b4f8a;
+    box-shadow: 0 0 0 3px rgba(11, 79, 138, 0.15);
+}
+
+/* Buttons */
+button {
+    border: none;
+    border-radius: 8px;
+    padding: 12px 22px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    background: #0b4f8a;
+    color: white;
+    transition: 0.2s ease;
+}
+
+button:hover {
+    background: #083b67;
+    transform: translateY(-1px);
+}
+
+/* Confirm button */
+.paymentForm button[type="submit"] {
+    background: #f28c28;
+    width: 100%;
+}
+
+.paymentForm button[type="submit"]:hover {
+    background: #d97706;
+}
+
+/* Back button */
+a {
+    text-decoration: none;
+}
+
+a button {
+    display: block;
+    margin: 20px auto;
+    background: #6c757d;
+}
+
+a button:hover {
+    background: #545b62;
+}
+
+/* Response */
+#response {
+    width: 85%;
+    max-width: 700px;
+    margin: 18px auto;
+    text-align: center;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+/* Mobile */
+@media screen and (max-width: 700px) {
+    h1 {
+        font-size: 28px;
+    }
+
+    .paymentForm {
+        width: 92%;
+        padding: 24px;
+    }
+
+    #paymentMethod {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    button {
+        width: 100%;
+    }
+
+    a button {
+        width: 92%;
+    }
+}

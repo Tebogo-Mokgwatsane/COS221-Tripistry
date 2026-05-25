@@ -1,4 +1,3 @@
-localStorage.removeItem("user");
 
 const user = JSON.parse(localStorage.getItem("user")) || {};
 
@@ -152,7 +151,36 @@ let searchQuery = "";
 let abs_max = 0;
 let max_price = 0;
 let in_stock_only = false;
+const loadPackagesFromAPI = async () => {
+    try {
+        const response = await fetch("api.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                type: "Packages"
+            })
+        });
+        const text = await response.text();
+        console.log("RAW API RESPONSE:", text);
+        const result = JSON.parse(text);
 
+        if (result.status !== "success") {
+            console.error("API Error:", result.message);
+            cardsContainer.innerHTML = `<p class="not-found">Could not load packages.</p>`;
+            return;
+        }
+
+        packages = result.data;
+
+        renderPackages(packages, true);
+ 
+    } catch (error) {
+        console.error("Failed to fetch packages:", error);
+        cardsContainer.innerHTML = `<p class="not-found">Something went wrong while loading packages.</p>`;
+    }
+};
 const filterPackages = () => {
     filteredPackages = packages.filter((package) => (package.price <= max_price) &&(package.agency.toLowerCase().includes(searchQuery) || package.location.toLowerCase().includes(searchQuery) || package.title.toLowerCase().includes(searchQuery)));
     if (groupFilter !== soloFilter){
