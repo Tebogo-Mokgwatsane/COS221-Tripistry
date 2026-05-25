@@ -1,3 +1,10 @@
+<<<<<<< Updated upstream
+=======
+<?php
+require_once '../Tripistry/auth.php';
+requireRole('traveller');
+?>
+>>>>>>> Stashed changes
 <!DOCTYPE html>
 <html lang="en">
 <head>

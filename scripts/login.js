@@ -5,95 +5,123 @@ const grayPlane = document.getElementById("gray-plane");
 const blackBrief = document.getElementById("black-brief");
 const grayBrief = document.getElementById("gray-brief");
 const form = document.getElementById("form");
-const email = document.getElementById("email");
-const password = document.getElementById("password");
+const emailInput = document.getElementById("email");
+const passwordInput = document.getElementById("password");
 const emailError = document.getElementById("email-error");
 const passwordError = document.getElementById("password-error");
 const welcome = document.getElementById("welcome");
 
 let activeTab = "traveller";
 
-form.addEventListener("submit", (e) => {
+// Form submit
+form.addEventListener("submit", function (e) {
     e.preventDefault();
+    handleLogin();
+});
 
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
-
-    if (!emailRegex.test(email.value)){
-        emailError.textContent = "Enter a valid email address";
-    } else {
-        emailError.textContent = "";
-        // TODO: make request
-    }
-})
-
+// Tab switching
 tabs.forEach((tab, index) => {
-
     tab.addEventListener("click", () => {
-
         tabs.forEach(t => t.classList.remove("active"));
         tab.classList.add("active");
 
-        if(index === 1){
+        if (index === 1) {
             slider.classList.add("right");
             blackPlane.style.display = "none";
             grayPlane.style.display = "inline-block";
             grayBrief.style.display = "none";
             blackBrief.style.display = "inline-block";
             activeTab = "agency";
-            welcome.textContent = "Welcome back, partner"
-
+            welcome.textContent = "Welcome back, partner";
         } else {
             slider.classList.remove("right");
             blackPlane.style.display = "inline-block";
             grayPlane.style.display = "none";
             grayBrief.style.display = "inline-block";
             blackBrief.style.display = "none";
-            activeTab = "traveller"
-            welcome.textContent = "Welcome back"
+            activeTab = "traveller";
+            welcome.textContent = "Welcome back";
         }
-
     });
-
 });
 
 function handleLogin() {
-    const email = document.getElementById('email').value.trim();
-    const password = document.getElementById('password').value.trim();
+    const email = emailInput.value.trim();
+    const password = passwordInput.value.trim();
 
-    if (!email || !password) {
-        alert("Please fill in all fields");
+    emailError.textContent = "";
+    passwordError.textContent = "";
+
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    if (!emailRegex.test(email)) {
+        emailError.textContent = "Enter a valid email address";
         return;
     }
 
-    fetch('http://localhost/COS221-Tripistry/api.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+    if (!password) {
+        passwordError.textContent = "Password is required";
+        return;
+    }
+
+    const expectedUserType = activeTab === "agency" ? "travel_agent" : "traveller";
+
+    fetch("http://localhost/COS221-Tripistry/api.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
             type: "Login",
             email: email,
-            password: password
+            password: password,
+            expected_user_type: expectedUserType
         })
     })
     .then(res => res.json())
     .then(data => {
         if (data.status === "success") {
 
-            // Save to localStorage
-            localStorage.setItem('user', JSON.stringify({
+            const actualUserType = data.data.user_type;
+
+            // Block wrong account type for selected tab
+            if (expectedUserType === "traveller" && actualUserType === "travel_agent") {
+                localStorage.removeItem("user");
+                document.cookie = "apiKey=; path=/; max-age=0";
+                alert("This is an agency account. Please login using the Partner tab.");
+                return;
+            }
+
+            if (expectedUserType === "travel_agent" && actualUserType === "traveller") {
+                localStorage.removeItem("user");
+                document.cookie = "apiKey=; path=/; max-age=0";
+                alert("This is a traveller account. Please login using the Traveller tab.");
+                return;
+            }
+
+            // Save user
+            localStorage.setItem("user", JSON.stringify({
                 username: data.data.username,
-                user_type: data.data.user_type
+                user_type: actualUserType
             }));
 
-            // Store API key in cookie
-            document.cookie = `apiKey=${data.data.apikey}; path=/; max-age=18000`;//expires in 5hrs
+            // Store API key in cookie for 5 hours
+            document.cookie = `apiKey=${data.data.apikey}; path=/; max-age=18000`;
 
+<<<<<<< Updated upstream
             alert("Welcome back, " + data.data.username + "!");
 
             if (data.data.user_type === "travel_agent") {
                 window.location.href = "Tripistry/agent.html";
             } else {
                 window.location.href = "Tripistry/traveller.html";
+=======
+            // Redirect based on role
+            if (actualUserType === "travel_agent") {
+                window.location.href = "/COS221-Tripistry/agency/index.php";
+            } else if (actualUserType === "traveller") {
+                window.location.href = "/COS221-Tripistry/traveller/";
+            } else {
+                alert("Unknown user type.");
+>>>>>>> Stashed changes
             }
 
         } else {

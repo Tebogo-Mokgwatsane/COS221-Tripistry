@@ -1,0 +1,64 @@
+.restaurant-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 25px;
+    margin-top: 40px;
+}
+
+.restaurant-item {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+}
+
+.restaurant-item:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+}
+
+.restaurant-item img {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+}
+
+.restaurant-info {
+    padding: 20px;
+}
+
+.restaurant-info h3 {
+    margin: 0 0 10px 0;
+    font-size: 1.35em;
+    font-weight: 600;
+}
+
+.restaurant-info .location {
+    color: #0066cc;
+    font-size: 0.95em;
+    margin-bottom: 12px;
+}
+
+.restaurant-info .type {
+    display: inline-block;
+    background: #fff0f0;
+    color: #d4380d;
+    padding: 5px 14px;
+    border-radius: 30px;
+    font-size: 0.9em;
+    margin-bottom: 12px;
+}
+
+.rating {
+    color: #f4b400;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.price {
+    font-size: 1.45em;
+    font-weight: bold;
+    color: #1a1a1a;
+}
