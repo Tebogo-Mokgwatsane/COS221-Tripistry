@@ -1,16 +1,3 @@
-<?php 
-include("../../api.php");
-
-/*$api = new API();
-$accommodations = $api->getAccommodations();
-
-header('Content-Type: application/json');
-echo json_encode([
-    "status" => "success",
-    "data" => $accommodations
-]);*/
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
