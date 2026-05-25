@@ -43,6 +43,12 @@ require_once 'config.php';
             case "Accommodations":
                 $this->getAccommodations($input);
                 break;
+            case "Attractions":
+                $this->getAttractions();
+                break;
+            case "Restaurants":
+                $this->getRestaurants();
+                break;
             default:
                 $this->jsonResponse("error", "Unknown request type");
                 break;
@@ -276,29 +282,20 @@ require_once 'config.php';
         ]);
     }
 
-    // Get Accommodations ====================
+    // Filtering sub Tabs ====================
     public function getAccommodations() {
-        $result = $this->mysqli->query("
-            SELECT 
-                a.acc_id,
-                a.acc_name,
-                a.acc_type,
-                a.rating,
-                a.price_per_night,
-                a.description,
-                a.img_url,
-                aa.city,
-                aa.country
-            FROM accommodation a
-            LEFT JOIN accommodationaddress aa ON a.acc_id = aa.acc_id
-            ORDER BY a.price_per_night ASC
-        ");
+        $result = $this->mysqli->query("SELECT a.*, aa.city, aa.country FROM accommodation a LEFT JOIN accommodationaddress aa ON a.acc_id = aa.acc_id ORDER BY a.price_per_night ASC");
+        $this->jsonResponse("success", "Accommodations retrieved", $result->fetch_all(MYSQLI_ASSOC));
+    }
 
-        $accommodations = [];
-        while ($row = $result->fetch_assoc()) {
-            $accommodations[] = $row;
-        }
-        $this->jsonResponse("success", "Accommodations retrieved", $accommodations);
+    private function getAttractions() {
+        $result = $this->mysqli->query("SELECT a.*, aa.city, aa.country FROM attraction a LEFT JOIN attractionaddress aa ON a.att_id = aa.att_id ORDER BY a.fee ASC");
+        $this->jsonResponse("success", "Attractions retrieved", $result->fetch_all(MYSQLI_ASSOC));
+    }
+
+    private function getRestaurants() {
+        $result = $this->mysqli->query("SELECT r.*, ra.city, ra.country FROM restaurant r LEFT JOIN restaurantaddress ra ON r.res_id = ra.res_id ORDER BY r.fee ASC");
+        $this->jsonResponse("success", "Restaurants retrieved", $result->fetch_all(MYSQLI_ASSOC));
     }
 }
  

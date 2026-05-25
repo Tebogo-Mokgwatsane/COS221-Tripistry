@@ -30,13 +30,13 @@
                         <div id="dropdown">
                             <ul class="explore-dropdown">
                                 <li>
-                                    <a href="browse/destinations.html">
+                                    <a href="../browse/destinations/destinations.php">
                                         <img src="../img/icons/map-pin.svg" alt="Map Pin">
                                         Destinations
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="browse/flights/flights.php">
+                                    <a href="../browse/flights/flights.php">
                                         <img src="../img/icons/plane-black.svg" alt="Plane">
                                         Flights
                                     </a>
@@ -48,13 +48,13 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="browse/attractions.html">
+                                    <a href="../browse/attractions/attractions.php">
                                         <img src="../img/icons/camera.svg" alt="Camera icon">
                                         Attractions
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="browse/restaurants.html">
+                                    <a href="../browse/restaurants/restaurants.php">
                                         <img src="../img/icons/utensils-crossed.svg" alt="Utinsils icons">
                                         Restaurants
                                     </a>
