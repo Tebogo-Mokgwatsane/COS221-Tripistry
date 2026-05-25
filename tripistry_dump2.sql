@@ -33,7 +33,7 @@ CREATE TABLE `accommodation` (
   `description` text DEFAULT NULL,
   PRIMARY KEY (`acc_id`),
   KEY `dest_id` (`dest_id`),
-  CONSTRAINT `fk_accommodation_dest` FOREIGN KEY (`dest_id`) REFERENCES `destination` (`dest_id`) ON UPDATE CASCADE
+  CONSTRAINT `1` FOREIGN KEY (`dest_id`) REFERENCES `destination` (`dest_id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -68,7 +68,7 @@ CREATE TABLE `accommodationaddress` (
   `country` varchar(100) NOT NULL,
   `postal_code` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`acc_id`,`city`,`street`),
-  CONSTRAINT `fk_accommodationaddress_acc` FOREIGN KEY (`acc_id`) REFERENCES `accommodation` (`acc_id`) ON DELETE CASCADE
+  CONSTRAINT `1` FOREIGN KEY (`acc_id`) REFERENCES `accommodation` (`acc_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -108,8 +108,8 @@ CREATE TABLE `attraction` (
   `closing_time` time DEFAULT NULL,
   PRIMARY KEY (`att_id`),
   KEY `dest_id` (`dest_id`),
-  CONSTRAINT `fk_attraction_dest` FOREIGN KEY (`dest_id`) REFERENCES `destination` (`dest_id`) ON UPDATE CASCADE,
-  CONSTRAINT `chk_attraction_closing` CHECK (`closing_time` > `opening_time`)
+  CONSTRAINT `1` FOREIGN KEY (`dest_id`) REFERENCES `destination` (`dest_id`) ON UPDATE CASCADE,
+  CONSTRAINT `CONSTRAINT_1` CHECK (`closing_time` > `opening_time`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -144,7 +144,7 @@ CREATE TABLE `attractionaddress` (
   `country` varchar(100) NOT NULL,
   `postal_code` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`att_id`,`city`,`street`),
-  CONSTRAINT `fk_attractionaddress_att` FOREIGN KEY (`att_id`) REFERENCES `attraction` (`att_id`) ON DELETE CASCADE
+  CONSTRAINT `1` FOREIGN KEY (`att_id`) REFERENCES `attraction` (`att_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -183,8 +183,8 @@ CREATE TABLE `booking` (
   PRIMARY KEY (`booking_id`),
   KEY `traveller_id` (`traveller_id`),
   KEY `package_id` (`package_id`),
-  CONSTRAINT `fk_booking_traveller` FOREIGN KEY (`traveller_id`) REFERENCES `traveller` (`traveller_id`),
-  CONSTRAINT `fk_booking_package` FOREIGN KEY (`package_id`) REFERENCES `package` (`package_id`)
+  CONSTRAINT `1` FOREIGN KEY (`traveller_id`) REFERENCES `traveller` (`traveller_id`),
+  CONSTRAINT `2` FOREIGN KEY (`package_id`) REFERENCES `package` (`package_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -255,8 +255,8 @@ CREATE TABLE `flight` (
   `classes` set('Economy','Business','First') NOT NULL DEFAULT 'Economy',
   `price` decimal(10,2) NOT NULL CHECK (`price` >= 0),
   PRIMARY KEY (`flight_id`),
-  CONSTRAINT `chk_flight_arrival` CHECK (`arrival_datetime` > `dept_date`),
-  CONSTRAINT `chk_flight_airports` CHECK (`departure_airport` <> `arrival_airport`)
+  CONSTRAINT `CONSTRAINT_1` CHECK (`arrival_datetime` > `dept_date`),
+  CONSTRAINT `CONSTRAINT_2` CHECK (`departure_airport` <> `arrival_airport`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -290,8 +290,8 @@ CREATE TABLE `grouppackage` (
   `max_group_size` int(11) NOT NULL,
   `status` enum('open','closed','full') NOT NULL DEFAULT 'open',
   PRIMARY KEY (`package_id`),
-  CONSTRAINT `fk_grouppackage_package` FOREIGN KEY (`package_id`) REFERENCES `package` (`package_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `chk_grouppackage_maxsize` CHECK (`max_group_size` >= `min_group_size`)
+  CONSTRAINT `1` FOREIGN KEY (`package_id`) REFERENCES `package` (`package_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `CONSTRAINT_1` CHECK (`max_group_size` >= `min_group_size`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -331,8 +331,8 @@ CREATE TABLE `package` (
   PRIMARY KEY (`package_id`),
   KEY `agent_id` (`agent_id`),
   KEY `dest_id` (`dest_id`),
-  CONSTRAINT `fk_package_agent` FOREIGN KEY (`agent_id`) REFERENCES `travelagent` (`agent_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_package_dest` FOREIGN KEY (`dest_id`) REFERENCES `destination` (`dest_id`) ON UPDATE CASCADE
+  CONSTRAINT `1` FOREIGN KEY (`agent_id`) REFERENCES `travelagent` (`agent_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `2` FOREIGN KEY (`dest_id`) REFERENCES `destination` (`dest_id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -365,8 +365,8 @@ CREATE TABLE `packageaccommodation` (
   `acc_id` int(11) NOT NULL,
   PRIMARY KEY (`package_id`,`acc_id`),
   KEY `acc_id` (`acc_id`),
-  CONSTRAINT `fk_pkgacc_package` FOREIGN KEY (`package_id`) REFERENCES `package` (`package_id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_pkgacc_acc` FOREIGN KEY (`acc_id`) REFERENCES `accommodation` (`acc_id`) ON DELETE CASCADE
+  CONSTRAINT `1` FOREIGN KEY (`package_id`) REFERENCES `package` (`package_id`) ON DELETE CASCADE,
+  CONSTRAINT `2` FOREIGN KEY (`acc_id`) REFERENCES `accommodation` (`acc_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -401,7 +401,7 @@ CREATE TABLE `packageactivity` (
   `activity_time` time DEFAULT NULL,
   `description` text DEFAULT NULL,
   PRIMARY KEY (`package_id`,`day_number`,`activity_name`),
-  CONSTRAINT `fk_packageactivity_package` FOREIGN KEY (`package_id`) REFERENCES `package` (`package_id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `1` FOREIGN KEY (`package_id`) REFERENCES `package` (`package_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -443,8 +443,8 @@ CREATE TABLE `packageflight` (
   `flight_id` int(11) NOT NULL,
   PRIMARY KEY (`package_id`,`flight_id`),
   KEY `flight_id` (`flight_id`),
-  CONSTRAINT `fk_pkgflight_package` FOREIGN KEY (`package_id`) REFERENCES `package` (`package_id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_pkgflight_flight` FOREIGN KEY (`flight_id`) REFERENCES `flight` (`flight_id`) ON DELETE CASCADE
+  CONSTRAINT `1` FOREIGN KEY (`package_id`) REFERENCES `package` (`package_id`) ON DELETE CASCADE,
+  CONSTRAINT `2` FOREIGN KEY (`flight_id`) REFERENCES `flight` (`flight_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -477,8 +477,8 @@ CREATE TABLE `packagerestaurant` (
   `res_id` int(11) NOT NULL,
   PRIMARY KEY (`package_id`,`res_id`),
   KEY `res_id` (`res_id`),
-  CONSTRAINT `fk_pkgrest_package` FOREIGN KEY (`package_id`) REFERENCES `package` (`package_id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_pkgrest_res` FOREIGN KEY (`res_id`) REFERENCES `restaurant` (`res_id`) ON DELETE CASCADE
+  CONSTRAINT `1` FOREIGN KEY (`package_id`) REFERENCES `package` (`package_id`) ON DELETE CASCADE,
+  CONSTRAINT `2` FOREIGN KEY (`res_id`) REFERENCES `restaurant` (`res_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -517,7 +517,7 @@ CREATE TABLE `payment` (
   PRIMARY KEY (`trans_id`),
   UNIQUE KEY `reference` (`reference`),
   KEY `booking_id` (`booking_id`),
-  CONSTRAINT `fk_payment_booking` FOREIGN KEY (`booking_id`) REFERENCES `booking` (`booking_id`)
+  CONSTRAINT `1` FOREIGN KEY (`booking_id`) REFERENCES `booking` (`booking_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -554,7 +554,7 @@ CREATE TABLE `restaurant` (
   `rating` decimal(2,1) DEFAULT NULL CHECK (`rating` between 0.0 and 5.0),
   PRIMARY KEY (`res_id`),
   KEY `dest_id` (`dest_id`),
-  CONSTRAINT `fk_restaurant_dest` FOREIGN KEY (`dest_id`) REFERENCES `destination` (`dest_id`) ON UPDATE CASCADE
+  CONSTRAINT `1` FOREIGN KEY (`dest_id`) REFERENCES `destination` (`dest_id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -589,7 +589,7 @@ CREATE TABLE `restaurantaddress` (
   `country` varchar(100) NOT NULL,
   `postal_code` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`res_id`,`city`,`street`),
-  CONSTRAINT `fk_restaurantaddress_res` FOREIGN KEY (`res_id`) REFERENCES `restaurant` (`res_id`) ON DELETE CASCADE
+  CONSTRAINT `1` FOREIGN KEY (`res_id`) REFERENCES `restaurant` (`res_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -629,9 +629,9 @@ CREATE TABLE `review` (
   UNIQUE KEY `uq_review` (`traveller_id`,`agent_id`,`package_id`),
   KEY `agent_id` (`agent_id`),
   KEY `package_id` (`package_id`),
-  CONSTRAINT `fk_review_traveller` FOREIGN KEY (`traveller_id`) REFERENCES `traveller` (`traveller_id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_review_agent` FOREIGN KEY (`agent_id`) REFERENCES `travelagent` (`agent_id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_review_package` FOREIGN KEY (`package_id`) REFERENCES `package` (`package_id`) ON DELETE SET NULL
+  CONSTRAINT `1` FOREIGN KEY (`traveller_id`) REFERENCES `traveller` (`traveller_id`) ON DELETE CASCADE,
+  CONSTRAINT `2` FOREIGN KEY (`agent_id`) REFERENCES `travelagent` (`agent_id`) ON DELETE CASCADE,
+  CONSTRAINT `3` FOREIGN KEY (`package_id`) REFERENCES `package` (`package_id`) ON DELETE SET NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -664,7 +664,7 @@ CREATE TABLE `travelagent` (
   `phone_number` varchar(20) DEFAULT NULL,
   `website` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`agent_id`),
-  CONSTRAINT `fk_travelagent_user` FOREIGN KEY (`agent_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `1` FOREIGN KEY (`agent_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -697,7 +697,7 @@ CREATE TABLE `traveller` (
   `phone_number` varchar(20) DEFAULT NULL,
   `type` enum('Solo','Group','Family','Couple') DEFAULT 'Solo',
   PRIMARY KEY (`traveller_id`),
-  CONSTRAINT `fk_traveller_user` FOREIGN KEY (`traveller_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `1` FOREIGN KEY (`traveller_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -765,7 +765,3 @@ SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
 -- Dump completed on 2026-05-13  0:43:09
-
--- Add api_key column to user table
-ALTER TABLE user 
-ADD COLUMN api_key VARCHAR(32) UNIQUE NULL;
