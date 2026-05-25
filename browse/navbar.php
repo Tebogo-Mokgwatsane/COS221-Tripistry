@@ -78,5 +78,5 @@
         </div>
     </nav>
 
-<script src="../scripts/navbar.js"></script>
-<script src="../scripts/traveller.js"></script>
+<script src="../../scripts/navbar.js"></script>
+<script src="../../scripts/traveller.js"></script>

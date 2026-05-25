@@ -207,7 +207,10 @@ class API {
 
         // Hash password
         //changed to SHA2 hashing for better security. 
-        $hashed = hash('sha256', $data['password']);
+        //$hashed = hash('sha256', $data['password']);
+        $hashed = password_hash($data['password'], PASSWORD_DEFAULT);
+        //OR
+        //password_hash($data['password'], PASSWORD_BCRYPT);
 
         // Generate API key
         $apiKey = bin2hex(random_bytes(16));
