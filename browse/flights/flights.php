@@ -9,7 +9,7 @@
 
 </head>
 <body>
-    <?php include("../../traveller/navbar.php"); ?>
+    <?php include("../../traveller/navbar.php") ?>
     <div class="flights-header">
         <h2 class="flights-title">Flights</h2>
         <p class="flights-subtitle">Browse through your favourite flights</p>
@@ -22,18 +22,18 @@
             </div>
             <div class="filter-group">
                 <label class="label">Price</label>
-                <input type="range" id="priceFilter" >
-                <span id="priceDisplay"></span>
+                <input type="range" id="priceFilter" class="pricefilter">
+                <span id="priceDisplay" class="pricedisplay">R0.00</span>
             </div>
             <div class="filter-group">
                 <label>From: </label>
-                <select id="fromFilter">
+                <select id="fromFilter" class="dropdown">
                     <option value="">All Airports</option>
                 </select>
             </div>
             <div class="filter-group">
                 <label>To:</label>
-                <select id="toFilter">
+                <select id="toFilter" class="dropdown">
                     <option value="">All Airports</option>
                 </select>
             </div>
@@ -54,12 +54,10 @@
         <button id="nextBtn" class="pagination-btn">Next</button>
     </div>
 
-    
 
 </body>
-<script src="../../scripts/navbar.js"></script>
 <script src="flights.js"></script>
-
+<script src="../../scripts/navbar.js"></script>
 </html>
 
 
