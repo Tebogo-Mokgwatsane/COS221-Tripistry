@@ -15,7 +15,7 @@
         
         <div class="filters">
             <div class="filter-group">
-                <label>MAX FEE</label>
+                <label>MAX ENTRY FEE</label>
                 <input type="range" id="max-fee" min="0" max="1000" value="1000">
                 <span id="max-fee-value">R1000</span>
             </div>

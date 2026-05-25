@@ -139,3 +139,23 @@ h1 {
     gap: 10px;
     align-items: center;
 }
+
+.filter-group button {
+    padding: 10px 16px;
+    margin: 2px;
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    background: white;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 500;
+}
+
+.filter-group button.active,
+.filter-group button:hover {
+    background: #0066cc;
+    color: white;
+    border-color: #0066cc;
+}
