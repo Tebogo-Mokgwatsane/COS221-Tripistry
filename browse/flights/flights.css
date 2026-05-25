@@ -1,3 +1,4 @@
+
 .flight-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(475px,1fr));

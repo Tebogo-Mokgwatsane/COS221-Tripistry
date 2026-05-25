@@ -1,23 +1,24 @@
 const user = JSON.parse(localStorage.getItem("user"));
 
 if (user === null){
-    window.location.href = "/login.html"
+    window.location.href = "../login.html"
 }
 if (user.user_type !== "traveller"){
-    if (user.user_type === "agency"){
-        window.location.href = "/agency/";
+    if (user.user_type === "agency"|| user.user_type === "travel_agent"){
+        window.location.href = "../agency/";
     } else {
         localStorage.removeItem("user");
-        window.location.href = "/login.html";    
+        window.location.href = "../login.html";    
     }
-
+    return;
 }
 
 // loading the username
-const username = document.getElementById("username");
-username.textContent = user.name;
+const username = document.getElementById("username") || document.getElementById("packages-username");
+if (username) {
+    username.textContent = user.username || "Traveller";
+}
 
-    
 //fixing some css issues
 const loginSection = document.getElementById("login-section");
 loginSection.style.gap = "7px";

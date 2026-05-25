@@ -1,5 +1,9 @@
+const user = JSON.parse(localStorage.getItem("user")) || {};
+
 const packagesUsername = document.getElementById("packages-username");
-packagesUsername.textContent = user.name;
+if (packagesUsername) {
+    packagesUsername.textContent = user.username || "Traveller";
+}
 
 //logic for filtering by group/solo packages
 const groupBtn = document.getElementById("group-btn");
@@ -174,6 +178,20 @@ searchBar.addEventListener("keyup", (e) => {
     filterPackages();
 })
 
+//Real-time search
+let timeout = null;
+searchBar.addEventListener('input', function() {
+    clearTimeout(timeout);
+    const query = this.value.trim();
+
+    if (query.length < 2) {
+        cardsContainer.innerHTML = '';
+        return;
+    }
+
+    timeout = setTimeout(() => performSearch(query), 500); // Real-time with 500ms debounce
+});
+
 maxPriceRange.addEventListener("input", (e) => {
     maxSelectedPrice.innerHTML = `R${e.target.value}`;
     max_price = e.target.value;
@@ -190,6 +208,55 @@ inStockOnly.addEventListener("change", (e) => {
     filterPackages();
 })
 
+/*function performSearch(query) {
+    fetch('../api.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            type: "Search",
+            query: query
+        })
+    })
+    //.then(res => res.json())
+    .then(res => {//debugging
+    return res.text().then(text => {
+        try {
+            return JSON.parse(text);
+        } catch (err) {
+            console.error("The raw server login response was:", text);
+            throw new Error("Server did not return valid JSON");
+        }
+    });
+    })
+    .then(data => {
+        if (data.status === "success") {
+            renderPackages(data.data.packages, true);
+        }
+    })
+    .catch(err => console.error(err));
+}*/
+
+async function performSearch(query) {
+    try {
+        const res = await fetch('../api.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ type: "Search", query: query })
+        });
+
+        const text = await res.text();
+        console.log("Raw Response:", text);   // for debugging
+
+        const data = JSON.parse(text);
+
+        if (data.status === "success") {
+            allPackages = data.data.packages || [];
+            renderPackages(allPackages, true);
+        }
+    } catch (err) {
+        console.error("Search error:", err);
+    }
+}       
 const renderPackages = (packagesArray, firstRender = false) => {
     cardsContainer.innerHTML = "";
     if (packagesArray.length === 0){

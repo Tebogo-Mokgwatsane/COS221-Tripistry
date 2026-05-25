@@ -1,19 +1,22 @@
 <?php
 
-    
+
 header("Content-Type: application/json");
 
 require_once 'config.php';
-    
-class API {
+
+class API
+{
     private $mysqli; // mysqli connection
 
-    public function __construct() {
+    public function __construct()
+    {
         global $mysqli;
         $this->mysqli = $mysqli;
     }
 
-    public function handleRequest() {
+    public function handleRequest()
+    {
         $input = [];
 
         if (strpos($_SERVER['CONTENT_TYPE'] ?? '', 'application/json') !== false) {
@@ -23,7 +26,7 @@ class API {
         }
 
         if (!isset($input['type']) || empty($input['type'])) {
-            $this->jsonResponse("error", "Missing 'type' parameter");
+            $this->error("Missing 'type' parameter", 400);
         }
 
         $type = $input['type'];
@@ -52,25 +55,45 @@ class API {
                 break;
             case "GetFavourites":
                 $this->getFavourites($input);
+            case "Search":
+                $this->searchPackages($input);
+                break;
+            case "Accommodations":
+                $this->getAccommodations($input);
                 break;
             default:
-                $this->jsonResponse("error", "Unknown request type");
+                $this->error("Unknown request type");
                 break;
         }
     }
 
-    private function jsonResponse($status, $message, $data = []) {
-        echo json_encode([  
-            "status" => $status,
-            "message" => $message,
+    private function success($data)
+    {
+        http_response_code(200);
+        echo json_encode([
+            "status" => "success",
+            "timestamp" => time(),
             "data" => $data
         ]);
         exit;
     }
 
-    private function authenticate($apiKey) {
+    private function error($message, $code = 400)
+    {
+        http_response_code($code);
+        echo json_encode([
+            "status" => "error",
+            "timestamp" => time(),
+            "data" => $message
+        ]);
+        exit;
+        $this->error("Request failed", $data, $code);
+    }
+
+    private function authenticate($apiKey)
+    {
         if (empty($apiKey)) {
-            $this->jsonResponse("error", "Missing API key. Please log in.");
+            $this->error("Missing API key. Please log in.");
         }
         $stmt = $this->mysqli->prepare(
             "SELECT user_id, user_type FROM user WHERE api_key = ?"
@@ -78,16 +101,17 @@ class API {
         $stmt->bind_param("s", $apiKey);
         $stmt->execute();
         $result = $stmt->get_result();
-        $user   = $result->fetch_assoc();
+        $user = $result->fetch_assoc();
         $stmt->close();
- 
+
         if (!$user) {
-            $this->jsonResponse("error", "Invalid or expired session. Please log in again.");
+            $this->error("Invalid or expired session. Please log in again.");
         }
         return $user;
     }
 
-    private function getTravellerId($userId){
+    private function getTravellerId($userId)
+    {
         $stmt = $this->mysqli->prepare(
             "SELECT traveller_id FROM traveller WHERE traveller_id = ?"
         );
@@ -96,26 +120,27 @@ class API {
         $result = $stmt->get_result();
         $row = $result->fetch_assoc();
         $stmt->close();
-        return $row ? $row['traveller_id'] :null;
+        return $row ? $row['traveller_id'] : null;
     }
 
     // Registering user ====================
-    private function registerUser($data) {
+    private function registerUser($data)
+    {
         if (empty($data['email']) || empty($data['password']) || empty($data['user_type'])) {
-            $this->jsonResponse("error", "All fields are required");
+            $this->error("All fields are required", 400);
         }
 
         if (empty($data['username'])) {
-            $this->jsonResponse("error", "Username is required");
+            $this->error("Username is required", 400);
         }
 
         if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
-            $this->jsonResponse("error", "Invalid email address");
+            $this->error("Invalid email address", 400);
         }
 
         $passRegex = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/";
         if (!preg_match($passRegex, $data['password'])) {
-            $this->jsonResponse("error", "Password must be 8+ chars with upper, lower, number and symbol");
+            $this->error("Password must be 8+ chars with upper, lower, number and symbol");
         }
 
         $userType = $data['user_type'];
@@ -124,29 +149,28 @@ class API {
         // Agency specific validation
         if ($userType === "agency" || $userType === "travel_agent") {
             if (empty($data['registration_num'])) {
-                $this->jsonResponse("error", "Registration number is required for agencies");
+                $this->error("Registration number is required for agencies", 400);
             }
 
             // Check if registration number is valid in reg_numbers table
-            $stmt = $this->mysqli->prepare("SELECT id FROM reg_numbers WHERE registration_num = ? AND status = 'valid'");
+            $stmt = $this->mysqli->prepare("SELECT reg_id FROM businessregistration WHERE reg_number = ? AND status = 'valid'");
             $stmt->bind_param("s", $data['registration_num']);
             $stmt->execute();
             $stmt->store_result();
 
             if ($stmt->num_rows === 0) {
                 $stmt->close();
-                $this->jsonResponse("error", "Invalid or unlicensed registration number");
-            }
-            else //If valid, check if not taken
+                $this->error("Invalid or unlicensed registration number", 400);
+            } else //If valid, check if not taken
             {
                 $stmt->close();
-                $stmt = $this->mysqli->prepare("SELECT user_id FROM user WHERE registration_num = ?");
-                $stmt->bind_param("s", $data['registration_num']);
+                $stmt = $this->mysqli->prepare("SELECT reg_id FROM businessregistration WHERE (used_by IS NOT NULL AND reg_number = ?) OR (reg_number = ? AND status = 'taken')");
+                $stmt->bind_param("ss", $data['registration_num'], $data['registration_num']);
                 $stmt->execute();
                 $stmt->store_result();
                 if ($stmt->num_rows > 0) {
                     $stmt->close();
-                    $this->jsonResponse("error", "Registration number already in use by another account");
+                    $this->error("Registration number already in use by another account", 409);
                 }
             }
             $stmt->close();
@@ -159,18 +183,7 @@ class API {
         $stmt->store_result();
         if ($stmt->num_rows > 0) {
             $stmt->close();
-            $this->jsonResponse("error", "Email already registered");
-        }
-        $stmt->close();
-        
-        // Check if username already exists (db has a constraint that doesnt allow dublicate usernames so for now This stops the error from the db being thrown)
-        $stmt = $this->mysqli->prepare("SELECT user_id FROM user WHERE username = ?");
-        $stmt->bind_param("s", $data['username']);
-        $stmt->execute();
-        $stmt->store_result();
-        if ($stmt->num_rows > 0) {
-            $stmt->close();
-            $this->jsonResponse("error", "Username \"" . $data['username'] . "\" is already taken");
+            $this->error("Email already registered", 409);
         }
         $stmt->close();
 
@@ -183,9 +196,9 @@ class API {
 
         $reg_num = isset($data['registration_num']) ? trim($data['registration_num']) : null;
         // Insert user
-        $stmt = $this->mysqli->prepare("INSERT INTO user (username, email, password_hash, user_type, api_key, registration_num)
-                                     VALUES (?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("ssssss", $username, $data['email'], $hashed, $userType, $apiKey, $reg_num);
+        $stmt = $this->mysqli->prepare("INSERT INTO user (username, email, password_hash, user_type, api_key)
+                                     VALUES (?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssss", $username, $data['email'], $hashed, $userType, $apiKey);
         $success = $stmt->execute();
         $userId = $this->mysqli->insert_id;
         $stmt->close();
@@ -198,70 +211,121 @@ class API {
                                             VALUES (?, ?, ?, 'Solo')");
             $stmt->bind_param("iss", $userId, $fname, $lname);
             $stmt->execute();
-        } 
-        else // Agency
-        { 
+        } else // Agency
+        {
             $agencyName = $data['agency_name'] ?? $username;
-            $stmt = $this->mysqli->prepare("INSERT INTO travelagent (agent_id, agency_name) 
-                                            VALUES (?, ?)");
-            $stmt->bind_param("is", $userId, $agencyName);
+            $stmt = $this->mysqli->prepare("INSERT INTO travelagent (agent_id, agency_name, registration_number) 
+                                            VALUES (?, ?, ?)");
+            $stmt->bind_param("iss", $userId, $agencyName, $reg_num);
             $stmt->execute();
 
-            $stmt = $this->mysqli->prepare("UPDATE reg_numbers SET status = 'invalid' WHERE registration_num = ?");
+            $stmt = $this->mysqli->prepare("UPDATE businessregistration SET status = 'taken' WHERE reg_number = ?");
             $stmt->bind_param("s", $reg_num);
             $success2 = $stmt->execute();
             $stmt->close();
         }
 
         if ($success || $success2) {
-            $this->jsonResponse("success", "Registration Successful!");
+            $this->success([
+                "apikey" => $apiKey,
+                "username" => $username,
+                "user_type" => $userType
+            ], 201);
         } else {
-            $this->jsonResponse("error", "Failed to register user");
+            $this->error("Failed to register user", 500);
         }
     }
 
-    private function loginUser($data) {
+    private function loginUser($data)
+    {
         if (empty($data['email']) || empty($data['password'])) {
-            $this->jsonResponse("error", "Email and password required");
+            $this->error("Email and password required", 400);
         }
-        //changed to match database
-        $stmt = $this->mysqli->prepare("SELECT user_id, username, email, password_hash, api_key, user_type FROM user WHERE email = ?");
+
+        $stmt = $this->mysqli->prepare("SELECT user_id, username, email, password_hash, user_type, api_key FROM user WHERE email = ?");
         $stmt->bind_param("s", $data['email']);
         $stmt->execute();
         $result = $stmt->get_result();
         $user = $result->fetch_assoc();
         $stmt->close();
 
-        //Kat used SHA2 hashing in registration, so we need to hash the input password the same way for comparison.
-        $sha2hash = hash('sha256', $data['password']);
-        if (!$user || $sha2hash !== $user['password_hash']) {
-            $this->jsonResponse("error", "Invalid Credentials");
+        if (!$user || !password_verify($data['password'], $user['password_hash'])) {
+            $this->error("Invalid Credentials", 401);
         }
 
         session_start();
         $_SESSION['user_id'] = $user['user_id'];
-        $_SESSION['username']   = $user['username'];
+        $_SESSION['username'] = $user['username'];
 
         //Return API key in response
-        $this->jsonResponse("success", "Login successful", [
+        $this->success([
             "apikey" => $user['api_key'],
-            "username"   => $user['username'],
-            "user_type"   => $user['user_type']
+            "username" => $user['username'],
+            "user_type" => $user['user_type']
         ]);
     }
 
-    private function getBookings($data){
+    // Searching for packages ====================
+    private function searchPackages($data)
+    {
+        if (empty($data['query'])) {
+            $this->error("Search query is required", 400);//Debugg
+        }
+
+        $query = "%" . $data['query'] . "%";
+
+        $stmt = $this->mysqli->prepare("
+        SELECT 
+            p.package_id as id,
+            p.title,
+            p.description,
+            p.price,
+            p.quantity,
+            'https://via.placeholder.com/300x200' as image_url,
+            (p.quantity > 0) as in_stock,
+            4.8 as rating,
+            ta.agency_name as agency,
+            CONCAT(d.city, ', ', d.country) as location,
+            'Group' as package_type,
+            '5 nights' as nights
+        FROM package p
+        LEFT JOIN destination d ON p.dest_id = d.dest_id
+        LEFT JOIN travelagent ta ON p.agent_id = ta.agent_id
+        WHERE p.title LIKE ? 
+           OR p.description LIKE ? 
+           OR d.city LIKE ? 
+           OR d.country LIKE ?
+           OR ta.agency_name LIKE ?
+        ORDER BY p.price ASC
+        LIMIT 20
+        ");
+
+        $stmt->bind_param("sssss", $query, $query, $query, $query, $query);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $packages = [];
+        while ($row = $result->fetch_assoc()) {
+            $packages[] = $row;
+        }
+        $stmt->close();
+
+        $this->success($packages);
+    }
+
+    private function getBookings($data)
+    {
         $apiKey = $data['api_key'] ?? '';
         $user = $this->authenticate($apiKey);
 
-        if($user['user_type'] !== 'traveller'){
-            $this->jsonResponse("error", "Only travellers can view bookings");
+        if ($user['user_type'] !== 'traveller') {
+            $this->error("Only travellers can view bookings");
         }
 
         $travellerId = $this->getTravellerId($user['user_id']);
-        if(!$travellerId){
-            $this->jsonResponse("error", "Traveller profile not found");
-             
+        if (!$travellerId) {
+            $this->error("Traveller profile not found");
+
         }
 
         $stmt = $this->mysqli->prepare("
@@ -295,40 +359,41 @@ class API {
         $stmt->bind_param("ii", $travellerId, $travellerId);
         $stmt->execute();
         $result = $stmt->get_result();
-        $booking =[];
-        while($row = $result->fetch_assoc()){
-            $row['already_reviewed'] = (bool)$row['already_reviewed'];
-            $booking[]= $row;
+        $booking = [];
+        while ($row = $result->fetch_assoc()) {
+            $row['already_reviewed'] = (bool) $row['already_reviewed'];
+            $booking[] = $row;
         }
 
         $stmt->close();
-        $this->jsonResponse("success", "Bookings retrieved", $booking);
+        $this->success($booking);
     }
 
-    private function addReview($data) {
+    private function addReview($data)
+    {
         $apiKey = $data['api_key'] ?? '';
-        $user   = $this->authenticate($apiKey);
- 
+        $user = $this->authenticate($apiKey);
+
         if ($user['user_type'] !== 'traveller') {
-            $this->jsonResponse("error", "Only travellers can leave reviews");
+            $this->error("Only travellers can leave reviews");
         }
- 
+
         $travellerId = $this->getTravellerId($user['user_id']);
         if (!$travellerId) {
-            $this->jsonResponse("error", "Traveller profile not found");
+            $this->error("Traveller profile not found");
         }
- 
+
         $packageId = intval($data['package_id'] ?? 0);
-        $rating    = intval($data['rating']     ?? 0);
-        $comment   = trim($data['comment']      ?? '');
- 
+        $rating = intval($data['rating'] ?? 0);
+        $comment = trim($data['comment'] ?? '');
+
         if (!$packageId) {
-            $this->jsonResponse("error", "Package ID is required");
+            $this->error("Package ID is required");
         }
         if ($rating < 1 || $rating > 5) {
-            $this->jsonResponse("error", "Rating must be between 1 and 5");
+            $this->error("Rating must be between 1 and 5");
         }
- 
+
         // Check traveller actually booked this package
         $stmt = $this->mysqli->prepare("
             SELECT booking_id FROM booking
@@ -340,10 +405,10 @@ class API {
         $stmt->store_result();
         if ($stmt->num_rows === 0) {
             $stmt->close();
-            $this->jsonResponse("error", "You can only review packages you have booked");
+            $this->error("You can only review packages you have booked");
         }
         $stmt->close();
- 
+
         // Check not already reviewed
         $stmt = $this->mysqli->prepare("
             SELECT review_id FROM review
@@ -355,24 +420,24 @@ class API {
         $stmt->store_result();
         if ($stmt->num_rows > 0) {
             $stmt->close();
-            $this->jsonResponse("error", "You have already reviewed this package");
+            $this->error("You have already reviewed this package");
         }
         $stmt->close();
- 
+
         // Get the agent_id from the package
         $stmt = $this->mysqli->prepare("SELECT agent_id FROM package WHERE package_id = ?");
         $stmt->bind_param("i", $packageId);
         $stmt->execute();
-        $result  = $stmt->get_result();
+        $result = $stmt->get_result();
         $package = $result->fetch_assoc();
         $stmt->close();
- 
+
         if (!$package) {
-            $this->jsonResponse("error", "Package not found");
+            $this->error("Package not found");
         }
- 
+
         $agentId = $package['agent_id'];
- 
+
         // Insert review
         $stmt = $this->mysqli->prepare("
             INSERT INTO review (traveller_id, agent_id, package_id, rating, comment)
@@ -381,21 +446,22 @@ class API {
         $stmt->bind_param("iiiis", $travellerId, $agentId, $packageId, $rating, $comment);
         $success = $stmt->execute();
         $stmt->close();
- 
+
         if ($success) {
-            $this->jsonResponse("success", "Review submitted successfully!");
+            $this->success("Review submitted successfully!");
         } else {
-            $this->jsonResponse("error", "Failed to submit review");
+            $this->error("Failed to submit review");
         }
     }
 
-    private function getReviews($data) {
+    private function getReviews($data)
+    {
         $packageId = intval($data['package_id'] ?? 0);
- 
+
         if (!$packageId) {
-            $this->jsonResponse("error", "Package ID is required");
+            $this->error("Package ID is required");
         }
- 
+
         $stmt = $this->mysqli->prepare("
             SELECT
                 r.review_id,
@@ -410,31 +476,32 @@ class API {
         ");
         $stmt->bind_param("i", $packageId);
         $stmt->execute();
-        $result  = $stmt->get_result();
+        $result = $stmt->get_result();
         $reviews = [];
         while ($row = $result->fetch_assoc()) {
             $reviews[] = $row;
         }
         $stmt->close();
- 
-        $this->jsonResponse("success", "Reviews retrieved", $reviews);
+
+        $this->success($reviews);
     }
 
-    private function addFavourite($data) {
+    private function addFavourite($data)
+    {
         $apiKey = $data['api_key'] ?? '';
-        $user   = $this->authenticate($apiKey);
- 
+        $user = $this->authenticate($apiKey);
+
         if ($user['user_type'] !== 'traveller') {
-            $this->jsonResponse("error", "Only travellers can save favourites");
+            $this->error("Only travellers can save favourites");
         }
- 
+
         $travellerId = $this->getTravellerId($user['user_id']);
-        $packageId   = intval($data['package_id'] ?? 0);
- 
+        $packageId = intval($data['package_id'] ?? 0);
+
         if (!$packageId) {
-            $this->jsonResponse("error", "Package ID is required");
+            $this->error("Package ID is required");
         }
- 
+
         // Check not already favourited (INSERT IGNORE handles duplicates gracefully)
         $stmt = $this->mysqli->prepare(
             "INSERT IGNORE INTO favourite (traveller_id, package_id) VALUES (?, ?)"
@@ -442,48 +509,50 @@ class API {
         $stmt->bind_param("ii", $travellerId, $packageId);
         $success = $stmt->execute();
         $stmt->close();
- 
+
         if ($success) {
-            $this->jsonResponse("success", "Package added to favourites");
+            $this->success("Package added to favourites");
         } else {
-            $this->jsonResponse("error", "Failed to add to favourites");
+            $this->error("Failed to add to favourites");
         }
     }
 
-    private function removeFavourite($data) {
+    private function removeFavourite($data)
+    {
         $apiKey = $data['api_key'] ?? '';
-        $user   = $this->authenticate($apiKey);
- 
+        $user = $this->authenticate($apiKey);
+
         $travellerId = $this->getTravellerId($user['user_id']);
-        $packageId   = intval($data['package_id'] ?? 0);
- 
+        $packageId = intval($data['package_id'] ?? 0);
+
         if (!$packageId) {
-            $this->jsonResponse("error", "Package ID is required");
+            $this->error("Package ID is required");
         }
- 
+
         $stmt = $this->mysqli->prepare(
             "DELETE FROM favourite WHERE traveller_id = ? AND package_id = ?"
         );
         $stmt->bind_param("ii", $travellerId, $packageId);
         $stmt->execute();
         $stmt->close();
- 
-        $this->jsonResponse("success", "Package removed from favourites");
+
+        $this->success("Package removed from favourites");
     }
 
-    private function getFavourites($data) {
+    private function getFavourites($data)
+    {
         $apiKey = $data['api_key'] ?? '';
-        $user   = $this->authenticate($apiKey);
- 
+        $user = $this->authenticate($apiKey);
+
         if ($user['user_type'] !== 'traveller') {
-            $this->jsonResponse("error", "Only travellers can view favourites");
+            $this->error("Only travellers can view favourites");
         }
- 
+
         $travellerId = $this->getTravellerId($user['user_id']);
         if (!$travellerId) {
-            $this->jsonResponse("error", "Traveller profile not found");
+            $this->error("Traveller profile not found");
         }
- 
+
         $stmt = $this->mysqli->prepare("
             SELECT
                 p.package_id,
@@ -511,19 +580,44 @@ class API {
         ");
         $stmt->bind_param("i", $travellerId);
         $stmt->execute();
-        $result     = $stmt->get_result();
+        $result = $stmt->get_result();
         $favourites = [];
         while ($row = $result->fetch_assoc()) {
             $favourites[] = $row;
         }
         $stmt->close();
- 
-        $this->jsonResponse("success", "Favourites retrieved", $favourites);
+
+        $this->success($favourites);
     }
 
+    // Get Accommodations ====================
+    public function getAccommodations()
+    {
+        $result = $this->mysqli->query("
+            SELECT 
+                a.acc_id,
+                a.acc_name,
+                a.acc_type,
+                a.rating,
+                a.price_per_night,
+                a.description,
+                a.img_url,
+                aa.city,
+                aa.country
+            FROM accommodation a
+            LEFT JOIN accommodationaddress aa ON a.acc_id = aa.acc_id
+            ORDER BY a.price_per_night ASC
+        ");
+
+        $accommodations = [];
+        while ($row = $result->fetch_assoc()) {
+            $accommodations[] = $row;
+        }
+        $this->success($accommodations);
     }
- 
+}
+
 // Run API
 $api = new API();
 $api->handleRequest();
-?> 
+?>
