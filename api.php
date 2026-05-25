@@ -3,11 +3,10 @@
     
 header("Content-Type: application/json");
 
-define('USE_LOCAL_CONFIG', true);
-//require_once 'Tripistry/config.php';
+//define('USE_LOCAL_CONFIG', true);
 require_once 'config.php';
     
-    class API {
+class API {
     private $mysqli; // mysqli connection
 
     public function __construct() {
@@ -37,6 +36,23 @@ require_once 'config.php';
             case "Login":
                 $this->loginUser($input);
                 break;
+            case "GetBookings":
+                $this->getBookings($input);
+                break;
+            case "AddReview":
+                $this->addReview($input);
+                break;
+            case "GetReviews":
+                $this->getReviews($input);
+                break;
+            case "AddFavourite":
+                $this->addFavourite($input);
+                break;
+            case "RemoveFavourite":
+                $this->removeFavourite($input);
+                break;
+            case "GetFavourites":
+                $this->getFavourites($input);
             case "Search":
                 $this->searchPackages($input);
                 break;
@@ -81,6 +97,37 @@ require_once 'config.php';
             "data" => $data
         ]);
         exit;
+    }
+
+    private function authenticate($apiKey) {
+        if (empty($apiKey)) {
+            $this->jsonResponse("error", "Missing API key. Please log in.");
+        }
+        $stmt = $this->mysqli->prepare(
+            "SELECT user_id, user_type FROM user WHERE api_key = ?"
+        );
+        $stmt->bind_param("s", $apiKey);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $user   = $result->fetch_assoc();
+        $stmt->close();
+ 
+        if (!$user) {
+            $this->jsonResponse("error", "Invalid or expired session. Please log in again.");
+        }
+        return $user;
+    }
+
+    private function getTravellerId($userId){
+        $stmt = $this->mysqli->prepare(
+            "SELECT traveller_id FROM traveller WHERE traveller_id = ?"
+        );
+        $stmt->bind_param("i", $userId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+        $stmt->close();
+        return $row ? $row['traveller_id'] :null;
     }
 
     // Registering user ====================
@@ -159,7 +206,8 @@ require_once 'config.php';
         $stmt->close();*/
 
         // Hash password
-        $hashed = password_hash($data['password'], PASSWORD_DEFAULT);
+        //changed to SHA2 hashing for better security. 
+        $hashed = hash('sha256', $data['password']);
 
         // Generate API key
         $apiKey = bin2hex(random_bytes(16));
@@ -236,6 +284,289 @@ require_once 'config.php';
         ], 200);
     }
 
+    private function getBookings($data){
+        $apiKey = $data['api_key'] ?? '';
+        $user = $this->authenticate($apiKey);
+
+        if($user['user_type'] !== 'traveller'){
+            $this->jsonResponse("error", "Only travellers can view bookings");
+        }
+
+        $travellerId = $this->getTravellerId($user['user_id']);
+        if(!$travellerId){
+            $this->jsonResponse("error", "Traveller profile not found");
+             
+        }
+
+        $stmt = $this->mysqli->prepare("
+            SELECT
+                b.booking_id,
+                b.package_id,
+                p.title            AS package_title,
+                d.city             AS destination_city,
+                d.country          AS destination_country,
+                ta.agency_name,
+                ta.agent_id,
+                b.num_travellers,
+                b.total_price,
+                b.booking_status,
+                b.booking_date,
+                p.price            AS package_price,
+                p.expiry_date,
+                -- Check if traveller already reviewed this package
+                EXISTS (
+                    SELECT 1 FROM review r
+                    WHERE r.traveller_id = ? AND r.package_id = b.package_id
+                ) AS already_reviewed
+            FROM booking b
+            JOIN package     p  ON b.package_id = p.package_id
+            JOIN destination d  ON p.dest_id    = d.dest_id
+            JOIN travelagent ta ON p.agent_id   = ta.agent_id
+            WHERE b.traveller_id = ?
+            ORDER BY b.booking_date DESC
+        ");
+
+        $stmt->bind_param("ii", $travellerId, $travellerId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $booking =[];
+        while($row = $result->fetch_assoc()){
+            $row['already_reviewed'] = (bool)$row['already_reviewed'];
+            $booking[]= $row;
+        }
+
+        $stmt->close();
+        $this->jsonResponse("success", "Bookings retrieved", $booking);
+    }
+
+    private function addReview($data) {
+        $apiKey = $data['api_key'] ?? '';
+        $user   = $this->authenticate($apiKey);
+ 
+        if ($user['user_type'] !== 'traveller') {
+            $this->jsonResponse("error", "Only travellers can leave reviews");
+        }
+ 
+        $travellerId = $this->getTravellerId($user['user_id']);
+        if (!$travellerId) {
+            $this->jsonResponse("error", "Traveller profile not found");
+        }
+ 
+        $packageId = intval($data['package_id'] ?? 0);
+        $rating    = intval($data['rating']     ?? 0);
+        $comment   = trim($data['comment']      ?? '');
+ 
+        if (!$packageId) {
+            $this->jsonResponse("error", "Package ID is required");
+        }
+        if ($rating < 1 || $rating > 5) {
+            $this->jsonResponse("error", "Rating must be between 1 and 5");
+        }
+ 
+        // Check traveller actually booked this package
+        $stmt = $this->mysqli->prepare("
+            SELECT booking_id FROM booking
+            WHERE traveller_id = ? AND package_id = ?
+            LIMIT 1
+        ");
+        $stmt->bind_param("ii", $travellerId, $packageId);
+        $stmt->execute();
+        $stmt->store_result();
+        if ($stmt->num_rows === 0) {
+            $stmt->close();
+            $this->jsonResponse("error", "You can only review packages you have booked");
+        }
+        $stmt->close();
+ 
+        // Check not already reviewed
+        $stmt = $this->mysqli->prepare("
+            SELECT review_id FROM review
+            WHERE traveller_id = ? AND package_id = ?
+            LIMIT 1
+        ");
+        $stmt->bind_param("ii", $travellerId, $packageId);
+        $stmt->execute();
+        $stmt->store_result();
+        if ($stmt->num_rows > 0) {
+            $stmt->close();
+            $this->jsonResponse("error", "You have already reviewed this package");
+        }
+        $stmt->close();
+ 
+        // Get the agent_id from the package
+        $stmt = $this->mysqli->prepare("SELECT agent_id FROM package WHERE package_id = ?");
+        $stmt->bind_param("i", $packageId);
+        $stmt->execute();
+        $result  = $stmt->get_result();
+        $package = $result->fetch_assoc();
+        $stmt->close();
+ 
+        if (!$package) {
+            $this->jsonResponse("error", "Package not found");
+        }
+ 
+        $agentId = $package['agent_id'];
+ 
+        // Insert review
+        $stmt = $this->mysqli->prepare("
+            INSERT INTO review (traveller_id, agent_id, package_id, rating, comment)
+            VALUES (?, ?, ?, ?, ?)
+        ");
+        $stmt->bind_param("iiiis", $travellerId, $agentId, $packageId, $rating, $comment);
+        $success = $stmt->execute();
+        $stmt->close();
+ 
+        if ($success) {
+            $this->jsonResponse("success", "Review submitted successfully!");
+        } else {
+            $this->jsonResponse("error", "Failed to submit review");
+        }
+    }
+
+    private function getReviews($data) {
+        $packageId = intval($data['package_id'] ?? 0);
+ 
+        if (!$packageId) {
+            $this->jsonResponse("error", "Package ID is required");
+        }
+ 
+        $stmt = $this->mysqli->prepare("
+            SELECT
+                r.review_id,
+                r.rating,
+                r.comment,
+                r.review_date,
+                CONCAT(t.first_name, ' ', t.last_name) AS reviewer_name
+            FROM review r
+            JOIN traveller t ON r.traveller_id = t.traveller_id
+            WHERE r.package_id = ?
+            ORDER BY r.review_date DESC
+        ");
+        $stmt->bind_param("i", $packageId);
+        $stmt->execute();
+        $result  = $stmt->get_result();
+        $reviews = [];
+        while ($row = $result->fetch_assoc()) {
+            $reviews[] = $row;
+        }
+        $stmt->close();
+ 
+        $this->jsonResponse("success", "Reviews retrieved", $reviews);
+    }
+
+    private function addFavourite($data) {
+        $apiKey = $data['api_key'] ?? '';
+        $user   = $this->authenticate($apiKey);
+ 
+        if ($user['user_type'] !== 'traveller') {
+            $this->jsonResponse("error", "Only travellers can save favourites");
+        }
+ 
+        $travellerId = $this->getTravellerId($user['user_id']);
+        $packageId   = intval($data['package_id'] ?? 0);
+ 
+        if (!$packageId) {
+            $this->jsonResponse("error", "Package ID is required");
+        }
+ 
+        // Check not already favourited (INSERT IGNORE handles duplicates gracefully)
+        $stmt = $this->mysqli->prepare(
+            "INSERT IGNORE INTO favourite (traveller_id, package_id) VALUES (?, ?)"
+        );
+        $stmt->bind_param("ii", $travellerId, $packageId);
+        $success = $stmt->execute();
+        $stmt->close();
+ 
+        if ($success) {
+            $this->jsonResponse("success", "Package added to favourites");
+        } else {
+            $this->jsonResponse("error", "Failed to add to favourites");
+        }
+    }
+
+    private function removeFavourite($data) {
+        $apiKey = $data['api_key'] ?? '';
+        $user   = $this->authenticate($apiKey);
+ 
+        $travellerId = $this->getTravellerId($user['user_id']);
+        $packageId   = intval($data['package_id'] ?? 0);
+ 
+        if (!$packageId) {
+            $this->jsonResponse("error", "Package ID is required");
+        }
+ 
+        $stmt = $this->mysqli->prepare(
+            "DELETE FROM favourite WHERE traveller_id = ? AND package_id = ?"
+        );
+        $stmt->bind_param("ii", $travellerId, $packageId);
+        $stmt->execute();
+        $stmt->close();
+ 
+        $this->jsonResponse("success", "Package removed from favourites");
+    }
+
+    private function getFavourites($data) {
+        $apiKey = $data['api_key'] ?? '';
+        $user   = $this->authenticate($apiKey);
+ 
+        if ($user['user_type'] !== 'traveller') {
+            $this->jsonResponse("error", "Only travellers can view favourites");
+        }
+ 
+        $travellerId = $this->getTravellerId($user['user_id']);
+        if (!$travellerId) {
+            $this->jsonResponse("error", "Traveller profile not found");
+        }
+ 
+        $stmt = $this->mysqli->prepare("
+            SELECT
+                p.package_id,
+                p.title,
+                p.description,
+                p.price,
+                p.expiry_date,
+                p.status,
+                d.city             AS destination_city,
+                d.country          AS destination_country,
+                ta.agency_name,
+                f.added_at,
+                COALESCE(ROUND(AVG(r.rating), 1), 0) AS avg_rating,
+                COUNT(r.review_id)                    AS review_count
+            FROM favourite f
+            JOIN package     p  ON f.package_id = p.package_id
+            JOIN destination d  ON p.dest_id    = d.dest_id
+            JOIN travelagent ta ON p.agent_id   = ta.agent_id
+            LEFT JOIN review r  ON p.package_id = r.package_id
+            WHERE f.traveller_id = ?
+            GROUP BY p.package_id, p.title, p.description, p.price,
+                     p.expiry_date, p.status, d.city, d.country,
+                     ta.agency_name, f.added_at
+            ORDER BY f.added_at DESC
+        ");
+        $stmt->bind_param("i", $travellerId);
+        $stmt->execute();
+        $result     = $stmt->get_result();
+        $favourites = [];
+        while ($row = $result->fetch_assoc()) {
+            $favourites[] = $row;
+        }
+        $stmt->close();
+ 
+        $this->jsonResponse("success", "Favourites retrieved", $favourites);
+    }
+
+    public function getDestinations(){
+        $stmt = $this->mysqli->query("SELECT dest_id, city, country, description, img_url FROM destination");
+        $destinations = [];
+        while ($row = $stmt->fetch_assoc()) {
+            $destinations[] = $row;
+        }
+        return $destinations;
+    }
+
+
+
+
     // Searching for packages ====================
     private function searchPackages($data) {
         if (empty($data['query'])) {
@@ -301,13 +632,24 @@ require_once 'config.php';
         $this->jsonResponse("success", "Restaurants retrieved", $result->fetch_all(MYSQLI_ASSOC));
     }
 
-    private function getFlights() {
-        $result = $this->mysqli->query("SELECT f.*, da.city as departure_city, da.country as departure_country, aa.city as arrival_city, aa.country as arrival_country FROM flight f LEFT JOIN airport da ON f.departure_airport_id = da.airport_id LEFT JOIN airport aa ON f.arrival_airport_id = aa.airport_id ORDER BY f.price ASC");
-        $this->jsonResponse("success", "Flights retrieved", $result->fetch_all(MYSQLI_ASSOC));
+    public function getflights(){
+        $stmt = $this->mysqli->query("SELECT flight_id, airline_name, Price, departure_airport, arrival_airport,
+            DATE_FORMAT(dept_date,'%d %b %Y') as dept_date,
+            DATE_FORMAT(dept_date,'%H %i') as dept_time,
+            DATE_FORMAT(arrival_datetime,'%d %b %Y') as arrival_date,
+            DATE_FORMAT(arrival_datetime,'%H %i') as arrival_time,
+            classes,img_url FROM flight");
+        $flights = [];
+        while ($row = $stmt->fetch_assoc()) {
+            $flights[] = $row;
+        }
+        return $flights;
     }
 }
  
 // Run API
-$api = new API();
-$api->handleRequest();
+if (basename(__FILE__) === basename($_SERVER['SCRIPT_FILENAME'])) {
+    $api = new API();
+    $api->handleRequest();
+}
 ?> 

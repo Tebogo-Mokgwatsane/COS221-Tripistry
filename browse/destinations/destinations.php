@@ -9,7 +9,7 @@
 
 </head>
 <body>
-    <?php include ("../../traveller/navbar.php"); ?>
+    <?php include("../navbar.php"); ?>
     <div class="filter-container">
         <div class="filter-group">
             <label>Airline:</label>

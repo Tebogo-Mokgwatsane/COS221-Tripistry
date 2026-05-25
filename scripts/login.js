@@ -120,6 +120,7 @@ function handleLogin() {
     })
     .catch(err => {
         console.error(err);
+        console.error("The raw server login response was:", err);
         alert("Error connecting to server. Please try again.");
     });
 }

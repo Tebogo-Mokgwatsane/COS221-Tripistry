@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="../../css/navbar.css">
 </head>
 <body>
-    <?php include("../../traveller/navbar.php"); ?>
+    <?php include("../navbar.php"); ?>
     
     <div class="container" style="margin-top: 100px;">
         <h1>Best Restaurants to Visit 🍽️</h1>
