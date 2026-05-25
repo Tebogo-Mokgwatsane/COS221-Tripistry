@@ -1,0 +1,81 @@
+name,street_address,city,country,category,fee,description,rating,opening_time,closing_time,postal_code
+Table Mountain Aerial Cableway,Tafelberg Road,Cape Town,South Africa,Nature,390.0,Cable car trip to the top of Table Mountain with views over Cape Town.,4.9,08:00:00,18:00:00,8001
+Robben Island Museum,"V&A Waterfront, Nelson Mandela Gateway",Cape Town,South Africa,Cultural,450.0,Historic island museum and former prison site.,4.7,09:00:00,17:00:00,8001
+V&A Waterfront,19 Dock Road,Cape Town,South Africa,Leisure,0.0,Waterfront shopping dining and entertainment precinct.,4.7,09:00:00,21:00:00,8001
+Kirstenbosch National Botanical Garden,"Rhodes Drive, Newlands",Cape Town,South Africa,Nature,230.0,Botanical garden on the eastern slopes of Table Mountain.,4.8,08:00:00,18:00:00,7735
+Cape Point Nature Reserve,Cape Point Road,Cape Town,South Africa,Nature,400.0,Scenic nature reserve at the south-western tip of the Cape Peninsula.,4.8,06:00:00,18:00:00,7975
+Boulders Beach Penguin Colony,"Kleintuin Road, Simon's Town",Cape Town,South Africa,Wildlife,190.0,Protected beach area known for African penguins.,4.7,08:00:00,17:00:00,7995
+Two Oceans Aquarium,"Dock Road, V&A Waterfront",Cape Town,South Africa,Family,250.0,Aquarium showcasing marine life from the Atlantic and Indian Oceans.,4.6,09:30:00,18:00:00,8001
+District Six Museum,25A Buitenkant Street,Cape Town,South Africa,Museum,60.0,Museum telling the story of District Six and forced removals.,4.6,09:00:00,16:00:00,8001
+Castle of Good Hope,Darling Street,Cape Town,South Africa,Historical,90.0,Historic fort and heritage site in central Cape Town.,4.3,09:00:00,17:00:00,8001
+Bo-Kaap Museum,71 Wale Street,Cape Town,South Africa,Cultural,60.0,Museum and cultural stop in the colourful Bo-Kaap area.,4.4,09:00:00,16:00:00,8001
+Zeitz MOCAA,"Silo District, V&A Waterfront",Cape Town,South Africa,Museum,250.0,Contemporary African art museum in the Silo District.,4.5,10:00:00,18:00:00,8001
+Signal Hill,Signal Hill Road,Cape Town,South Africa,Viewpoint,0.0,Popular viewpoint overlooking Cape Town and the Atlantic coastline.,4.7,06:00:00,20:00:00,8001
+Clifton Fourth Beach,"Victoria Road, Clifton",Cape Town,South Africa,Beach,0.0,Popular Atlantic Seaboard beach known for white sand and sunsets.,4.6,06:00:00,19:00:00,8005
+Camps Bay Beach,"Victoria Road, Camps Bay",Cape Town,South Africa,Beach,0.0,"Beachfront area with mountain views, restaurants and ocean scenery.",4.6,06:00:00,19:00:00,8040
+Chapman's Peak Drive,"Chapman's Peak Drive, Hout Bay",Cape Town,South Africa,Scenic Route,60.0,Famous coastal drive between Hout Bay and Noordhoek.,4.8,06:00:00,20:00:00,7806
+Old Biscuit Mill,"375 Albert Road, Woodstock",Cape Town,South Africa,Market,0.0,Market and food precinct in Woodstock.,4.4,09:00:00,16:00:00,7925
+Company's Garden,19 Queen Victoria Street,Cape Town,South Africa,Park,0.0,Historic public garden in central Cape Town.,4.5,07:00:00,18:00:00,8001
+Norval Foundation,"4 Steenberg Road, Tokai",Cape Town,South Africa,Museum,200.0,Art museum and sculpture garden near the Constantia wine route.,4.5,10:00:00,18:00:00,7945
+Groot Constantia Wine Estate,"Groot Constantia Road, Constantia",Cape Town,South Africa,Wine Estate,150.0,"Historic wine estate with tastings, museum spaces and vineyard views.",4.6,09:00:00,17:00:00,7806
+Hout Bay Harbour,"Harbour Road, Hout Bay",Cape Town,South Africa,Harbour,0.0,"Working harbour with boat trips, seafood and mountain views.",4.3,08:00:00,18:00:00,7806
+Apartheid Museum,Northern Parkway and Gold Reef Road,Johannesburg,South Africa,Museum,150.0,Museum documenting South Africa's apartheid history.,4.7,09:00:00,17:00:00,2001
+Gold Reef City Theme Park,"Northern Parkway, Ormonde",Johannesburg,South Africa,Theme Park,250.0,Theme park and entertainment complex themed around gold mining history.,4.5,09:30:00,17:00:00,2159
+Constitution Hill,"11 Kotze Street, Braamfontein",Johannesburg,South Africa,Historical,100.0,Historic prison complex and home of South Africa's Constitutional Court.,4.6,09:00:00,17:00:00,2001
+Soweto Towers,"Chris Hani Road, Soweto",Johannesburg,South Africa,Adventure,0.0,Landmark painted cooling towers offering adventure activities.,4.5,10:00:00,18:00:00,1804
+Mandela House,"8115 Vilakazi Street, Orlando West",Johannesburg,South Africa,Museum,60.0,Former home of Nelson Mandela in Soweto.,4.5,09:00:00,17:00:00,1804
+Hector Pieterson Museum,"8287 Khumalo Street, Orlando West",Johannesburg,South Africa,Museum,30.0,Museum commemorating the 1976 Soweto uprising.,4.6,10:00:00,17:00:00,1804
+Maboneng Precinct,"Fox Street, City and Suburban",Johannesburg,South Africa,Leisure,0.0,"Urban arts, food and entertainment precinct in Johannesburg.",4.3,09:00:00,20:00:00,2094
+Johannesburg Zoo,"Jan Smuts Avenue, Parkview",Johannesburg,South Africa,Wildlife,120.0,Large city zoo with animal exhibits and family activities.,4.3,08:30:00,17:30:00,2193
+Walter Sisulu National Botanical Garden,"Malcolm Road, Roodepoort",Johannesburg,South Africa,Nature,100.0,"Botanical garden known for scenery, birdlife and the waterfall.",4.7,08:00:00,17:00:00,1732
+Cradle of Humankind Visitor Centre Maropeng,"R400, Cradle of Humankind",Johannesburg,South Africa,Heritage,175.0,Visitor centre for the Cradle of Humankind World Heritage Site.,4.5,09:00:00,17:00:00,1747
+Sterkfontein Caves,Kromdraai Road,Johannesburg,South Africa,Heritage,150.0,Famous fossil cave site in the Cradle of Humankind area.,4.4,09:00:00,16:00:00,1739
+Nelson Mandela Square,"5th Street, Sandton",Johannesburg,South Africa,Leisure,0.0,Shopping and dining square with a large Nelson Mandela statue.,4.4,09:00:00,21:00:00,2196
+Sandton City,"83 Rivonia Road, Sandton",Johannesburg,South Africa,Shopping,0.0,Major shopping centre in Sandton.,4.5,09:00:00,21:00:00,2196
+Rosebank Sunday Market,"50 Bath Avenue, Rosebank",Johannesburg,South Africa,Market,0.0,"Weekend market with crafts, food and local stalls.",4.3,09:00:00,16:00:00,2196
+Origins Centre Museum,"Yale Road, University of the Witwatersrand",Johannesburg,South Africa,Museum,80.0,Museum focused on human origins and rock art heritage.,4.5,10:00:00,17:00:00,2001
+Lindfield Victorian House Museum,"72 Richmond Avenue, Auckland Park",Johannesburg,South Africa,Museum,100.0,Historic Victorian house museum in Auckland Park.,4.5,10:00:00,17:00:00,2092
+James Hall Museum of Transport,"Pioneers Park, Rosettenville Road",Johannesburg,South Africa,Museum,50.0,Museum with transport and vehicle exhibits.,4.3,09:00:00,16:30:00,2190
+Delta Park,"77 Craighall Road, Victory Park",Johannesburg,South Africa,Park,0.0,Large city park with walking routes and green spaces.,4.4,06:00:00,18:00:00,2195
+Zoo Lake,"60 Jan Smuts Avenue, Parkview",Johannesburg,South Africa,Park,0.0,Public park and lake area popular for picnics and walks.,4.4,06:00:00,18:00:00,2193
+The Wilds Nature Reserve,"Houghton Drive, Houghton",Johannesburg,South Africa,Nature,0.0,Urban nature reserve with walking paths and city views.,4.5,06:00:00,18:00:00,2198
+Stone Town,Stone Town,Zanzibar,Tanzania,Cultural,0.0,"Historic old town known for narrow streets, architecture and markets.",4.7,08:00:00,20:00:00,71101
+House of Wonders,"Mizingani Road, Stone Town",Zanzibar,Tanzania,Historical,0.0,Historic landmark building in Stone Town.,4.2,09:00:00,17:00:00,71101
+Old Fort of Zanzibar,"Mizingani Road, Stone Town",Zanzibar,Tanzania,Historical,0.0,Historic fort near Forodhani Gardens and the seafront.,4.3,09:00:00,18:00:00,71101
+Forodhani Gardens,"Mizingani Road, Stone Town",Zanzibar,Tanzania,Market,0.0,Seafront gardens known for evening food stalls and views.,4.5,16:00:00,22:00:00,71101
+Darajani Market,"Creek Road, Stone Town",Zanzibar,Tanzania,Market,0.0,"Busy market area for local food, spices and daily trading.",4.3,08:00:00,18:00:00,71101
+Prison Island,Changuu Island,Zanzibar,Tanzania,Nature,250.0,"Island excursion known for history, beaches and giant tortoises.",4.5,08:00:00,17:00:00,71101
+Jozani Chwaka Bay National Park,Jozani Forest Road,Zanzibar,Tanzania,Wildlife,180.0,Forest reserve known for red colobus monkeys and mangrove walks.,4.6,07:30:00,17:00:00,72107
+Nakupenda Beach,Nakupenda Sandbank,Zanzibar,Tanzania,Beach,350.0,Sandbank excursion with swimming and beach scenery.,4.7,08:00:00,17:00:00,71101
+Nungwi Beach,Nungwi Beach,Zanzibar,Tanzania,Beach,0.0,"Popular northern beach with swimming, resorts and sunset views.",4.7,06:00:00,19:00:00,73107
+Kendwa Beach,Kendwa Beach,Zanzibar,Tanzania,Beach,0.0,Beach area known for calm water and sunset views.,4.7,06:00:00,19:00:00,73109
+Paje Beach,Paje Beach,Zanzibar,Tanzania,Beach,0.0,East coast beach known for kitesurfing and long sandy stretches.,4.6,06:00:00,19:00:00,72110
+Jambiani Beach,Jambiani Beach,Zanzibar,Tanzania,Beach,0.0,Quiet coastal village beach with relaxed island scenery.,4.6,06:00:00,19:00:00,72107
+Mnemba Island Atoll,Mnemba Atoll,Zanzibar,Tanzania,Marine,450.0,Marine excursion area known for snorkelling and clear waters.,4.7,08:00:00,16:00:00,73111
+Cheetah's Rock,Kama Village,Zanzibar,Tanzania,Wildlife,350.0,Wildlife conservation visitor experience near Stone Town.,4.8,08:30:00,17:00:00,71110
+Mnarani Marine Turtles Conservation Pond,Nungwi,Zanzibar,Tanzania,Wildlife,120.0,Conservation pond and visitor site focused on marine turtles.,4.4,09:00:00,17:00:00,73107
+Kizimkazi Dolphin Area,Kizimkazi,Zanzibar,Tanzania,Marine,300.0,Southern coastal area commonly used for dolphin and boat trips.,4.2,07:00:00,15:00:00,72100
+Spice Farm Tour,Dole Village,Zanzibar,Tanzania,Cultural,150.0,Guided spice farm experience explaining Zanzibar's spice heritage.,4.5,09:00:00,16:00:00,71110
+The Rock Area Pingwe,Michamvi Pingwe,Zanzibar,Tanzania,Viewpoint,0.0,Scenic coastal stop near the famous Rock Restaurant area.,4.5,10:00:00,18:00:00,72111
+Kuza Cave,Jambiani,Zanzibar,Tanzania,Nature,120.0,Limestone cave and cultural centre near Jambiani.,4.6,08:30:00,17:00:00,72107
+Zanzibar Butterfly Centre,Pete Village,Zanzibar,Tanzania,Nature,100.0,Butterfly conservation centre close to Jozani Forest.,4.4,09:00:00,17:00:00,72107
+Nairobi National Park,Langata Road,Nairobi,Kenya,Wildlife,600.0,Wildlife park located close to Nairobi city centre.,4.8,06:00:00,18:00:00,00506
+David Sheldrick Wildlife Trust Elephant Nursery,"Magadi Road, Langata",Nairobi,Kenya,Wildlife,300.0,Elephant orphanage visitor experience in Nairobi.,4.8,11:00:00,12:00:00,00509
+Giraffe Centre,"Duma Road, Langata",Nairobi,Kenya,Wildlife,250.0,Conservation centre where visitors can see and feed giraffes.,4.7,09:00:00,17:00:00,00509
+Karen Blixen Museum,Karen Road,Nairobi,Kenya,Museum,120.0,Museum at the former home of Karen Blixen.,4.5,09:30:00,18:00:00,00502
+Bomas of Kenya,Langata Road,Nairobi,Kenya,Cultural,200.0,"Cultural centre presenting traditional Kenyan music, dance and homesteads.",4.4,10:00:00,18:00:00,00509
+Nairobi National Museum,Museum Hill Road,Nairobi,Kenya,Museum,200.0,"National museum with cultural, natural history and heritage exhibits.",4.5,08:30:00,17:30:00,00100
+Karura Forest,Limuru Road,Nairobi,Kenya,Nature,100.0,"Urban forest with walking, cycling and nature trails.",4.7,06:00:00,18:00:00,00621
+Uhuru Park,Uhuru Highway,Nairobi,Kenya,Park,0.0,Central public park used for leisure walks and city views.,4.2,06:00:00,18:00:00,00100
+Kenyatta International Convention Centre,Harambee Avenue,Nairobi,Kenya,Viewpoint,150.0,Convention centre with a popular rooftop viewpoint.,4.4,08:00:00,18:00:00,00100
+Railway Museum,Workshop Road,Nairobi,Kenya,Museum,100.0,Museum with railway history and locomotive exhibits.,4.3,08:30:00,17:00:00,00100
+Maasai Market,Various Locations,Nairobi,Kenya,Market,0.0,"Open-air craft market selling local art, textiles and souvenirs.",4.3,09:00:00,18:00:00,00100
+Village Market,"Limuru Road, Gigiri",Nairobi,Kenya,Shopping,0.0,Shopping and entertainment centre in Gigiri.,4.5,09:00:00,21:00:00,00621
+Kazuri Beads,"Mbagathi Ridge, Karen",Nairobi,Kenya,Cultural,0.0,Workshop and craft centre known for handmade ceramic beads.,4.6,08:30:00,17:00:00,00502
+Ngong Hills,Ngong Road,Nairobi,Kenya,Nature,200.0,Scenic hills popular for hiking and views outside Nairobi.,4.6,06:00:00,18:00:00,00208
+Oloolua Nature Trail,Karen,Nairobi,Kenya,Nature,100.0,"Nature trail with forest walks, caves and picnic areas.",4.4,09:00:00,18:00:00,00502
+August 7th Memorial Park,Moi Avenue,Nairobi,Kenya,Historical,50.0,Memorial park and museum in central Nairobi.,4.3,08:00:00,17:00:00,00100
+Jamia Mosque Nairobi,Banda Street,Nairobi,Kenya,Cultural,0.0,Landmark mosque and architectural site in central Nairobi.,4.5,08:00:00,18:00:00,00100
+Nairobi Gallery,Kenyatta Avenue,Nairobi,Kenya,Museum,100.0,Art and heritage gallery housed in a historic building.,4.3,08:30:00,17:30:00,00100
+Westgate Shopping Mall,"Mwanzi Road, Westlands",Nairobi,Kenya,Shopping,0.0,Modern shopping and entertainment centre in Westlands.,4.4,09:00:00,21:00:00,00800
+Two Rivers Mall,"Limuru Road, Ruaka",Nairobi,Kenya,Shopping,0.0,Large shopping and leisure mall near Nairobi.,4.5,09:00:00,21:00:00,00100

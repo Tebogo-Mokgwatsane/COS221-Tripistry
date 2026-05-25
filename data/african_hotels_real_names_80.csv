@@ -1,0 +1,81 @@
+acc_name,street_address,city,country,acc_type,rating,price_per_night,description,postal_code
+"Mount Nelson, A Belmond Hotel, Cape Town","76 Orange Street, Gardens",Cape Town,South Africa,Hotel,5.0,6500.0,"Iconic luxury hotel in Gardens, suitable for premium Cape Town packages.",8001
+"Cape Grace, A Fairmont Managed Hotel","West Quay Road, V&A Waterfront",Cape Town,South Africa,Hotel,5.0,7200.0,Luxury waterfront hotel at the V&A Waterfront.,8001
+The Table Bay Hotel,"Quay 6, V&A Waterfront",Cape Town,South Africa,Hotel,5.0,5500.0,Five-star hotel at the V&A Waterfront with harbour and mountain views.,8001
+One&Only Cape Town,"Dock Road, V&A Waterfront",Cape Town,South Africa,Resort,5.0,7800.0,Luxury resort-style hotel in the V&A Waterfront.,8001
+The Silo Hotel,"Silo Square, V&A Waterfront",Cape Town,South Africa,Hotel,5.0,9500.0,Premium boutique hotel above the Zeitz MOCAA precinct.,8001
+Taj Cape Town,1 Wale Street,Cape Town,South Africa,Hotel,5.0,4200.0,Luxury city hotel close to Company Gardens and central attractions.,8001
+Radisson RED Cape Town V&A Waterfront,"Silo 6, Silo Square, V&A Waterfront",Cape Town,South Africa,Hotel,4.5,3100.0,Modern hotel in the Silo District near the waterfront.,8001
+AC Hotel by Marriott Cape Town Waterfront,"Dockrail Road, Foreshore",Cape Town,South Africa,Hotel,4.5,2900.0,Waterfront-area hotel suitable for business and leisure travellers.,8001
+President Hotel,"4 Alexander Road, Bantry Bay",Cape Town,South Africa,Hotel,4.5,2600.0,Seaside hotel in Bantry Bay near beaches and restaurants.,8005
+Hotel Verde Cape Town Airport,"15 Michigan Street, Airport Industria",Cape Town,South Africa,Hotel,4.0,2100.0,Airport hotel convenient for early flights and stopovers.,7490
+Southern Sun Waterfront Cape Town,1 Lower Buitengracht,Cape Town,South Africa,Hotel,4.0,2300.0,Central hotel near the V&A Waterfront and Cape Town CBD.,8001
+The Commodore Hotel,"Portswood Road, V&A Waterfront",Cape Town,South Africa,Hotel,4.0,2800.0,"Hotel near the V&A Waterfront, suitable for sightseeing packages.",8001
+Victoria & Alfred Hotel,"Pierhead, V&A Waterfront",Cape Town,South Africa,Hotel,4.5,3900.0,Historic waterfront hotel close to harbour attractions.,8001
+Lagoon Beach Hotel & Spa,"1 Lagoon Gate Drive, Milnerton",Cape Town,South Africa,Hotel,4.0,2400.0,Beachfront hotel with views toward Table Mountain.,7441
+The Westin Cape Town,"Convention Square, Lower Long Street",Cape Town,South Africa,Hotel,5.0,4300.0,Large city hotel next to the Cape Town International Convention Centre.,8001
+Protea Hotel Fire & Ice Cape Town,"New Church Street, Tamboerskloof",Cape Town,South Africa,Hotel,4.0,2200.0,Trendy hotel close to Kloof Street and the city centre.,8001
+Gorgeous George by Design Hotels,118 St Georges Mall,Cape Town,South Africa,Hotel,4.5,3600.0,Boutique design hotel in Cape Town CBD.,8001
+City Lodge Hotel V&A Waterfront,Corner Dock Road and Alfred Street,Cape Town,South Africa,Hotel,3.5,1800.0,Mid-range hotel close to the waterfront and city attractions.,8001
+Hyatt Regency Cape Town,126 Buitengracht Street,Cape Town,South Africa,Hotel,4.0,2500.0,City hotel in central Cape Town near Bo-Kaap and CBD attractions.,8001
+Pepperclub Hotel,Corner Loop Street and Pepper Street,Cape Town,South Africa,Hotel,5.0,3300.0,Luxury city hotel with access to dining and nightlife areas.,8001
+"Four Seasons Hotel The Westcliff, Johannesburg","67 Jan Smuts Avenue, Westcliff",Johannesburg,South Africa,Hotel,5.0,6200.0,Luxury hillside hotel with views over Johannesburg.,2193
+"Saxon Hotel, Villas and Spa","36 Saxon Road, Sandhurst",Johannesburg,South Africa,Hotel,5.0,8500.0,Luxury Sandton-area hotel suitable for premium packages.,2196
+54 on Bath,"54 Bath Avenue, Rosebank",Johannesburg,South Africa,Hotel,5.0,3800.0,Boutique luxury hotel in Rosebank.,2196
+"The Houghton Hotel, Spa, Wellness & Golf","Lloys Ellis Avenue, Houghton Estate",Johannesburg,South Africa,Hotel,5.0,4600.0,"Luxury hotel with spa, wellness and golf facilities.",2198
+Johannesburg Marriott Hotel Melrose Arch,"42 The High Street, Melrose Arch",Johannesburg,South Africa,Hotel,5.0,4200.0,Modern luxury hotel in the Melrose Arch precinct.,2076
+Protea Hotel by Marriott Johannesburg Balalaika Sandton,"20 Maude Street, Sandton",Johannesburg,South Africa,Hotel,4.0,2300.0,Central Sandton hotel suitable for business and leisure travellers.,2196
+Sandton Sun and Towers,"Corner Fifth Street and Alice Lane, Sandton",Johannesburg,South Africa,Hotel,5.0,3900.0,Large luxury hotel connected to Sandton shopping and business areas.,2196
+Southern Sun Rosebank,"13 Tyrwhitt Avenue, Rosebank",Johannesburg,South Africa,Hotel,4.0,2200.0,Hotel in Rosebank close to shopping and Gautrain access.,2196
+Holiday Inn Johannesburg - Rosebank,"Oxford Road, Rosebank",Johannesburg,South Africa,Hotel,4.0,1900.0,Convenient hotel near Rosebank Mall and transport links.,2196
+Hyatt House Johannesburg Rosebank,"28 Tottenham Avenue, Rosebank",Johannesburg,South Africa,Hotel,4.0,2100.0,Apartment-style hotel option in Rosebank.,2196
+The Maslow Sandton,"146 Rivonia Road, Sandton",Johannesburg,South Africa,Hotel,4.0,2600.0,Business-friendly hotel in Sandton.,2196
+Radisson RED Hotel Johannesburg Rosebank,"Parks Boulevard, Oxford Parks",Johannesburg,South Africa,Hotel,4.0,2300.0,Modern hotel in the Rosebank/Oxford Parks area.,2196
+The Capital Empire,"177 Empire Place, Sandhurst",Johannesburg,South Africa,Hotel,4.0,2400.0,Hotel and apartment accommodation close to Sandton City.,2196
+DaVinci Hotel and Suites,"2 Maude Street, Sandton",Johannesburg,South Africa,Hotel,5.0,4100.0,Luxury hotel in Sandton near Nelson Mandela Square.,2196
+InterContinental Johannesburg O.R. Tambo Airport,O.R. Tambo International Airport,Johannesburg,South Africa,Hotel,5.0,4700.0,Airport hotel for stopovers and flight-connected packages.,1627
+Garden Court Sandton City,"Corner West Street and Maude Street, Sandton",Johannesburg,South Africa,Hotel,3.5,1900.0,Mid-range hotel close to Sandton City and Nelson Mandela Square.,2196
+The Peech Hotel,"North Street, Melrose",Johannesburg,South Africa,Guesthouse,4.5,3200.0,Boutique accommodation in Melrose.,2196
+Sanctuary Mandela,"13th Avenue, Houghton Estate",Johannesburg,South Africa,Guesthouse,5.0,5200.0,Boutique heritage accommodation in Houghton.,2198
+The Catalyst Hotel,"100 Pretoria Avenue, Sandton",Johannesburg,South Africa,Hotel,4.0,2100.0,Modern Sandton hotel suited to city packages.,2196
+Hyatt House Johannesburg Sandton,"125 Ann Crescent, Sandton",Johannesburg,South Africa,Hotel,4.0,2100.0,Apartment-style hotel in Sandton.,2196
+Park Hyatt Zanzibar,"Shangani Street, Stone Town",Zanzibar,Tanzania,Hotel,5.0,6500.0,Luxury beachfront hotel in Stone Town.,71101
+Zanzibar Serena Hotel,"Shangani Street, Stone Town",Zanzibar,Tanzania,Hotel,5.0,5200.0,Historic hotel on the Stone Town seafront.,71101
+Tembo House Hotel,"Shangani Street, Stone Town",Zanzibar,Tanzania,Hotel,4.0,2400.0,Stone Town hotel close to Forodhani Gardens and the waterfront.,71101
+Mizingani Seafront Hotel,"Mizingani Road, Stone Town",Zanzibar,Tanzania,Hotel,4.0,2300.0,Seafront hotel in the historic Stone Town area.,71101
+Dhow Palace Hotel,"Kenyatta Road, Shangani",Zanzibar,Tanzania,Hotel,4.0,2100.0,Traditional Stone Town hotel with historic architecture.,71101
+Kisiwa House,"572 Baghani Street, Stone Town",Zanzibar,Tanzania,Hotel,4.0,2800.0,Boutique hotel in Stone Town near heritage attractions.,71101
+The Seyyida Hotel and Spa,"Kiponda, Stone Town",Zanzibar,Tanzania,Hotel,4.0,2600.0,Boutique hotel with spa facilities in Stone Town.,71101
+Zanzibar Coffee House,"Mkunazini Street, Stone Town",Zanzibar,Tanzania,Guesthouse,4.0,1800.0,Boutique guesthouse and cafe-style accommodation in Stone Town.,71101
+Hotel Verde Zanzibar - Azam Luxury Resort and Spa,"Malawi Road, Mtoni",Zanzibar,Tanzania,Hotel,5.0,4100.0,Luxury resort-style hotel near Stone Town and the waterfront.,71110
+Madinat Al Bahr Business & Spa Hotel,Mbweni Road,Zanzibar,Tanzania,Hotel,5.0,4300.0,Business and spa hotel near the coast.,71110
+Zanzi Resort,Kama Village,Zanzibar,Tanzania,Resort,5.0,6200.0,Luxury resort outside Stone Town in a quieter coastal area.,71110
+Meliá Zanzibar,Kiwengwa,Zanzibar,Tanzania,Resort,5.0,5900.0,Luxury beachfront resort on Zanzibar's east coast.,73111
+Zuri Zanzibar,Kendwa,Zanzibar,Tanzania,Resort,5.0,6800.0,Luxury beach resort in Kendwa.,73109
+Hotel Riu Palace Zanzibar,Nungwi Beach,Zanzibar,Tanzania,Resort,5.0,5600.0,All-inclusive beachfront resort in Nungwi.,73107
+Kendwa Rocks Beach Hotel,Kendwa Beach,Zanzibar,Tanzania,Resort,4.0,2500.0,Beach hotel in Kendwa suitable for leisure packages.,73109
+Amaan Beach Bungalows,Nungwi Beach,Zanzibar,Tanzania,Resort,4.0,2000.0,Beach bungalow-style accommodation in Nungwi.,73107
+Bluebay Beach Resort & Spa,Kiwengwa Beach,Zanzibar,Tanzania,Resort,5.0,4600.0,Beach resort with spa facilities on the east coast.,73111
+Neptune Pwani Beach Resort & Spa,Pwani Mchangani,Zanzibar,Tanzania,Resort,5.0,4700.0,Beach resort suitable for leisure holiday packages.,73111
+Baraza Resort and Spa Zanzibar,Bwejuu Beach,Zanzibar,Tanzania,Resort,5.0,7600.0,Luxury resort on the south-east coast of Zanzibar.,72110
+Breezes Beach Club and Spa,Bwejuu Beach,Zanzibar,Tanzania,Resort,5.0,5100.0,Beach resort and spa for relaxed island packages.,72110
+Nairobi Serena Hotel,Kenyatta Avenue,Nairobi,Kenya,Hotel,5.0,4400.0,Luxury city hotel close to Uhuru Park and central attractions.,00100
+Sarova Stanley,Corner Kimathi Street and Kenyatta Avenue,Nairobi,Kenya,Hotel,5.0,3600.0,Historic city hotel in central Nairobi.,00100
+Fairmont The Norfolk,Harry Thuku Road,Nairobi,Kenya,Hotel,5.0,4200.0,Historic luxury hotel near Nairobi city centre.,00100
+Villa Rosa Kempinski Nairobi,Chiromo Road,Nairobi,Kenya,Hotel,5.0,4600.0,Luxury hotel in the Westlands area.,00800
+Hemingways Nairobi,"Mbagathi Ridge, Karen",Nairobi,Kenya,Hotel,5.0,6200.0,Luxury boutique hotel in Karen.,00502
+Tribe Hotel,"Village Market, Limuru Road",Nairobi,Kenya,Hotel,5.0,3900.0,Luxury hotel in the Gigiri area near Village Market.,00621
+"Sankara Nairobi, Autograph Collection","Woodvale Grove, Westlands",Nairobi,Kenya,Hotel,5.0,4100.0,Modern luxury hotel in Westlands.,00800
+Radisson Blu Hotel Nairobi Upper Hill,"Elgon Road, Upper Hill",Nairobi,Kenya,Hotel,5.0,3700.0,Business-friendly hotel in Upper Hill.,00100
+Mövenpick Hotel & Residences Nairobi,"Mkungu Close, Westlands",Nairobi,Kenya,Hotel,5.0,3500.0,Hotel and residences in Westlands.,00800
+Novotel Nairobi Westlands,Westlands Road,Nairobi,Kenya,Hotel,4.0,3000.0,Modern hotel in Westlands.,00800
+Pullman Nairobi Upper Hill,Upper Hill Road,Nairobi,Kenya,Hotel,4.0,3300.0,Business hotel in Upper Hill.,00100
+Boma Inn Nairobi,"Red Cross Road, South C",Nairobi,Kenya,Hotel,3.5,2100.0,Hotel near Nairobi's South C and airport routes.,00506
+Eka Hotel Nairobi,Mombasa Road,Nairobi,Kenya,Hotel,4.0,2500.0,Hotel on Mombasa Road suitable for airport and safari transfers.,00506
+Emara Ole-Sereni,Mombasa Road,Nairobi,Kenya,Hotel,5.0,4000.0,Hotel overlooking Nairobi National Park area.,00506
+Argyle Grand Hotel Nairobi Airport,Mombasa Road,Nairobi,Kenya,Hotel,5.0,3600.0,Airport-area hotel suited to transit and business travellers.,00506
+Giraffe Manor,"Gogo Falls Road, Langata",Nairobi,Kenya,Guesthouse,5.0,9500.0,"Luxury boutique stay in Langata, popular for wildlife-focused trips.",00509
+Windsor Golf Hotel and Country Club,"Kigwa Road, Ridgeways",Nairobi,Kenya,Resort,5.0,4300.0,Golf resort-style accommodation in Nairobi.,00619
+Palacina The Residence & The Suites,"Kitale Lane, Kilimani",Nairobi,Kenya,Hotel,5.0,3800.0,Luxury residence and suites in Kilimani.,00100
+Hyatt Regency Nairobi Westlands,Westlands,Nairobi,Kenya,Hotel,5.0,4100.0,Modern hotel in Westlands for city packages.,00800
+JW Marriott Hotel Nairobi,"Chiromo Lane, Westlands",Nairobi,Kenya,Hotel,5.0,5200.0,Luxury Marriott hotel in Nairobi's Westlands area.,00800
