@@ -1,25 +1,16 @@
 let destinations = [];
 
-fetch("get_destinations.php")
-  .then((status) => {
-    if (!status.ok) {
-      throw new Error("Network response was not ok");
-    }
-    return status.json();
-  })
-  .then((response) => {
-    if (response.status !== "success") {
-      throw new Error("API error: " + response.message);
-    }
-    return response.data;
-  })
-  .then((data) => {
-    destinations = data;
-    showDestinations(destinations);
-  })
-  .catch((error) => {
-    console.error("Error fetching Destinations:", error);
-  });
+const loadPage = (page = 1) => {
+  fetch(`get_destinations.php?page=${page}`)
+    .then((status) => status.json())
+    .then((response) => {
+      if (response.status !== "success") throw new Error(response.message);
+      destinations = response.data;
+      showDestinations(destinations);
+      updatePaginationButtons(response.currentPage, response.totalPages);
+    })
+    .catch((error) => console.error("Error:", error));
+};
 
 const showDestinations = (destinations) => {
   const DestinationContainer = document.getElementById("destinations");
@@ -43,3 +34,15 @@ const showDestinations = (destinations) => {
 
   });
 };
+
+ const updatePaginationButtons = (current, total) => {
+   document.getElementById("prevBtn").disabled = current === 1;
+   document.getElementById("nextBtn").disabled = current === total;
+   document.getElementById("pageInfo").textContent =
+     `Page ${current} of ${total}`;
+
+   document.getElementById("prevBtn").onclick = () => loadPage(current - 1);
+   document.getElementById("nextBtn").onclick = () => loadPage(current + 1);
+ };
+
+ loadPage(1);

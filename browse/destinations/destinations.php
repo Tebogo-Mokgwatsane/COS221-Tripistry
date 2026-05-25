@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>destinationss</title>
+    <title>Destinations</title>
     <link rel="stylesheet" href="destinations.css">
     <link rel="stylesheet" href="../../css/navbar.css">
 
@@ -37,7 +37,11 @@
     </div>
     
     <div id="destinations" class="destinations-grid" ></div>
-
+    <div class="pagination-container">
+        <button id="prevBtn" class="pagination-btn">Previous</button>
+        <span id="pageInfo" class="page-info">Page 1 of 1</span>
+        <button id="nextBtn" class="pagination-btn">Next</button>
+    </div>
 <script src="destinations.js"></script>
 <script src="scripts/navbar.js"></script>
 </body>

@@ -1,5 +1,6 @@
 let flights = [];
 
+
 const loadPage = (page = 1) => {
   fetch(`get_flights.php?page=${page}`)
     .then((status) => status.json())
@@ -38,8 +39,7 @@ const showFlights = (flights) => {
  const updatePaginationButtons = (current, total) => {
   document.getElementById("prevBtn").disabled = current === 1;
   document.getElementById("nextBtn").disabled = current === total;
-  document.getElementById("pageInfo").textContent =
-    `Page ${current} of ${total}`;
+  document.getElementById("pageInfo").textContent =`Page ${current} of ${total}`;
 
   document.getElementById("prevBtn").onclick = () => loadPage(current - 1);
   document.getElementById("nextBtn").onclick = () => loadPage(current + 1);

@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,7 +9,11 @@
 
 </head>
 <body>
-    <?php include ("../../navbar.php"); ?>
+    <?php include("../../traveller/navbar.php"); ?>
+    <div class="flights-header">
+        <h2 class="flights-title">Flights</h2>
+        <p class="flights-subtitle">Browse through your favourite flights</p>
+    </div>
     <div class="flights-section">
         <div class="filters">
             <div class="top">
@@ -52,9 +55,10 @@
     </div>
 
     
-<script src="flights.js"></script>
-<script src="scripts/navbar.js"></script>
+
 </body>
+<script src="../../scripts/navbar.js"></script>
+<script src="flights.js"></script>
 
 </html>
 

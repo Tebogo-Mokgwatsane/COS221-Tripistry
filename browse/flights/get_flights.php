@@ -2,7 +2,7 @@
  include ("../../api.php");
 
  $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
- $itemsPerPage = 2; // flights per page
+ $itemsPerPage = 20; // flights per page
  $offset = ($page - 1) * $itemsPerPage;
 
  $api = new API();
