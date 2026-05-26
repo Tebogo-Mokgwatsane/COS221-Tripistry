@@ -73,21 +73,26 @@ h1 {
 
 .flight-item img {
     width: 100%;
-    height: 200px;
+    height: 220px;
     object-fit: cover;
-    /* display: block; */
+    
 }
 
 .flight-item h1 {
-    margin: 15px;
-    font-size: 1.2em;
-    color: #333;
+    margin: 0 0 8px 0;
+    font-size: 1.25em;
 }
 
 .flight-item p {
     margin: 0 15px 15px 15px;
     color: #666;
     font-size: 0.95em;
+}
+
+.price {
+    font-size: 1.35em;
+    font-weight: bold;
+    color: #1a1a1a;
 }
 
 /* Filters */
