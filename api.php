@@ -246,8 +246,9 @@ class API
             $this->success([
                 "apikey" => $apiKey,
                 "username" => $username,
-                "user_type" => $userType
-            ], 201);
+                "user_type" => $userType,
+                "email" => $data['email']
+            ]);
         } else {
             $this->error("Failed to register user", 500);
         }
@@ -278,7 +279,8 @@ class API
         $this->success([
             "apikey" => $user['api_key'],
             "username" => $user['username'],
-            "user_type" => $user['user_type']
+            "user_type" => $user['user_type'],
+            "email" => $data['email']
         ]);
     }
 

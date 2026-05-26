@@ -158,9 +158,11 @@ form.addEventListener("submit", (e) => {
     })
     .then(data => {
         if (data.status === "success") {
+            console.log(data);
             localStorage.setItem('user', JSON.stringify({
                 username: formData.username,
-                user_type: formData.user_type
+                user_type: formData.user_type,
+                email: data.data.email
             }));
             if (formData.user_type === "traveller"){
                 window.location.href = "traveller/";

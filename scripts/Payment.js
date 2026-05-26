@@ -51,13 +51,25 @@ function handlePayment()
 
                 if (ob.status == "success")
                 {
-                    response.textContent = "Payment successful.";
                     response.style.color = "green";
 
                     localStorage.removeItem("Booking_id");
                     localStorage.removeItem("bookingTotalPrice");
                     localStorage.removeItem("Quantity");
-                }
+
+                    let seconds = 5;
+
+                    response.textContent = `Payment successful. You will be redirected to your bookings in ${seconds} seconds`;
+                    const countdown = setInterval(() => {
+                            seconds--;
+                            response.textContent = `Payment successful. You will be redirected to your bookings in ${seconds} seconds`;
+                            if (seconds <= 0){
+                                clearInterval(countdown);
+                                window.location.href = "/traveller/bookings.html";
+                            }
+
+                        }, 1000);
+                    }
                 else
                 {
                     response.textContent = ob.message;
@@ -80,7 +92,7 @@ function handlePayment()
             }
         }
     };
-    req.open("POST","api.php",true);
+    req.open("POST","/api.php",true);
     req.setRequestHeader("Content-Type", "application/json");
 
     var body = {

@@ -1,16 +1,19 @@
-var package_id = 1; // for testing only
+const params = new URLSearchParams(window.location.search);
+const id = params.get("package_id");
+
+if (id === null){
+    window.location.href = "/traveller";
+}
+
+const user = JSON.parse(localStorage.getItem("user"));
+if (user === null) window.location.href = "/login.html";
+
+
+
+var package_id = id; // for testing only
 var lastTotalPrice = 0;
 var bookingAvailable = false;
 
-function getPackageId()
-{
-    var params = new URLSearchParams(window.location.search);
-    var id = params.get("package_id");
-    if (id != null)
-    {
-        package_id = Number(id);
-    }
-}
 function checkBooking()
 {
     var quantity = Number(document.getElementById("quantity").value);
@@ -70,7 +73,7 @@ function checkBooking()
         }
     };
 
-    req.open("POST","api.php", true);
+    req.open("POST","/api.php", true);
     req.setRequestHeader("Content-Type", "application/json");
     var body = {
         type: "CheckBooking",
@@ -81,19 +84,12 @@ function checkBooking()
 }
 function confirmBooking()
 {
-    var email = document.getElementById("email").value;
     var quantity = Number(document.getElementById("quantity").value);
     var response = document.getElementById("response");
     var paymentLink = document.getElementById("paymentLink");
 
     paymentLink.style.display = "none";
 
-    if (email == "")
-    {
-        response.textContent = "Please enter your email.";
-        response.style.color = "red";
-        return;
-    }
 
     if (quantity <= 0)
     {
@@ -153,11 +149,11 @@ function confirmBooking()
             }
         }
     };
-    req.open("POST","api.php", true);
+    req.open("POST","/api.php", true);
     req.setRequestHeader("Content-Type", "application/json");
     var body = {
         type: "Booking",
-        Email: email,
+        Email: user.email,
         package_id: package_id,
         Quantity: quantity
     };
@@ -215,7 +211,7 @@ function packageInfo()
         }
     };
 
-    req.open("POST", "api.php", true);
+    req.open("POST", "/api.php", true);
     req.setRequestHeader("Content-Type", "application/json");
 
     var body = 
@@ -228,7 +224,6 @@ function packageInfo()
 }
 window.onload = function()
 {
-    getPackageId();
 
     packageInfo();
     
