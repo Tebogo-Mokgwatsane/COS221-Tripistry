@@ -101,7 +101,7 @@ class API {
         echo json_encode([
             "status" => $status,
             "message" => $message,
-            "data" => $data
+            "data" => $data 
         ]);
         exit;
     }

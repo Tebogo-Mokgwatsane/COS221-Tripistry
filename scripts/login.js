@@ -106,14 +106,10 @@ function handleLogin() {
             // Store API key in cookie for 5 hours
             document.cookie = `apiKey=${data.data.apikey}; path=/; max-age=18000`;
 
-<<<<<<< Updated upstream
-            alert("Welcome back, " + data.data.username + "!");
 
-            if (data.data.user_type === "travel_agent") {
-                window.location.href = "Tripistry/agent.html";
-            } else {
-                window.location.href = "Tripistry/traveller.html";
-=======
+            
+
+            
             // Redirect based on role
             if (actualUserType === "travel_agent") {
                 window.location.href = "/COS221-Tripistry/agency/index.php";
@@ -121,7 +117,7 @@ function handleLogin() {
                 window.location.href = "/COS221-Tripistry/traveller/";
             } else {
                 alert("Unknown user type.");
->>>>>>> Stashed changes
+
             }
 
         } else {
