@@ -44,6 +44,6 @@ overlay.addEventListener("click", (e) => {
 
 logoutBtn.addEventListener("click", (e) => {
     localStorage.removeItem("user");
-    window.location.href = "/";
+    window.location.href = "/COS221-Tripistry/login.html";
 })
 ; 

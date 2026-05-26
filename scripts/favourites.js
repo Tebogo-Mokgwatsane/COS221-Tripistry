@@ -7,7 +7,7 @@ const emptyState   = document.getElementById("empty-state");
 const loading      = document.getElementById("loading");
 
 // ── Guard: travellers only ───────────────────────────────────
-const user = JSON.parse(localStorage.getItem("user") || "{}");
+//const user = JSON.parse(localStorage.getItem("user") || "{}");
 if (!user || user.user_type !== "traveller") {
     alert("This page is for travellers only. Please log in.");
     window.location.href = "login.html";
@@ -37,7 +37,7 @@ function loadFavourites() {
         return;
     }
 
-    fetch("api.php", {
+    fetch("/COS221-Tripistry/api.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ type: "GetFavourites", api_key: apiKey })
@@ -105,7 +105,7 @@ function renderPackageCard(pkg) {
             </div>
             <div class="card-actions">
                 <span class="pkg-status ${statusClass}">${pkg.status}</span>
-                <a href="package-detail.html?id=${pkg.package_id}" class="view-btn">View Package</a>
+                <a href="/COS221-Tripistry/traveller/package.php?package_id=${pkg.package_id}" class="view-btn">View Package</a>
             </div>
         </div>
         <p class="saved-date">Saved ${new Date(pkg.added_at).toLocaleDateString("en-ZA")}</p>
@@ -126,7 +126,7 @@ function removeFavourite(packageId, cardElement) {
     cardElement.style.opacity = "0.4";
     cardElement.style.pointerEvents = "none";
 
-    fetch("api.php", {
+    fetch("/COS221-Tripistry/api.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

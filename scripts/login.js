@@ -100,7 +100,8 @@ function handleLogin() {
             // Save to localStorage
             localStorage.setItem('user', JSON.stringify({
                 username: data.data.username,
-                user_type: userType
+                user_type: userType,
+                email: data.data.email
             }));
 
             // Store API key in cookie
