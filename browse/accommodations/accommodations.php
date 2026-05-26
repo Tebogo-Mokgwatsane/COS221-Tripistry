@@ -33,7 +33,6 @@
 
         <div class="accommodation-grid" id="accommodations"></div>
     </div>
-
     <script src="accommodations.js"></script>
 </body>
 </html>

@@ -75,12 +75,18 @@ const loadPage = () => {
   document.getElementById("destinations").innerHTML =
     `<p style="color:#888;">Loading destinations...</p>`;
 
-  fetch(`get_destinations.php`)
+  fetch("../../api.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      type: "Destinations",
+    }),
+  })
     .then((res) => res.json())
-    .then((response) => {
-      console.log(response);
-      if (response.status !== "success") throw new Error(response.message);
-      destinations = response.data;
+    .then((data) => {
+
+      if (data.status !== "success") throw new Error(data.message);
+      destinations = data.data || [];
       applyFilters();
     })
     .catch((error) => {

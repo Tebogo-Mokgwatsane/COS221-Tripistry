@@ -2,23 +2,30 @@
 let flights = [];
 let selectedClasses = [];
 let currentPage = 1;
-const itemsPerPage = 20;
+const itemsPerPage = 18;
 
 const loadPage = () => {
   document.getElementById("flights").innerHTML =
     `<p style="color:#888;">Loading flights...</p>`;
 
-  fetch(`get_flights.php`)
+  fetch("../../api.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      type: "Flights",
+    }),
+  })
     .then((res) => res.json())
-    .then((response) => {
-      if (response.status !== "success") throw new Error(response.message);
-      flights = response.data;
+    .then((data) => {
+      if (data.status !== "success") throw new Error(data.message);
+      flights = data.data || [];
       populateFilters(flights);
       setupPriceFilter(flights);
       applyFilters();
     })
     .catch((error) => {
-      document.getElementById("flights").innerHTML =`<p style="color:red;">Failedload flights.</p>`;
+      document.getElementById("flights").innerHTML =
+        `<p style="color:red;">Failedload flights.</p>`;
       console.error("Error:", error);
     });
 };
