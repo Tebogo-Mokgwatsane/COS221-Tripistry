@@ -21,14 +21,7 @@ let activePackageId = null;
 // ── Guard: only travellers can access this page ──────────────
 const user = JSON.parse(localStorage.getItem("user") || "{}");
 if (!user || user.user_type !== "traveller") {
-    alert("This page is for travellers only. Please log in.");
-    window.location.href = "login.html";
-}
-
-// ── Get API key from cookie ──────────────────────────────────
-function getApiKey() {
-    const match = document.cookie.match(/apiKey=([^;]+)/);
-    return match ? match[1] : null;
+    window.location.href = "/login.html";
 }
 
 // ── Star rating labels ───────────────────────────────────────
@@ -82,14 +75,14 @@ reviewComment.addEventListener("input", () => {
 
 // ── Load bookings ────────────────────────────────────────────
 function loadBookings() {
-    const apiKey = getApiKey();
+    const apiKey = user.apikey;
     if (!apiKey) {
         alert("Session expired. Please log in.");
-        window.location.href = "login.html";
+        window.location.href = "/login.html";
         return;
     }
 
-    fetch("api.php", {
+    fetch("/api.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ type: "GetBookings", api_key: apiKey })

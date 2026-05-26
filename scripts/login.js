@@ -93,25 +93,22 @@ const handleLogin = async () => {
                 localStorage.setItem('user', JSON.stringify({
                     username: data.data.username,
                     user_type: userType,
-                    email: data
+                    email: data,
+                    apikey: data.data.apikey 
                 }));
     
                 // Store API key in cookie
                 document.cookie = `apiKey=${data.data.apikey}; path=/; max-age=18000`;//expires in 5hrs
     
-                alert("Welcome back, " + data.data.username + "!");
     
-                if (data.data.user_type === "travel_agent") {
-                    window.location.href = "agency/";
+                
     
                     if (userType === "travel_agent") {
                         window.location.href = "traveller/";
                     } else {
                         window.location.href = "traveller/";
                     }
-                } else {
-                    alert(data.message || "Login failed");
-                }
+                
     
             } else {
                 console.log(res);

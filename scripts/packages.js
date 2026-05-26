@@ -45,7 +45,7 @@ soloBtn.addEventListener("click", (e) => {
 });
 
 // some mock data
-let package = [];
+let packages = [];
 
 
 
@@ -156,6 +156,8 @@ async function performSearch(query) {
         if (data.status === "success") {
             allPackages = data.data || [];
             renderPackages(allPackages, true);
+            packages = allPackages;
+            filteredPackages = allPackages;
             console.log(allPackages);
         }
     } catch (err) {

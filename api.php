@@ -260,27 +260,37 @@ class API
             $this->error("Email and password required", 400);
         }
 
-        $stmt = $this->mysqli->prepare("SELECT user_id, username, email, password_hash, user_type, api_key FROM user WHERE email = ?");
+        $stmt = $this->mysqli->prepare("
+        SELECT user_id, username, email, password_hash, user_type, api_key
+        FROM user
+        WHERE email = ?
+    ");
+
         $stmt->bind_param("s", $data['email']);
         $stmt->execute();
+
         $result = $stmt->get_result();
         $user = $result->fetch_assoc();
+
         $stmt->close();
 
-        if (!$user || !password_verify($data['password'], $user['password_hash'])) {
+        $hashedPassword = hash('sha256', $data['password']);
+
+        if (!$user || $hashedPassword !== $user['password_hash']) {
             $this->error("Invalid Credentials", 401);
         }
 
         session_start();
+
         $_SESSION['user_id'] = $user['user_id'];
         $_SESSION['username'] = $user['username'];
+        $_SESSION['user_type'] = $user['user_type'];
 
-        //Return API key in response
         $this->success([
             "apikey" => $user['api_key'],
             "username" => $user['username'],
             "user_type" => $user['user_type'],
-            "email" => $data['email']
+            "email" => $user['email']
         ]);
     }
 
@@ -527,6 +537,254 @@ LIMIT 30;
         } else {
             $this->error("Failed to submit review");
         }
+    }
+
+    private function packageReturnAll($input)
+    {
+        if (!isset($input["package_id"]) || empty($input["package_id"])) {
+            $this->error("Missing package_id", 400);
+            return;
+        }
+
+        $package_id = (int) $input["package_id"];
+        if ($package_id <= 0) {
+            $this->error("Invalid package_id", 400);
+            return;
+        }
+        $sql = "
+            SELECT 
+                p.package_id,
+                p.title,
+                p.description,
+                p.price,
+                p.quantity,
+                p.status,
+                p.img_url,
+                p.expiry_date,
+                d.dest_id,
+                d.city,
+                d.country,
+                d.description AS destination_description,
+                d.img_url AS destination_img_url,
+                gp.package_id AS group_package_id,
+                gp.min_group_size,
+                gp.max_group_size,
+                gp.status AS group_status
+            FROM package p
+            INNER JOIN destination d 
+                ON p.dest_id = d.dest_id
+            LEFT JOIN grouppackage gp 
+                ON p.package_id = gp.package_id
+            WHERE p.package_id = ?
+            LIMIT 1
+        ";
+
+        $stmt = $this->mysqli->prepare($sql);
+
+        if (!$stmt) {
+            $this->error("Failed to prepare package query: " . $this->mysqli->error, 500);
+            return;
+        }
+
+        $stmt->bind_param("i", $package_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows === 0) {
+            $stmt->close();
+            $this->error("Package not found", 404);
+            return;
+        }
+
+        $package = $result->fetch_assoc();
+        $stmt->close();
+        $activities = [];
+
+        $sql = "
+            SELECT 
+                day_number,
+                activity_name,
+                activity_time,
+                description
+            FROM packageactivity
+            WHERE package_id = ?
+            ORDER BY day_number ASC, activity_time ASC
+        ";
+
+        $stmt = $this->mysqli->prepare($sql);
+
+        if ($stmt) {
+            $stmt->bind_param("i", $package_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            while ($row = $result->fetch_assoc()) {
+                $activities[] = [
+                    "day_number" => (int) $row["day_number"],
+                    "activity_name" => $row["activity_name"],
+                    "activity_time" => $row["activity_time"],
+                    "description" => $row["description"]
+                ];
+            }
+
+            $stmt->close();
+        }
+        $restaurants = [];
+
+        $sql = "
+            SELECT 
+                r.res_id,
+                r.name,
+                r.type,
+                r.fee,
+                r.description,
+                r.rating,
+                r.img_url
+            FROM packagerestaurant pr
+            INNER JOIN restaurant r 
+                ON pr.res_id = r.res_id
+            WHERE pr.package_id = ?
+            ORDER BY r.rating DESC
+        ";
+
+        $stmt = $this->mysqli->prepare($sql);
+
+        if ($stmt) {
+            $stmt->bind_param("i", $package_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            while ($row = $result->fetch_assoc()) {
+                $restaurants[] = [
+                    "res_id" => (int) $row["res_id"],
+                    "name" => $row["name"],
+                    "type" => $row["type"],
+                    "details" => $row["description"],
+                    "rating" => $row["rating"] !== null ? (float) $row["rating"] : null,
+                    "fee" => $row["fee"] !== null ? (float) $row["fee"] : 0,
+                    "img_url" => $row["img_url"]
+                ];
+            }
+
+            $stmt->close();
+        }
+        $flights = [];
+
+        $sql = "
+            SELECT 
+                f.flight_id,
+                f.airline_name,
+                f.departure_airport,
+                f.arrival_airport,
+                f.dept_date,
+                f.arrival_datetime,
+                f.classes,
+                f.price,
+                f.img_url
+            FROM packageflight pf
+            INNER JOIN flight f 
+                ON pf.flight_id = f.flight_id
+            WHERE pf.package_id = ?
+            ORDER BY f.dept_date ASC
+        ";
+
+        $stmt = $this->mysqli->prepare($sql);
+
+        if ($stmt) {
+            $stmt->bind_param("i", $package_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            while ($row = $result->fetch_assoc()) {
+                $flights[] = [
+                    "flight_id" => (int) $row["flight_id"],
+                    "airline_name" => $row["airline_name"],
+                    "departure_airport" => $row["departure_airport"],
+                    "arrival_airport" => $row["arrival_airport"],
+                    "departure_datetime" => $row["dept_date"],
+                    "arrival_datetime" => $row["arrival_datetime"],
+                    "class" => $row["classes"],
+                    "price" => (float) $row["price"],
+                    "img_url" => $row["img_url"]
+                ];
+            }
+
+            $stmt->close();
+        }
+        $reviews = [];
+
+        $sql = "
+            SELECT 
+                r.review_id,
+                r.rating,
+                r.comment,
+                r.review_date,
+                t.first_name,
+                t.last_name,
+                u.username
+            FROM review r
+            INNER JOIN traveller t 
+                ON r.traveller_id = t.traveller_id
+            INNER JOIN user u 
+                ON t.traveller_id = u.user_id
+            WHERE r.package_id = ?
+            ORDER BY r.review_date DESC
+        ";
+
+        $stmt = $this->mysqli->prepare($sql);
+        if ($stmt) {
+            $stmt->bind_param("i", $package_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            while ($row = $result->fetch_assoc()) {
+                $reviews[] = [
+                    "review_id" => (int) $row["review_id"],
+                    "rating" => (int) $row["rating"],
+                    "comment" => $row["comment"],
+                    "review_date" => $row["review_date"],
+                    "traveller_name" => trim($row["first_name"] . " " . $row["last_name"]),
+                    "username" => $row["username"]
+                ];
+            }
+
+            $stmt->close();
+        }
+        $response = [
+            "package_id" => (int) $package["package_id"],
+            "title" => $package["title"],
+            "img_url" => $package["img_url"],
+            "location" => $package["city"] . ", " . $package["country"],
+            "city" => $package["city"],
+            "country" => $package["country"],
+
+            "package_type" => $package["group_package_id"] !== null ? "Group" : "Solo",
+            "is_group_package" => $package["group_package_id"] !== null,
+
+            "in_stock" => ((int) $package["quantity"] > 0 && $package["status"] === "active"),
+            "stock_text" => ((int) $package["quantity"] > 0 && $package["status"] === "active") ? "In stock" : "Out of stock",
+
+            "description" => $package["description"],
+            "destination_description" => $package["destination_description"],
+            "price" => (float) $package["price"],
+            "quantity" => (int) $package["quantity"],
+            "status" => $package["status"],
+            "expiry_date" => $package["expiry_date"],
+
+            "group_details" => $package["group_package_id"] !== null ? [
+                "min_group_size" => (int) $package["min_group_size"],
+                "max_group_size" => (int) $package["max_group_size"],
+                "group_status" => $package["group_status"]
+            ] : null,
+
+            "activities" => $activities,
+            "restaurants" => $restaurants,
+            "flights" => $flights,
+            "reviews" => $reviews
+        ];
+
+        $this->success($response);
+        return;
     }
 
     private function getReviews($data)

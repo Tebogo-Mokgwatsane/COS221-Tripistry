@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tripistry - My Bookings & Reviews</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/navbar.css">
-    <link rel="stylesheet" href="css/reviews.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/navbar.css">
+    <link rel="stylesheet" href="../css/reviews.css">
 </head>
 <body>
     <?php include("navbar.php"); ?>
@@ -27,7 +27,7 @@
 
         <div class="empty-state" id="empty-state" style="display:none;">
             <div>
-                <img src="img/icons/earth.svg" alt="no bookings">
+                <img src="../img/icons/earth.svg" alt="no bookings">
             </div>
             <h2>No bookings yet</h2>
             <p>Once you book a package it will appear here for you to review.</p>
@@ -78,6 +78,6 @@
         &copy; 2026 Tripistry. All rights reserved.
     </footer>
 
-    <script src="scripts/reviews.js"></script>
+    <script src="../scripts/reviews.js"></script>
 </body>
 </html>
