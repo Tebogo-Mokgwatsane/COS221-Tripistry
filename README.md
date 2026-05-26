@@ -4,7 +4,7 @@
 **University of Pretoria**  
 **Group Project**
 
-## Project Overview
+# Project Overview
 
 Tripistry is a comprehensive travel booking platform that connects travellers with verified travel agencies. It allows users to browse, compare, search and book travel packages while providing agencies with tools to manage their offerings.
 
@@ -12,8 +12,8 @@ The system enforces two distinct user roles:
 - **Travellers** – Browse, book, review, and save packages
 - **Travel Agencies** – Create, manage packages and group trips
 
-## Features Implemented
-# Traveller Features
+# Features Implemented
+## Traveller Features
 - Browse destinations, flights, accommodations, attractions, and restaurants
 - Real-time search across packages and destinations
 - Advanced filtering (price, package type, availability)
@@ -22,18 +22,18 @@ The system enforces two distinct user roles:
 - Leave reviews and ratings regarding packages
 - View booking history
 
-# Agency Features
+## Agency Features
 - Verified business registration system
 - Create and manage travel packages
 - Link packages with destinations, flights, accommodations, attractions, and restaurants
 - View bookings and reviews
 
-# General
+## General
 - Secure login with role-based access
 - Responsive, modern UI
 - Clean clear separation between Traveller and Agency interfaces
 
-## Technologies Used
+# Technologies Used
 
 - **Backend**: PHP 8+
 - **Frontend**: HTML5, CSS3, Vanilla JavaScript
@@ -41,13 +41,13 @@ The system enforces two distinct user roles:
 - **Version Control**: Git + GitHub
 - **Styling**: Custom CSS
 
-## Setup Instructions
-# 1. Prerequisites
+# Setup Instructions
+## 1. Prerequisites
 - XAMPP (Apache + MariaDB)
 - PHP 8.2+
 - Git
 
-# 2. Installation
+## 2. Installation
 1. Clone or extract the project into:
 C:\xampp\htdocs\Tripistry\
 
@@ -67,7 +67,7 @@ C:\xampp\htdocs\Tripistry\
 5. Access the application:
 - Open browser: `http://localhost/Tripistry/`
 
-## Default Test Accounts
+# Default Test Accounts
 **Traveller:**
 - Email: `test@traveller.com`
 - Password: `Password123!`
@@ -76,17 +76,17 @@ C:\xampp\htdocs\Tripistry\
 - Email: `test@agency.co.za`
 - Password: `Password123!`
 
-## Git Repository
+# Git Repository
 **Repository**: https://github.com/Tebogo-Mokgwatsane/COS221-Tripistry/
 **Branching Strategy**: Main + Feature branches
 
-## Assumptions & Decisions
+# Assumptions & Decisions
 - Used separate tables for `traveller` and `travelagent` linked to `user`
 - Implemented real-time search with debounced input
 - Used SHA-256 for password hashing
 - Added `businessregistration` table for agency verification
 
-## Future Enhancements
+# Future Enhancements
 - Recommendation engine
 - Interactive map integration
 - Payment gateway simulation
@@ -94,5 +94,5 @@ C:\xampp\htdocs\Tripistry\
 
 **Submitted as part of COS221 Practical Assignment 5 2026**  
 
-## Site Demo Link
-https://tripistry.page.gd/
+# Site Demo Link
+**Link to our project**:https://tripistry.page.gd/
