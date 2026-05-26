@@ -1,16 +1,3 @@
-<?php 
-include("../../api.php");
-
-/*$api = new API();
-$accommodations = $api->getAccommodations();
-
-header('Content-Type: application/json');
-echo json_encode([
-    "status" => "success",
-    "data" => $accommodations
-]);*/
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,7 +8,7 @@ echo json_encode([
     <link rel="stylesheet" href="../../css/navbar.css">
 </head>
 <body>
-    <?php include("../../traveller/navbar.php"); ?>
+    <?php include("../navbar.php"); ?>
     
     <div class="container" style="margin-top: 100px;">
         <h1>Find Your Perfect Stay 🏨</h1>

@@ -61,6 +61,15 @@ class API
             case "Accommodations":
                 $this->getAccommodations($input);
                 break;
+            case "Attractions":
+                $this->getAttractions();
+                break;
+            case "Restaurants":
+                $this->getRestaurants();
+                break;
+            case "Flights":
+                $this->getFlights();
+                break;
             default:
                 $this->error("Unknown request type");
                 break;
@@ -176,6 +185,40 @@ class API
             $stmt->close();
         }
 
+        $userType = $data['user_type'];
+        $username = $data['username'] ?? '';
+
+        // Agency specific validation
+        if ($userType === "agency" || $userType === "travel_agent") {
+            if (empty($data['registration_num'])) {
+                $this->error("Registration number is required for agencies", 400);
+            }
+
+            // Check if registration number is valid in reg_numbers table
+            $stmt = $this->mysqli->prepare("SELECT reg_id FROM businessregistration WHERE reg_number = ? AND status = 'valid'");
+            $stmt->bind_param("s", $data['registration_num']);
+            $stmt->execute();
+            $stmt->store_result();
+
+            if ($stmt->num_rows === 0) {
+                $stmt->close();
+                $this->error("Invalid or unlicensed registration number",400);
+            }
+            else //If valid, check if not taken
+            {
+                $stmt->close();
+                $stmt = $this->mysqli->prepare("SELECT reg_id FROM businessregistration WHERE (used_by IS NOT NULL AND reg_number = ?) OR (reg_number = ? AND status = 'taken')");
+                $stmt->bind_param("ss", $data['registration_num'], $data['registration_num']);
+                $stmt->execute();
+                $stmt->store_result();
+                if ($stmt->num_rows > 0) {
+                    $stmt->close();
+                    $this->error("Registration number already in use by another account", 409);
+                }
+            }
+            $stmt->close();
+        }
+
         // Check if email exists
         $stmt = $this->mysqli->prepare("SELECT user_id FROM user WHERE email = ?");
         $stmt->bind_param("s", $data['email']);
@@ -185,11 +228,14 @@ class API
             $stmt->close();
             $this->error("Email already registered", 409);
         }
-        $stmt->close();
+        $stmt->close();*/
 
         // Hash password
         //changed to SHA2 hashing for better security. 
-        $hashed = hash('sha256', $data['password']);
+        //$hashed = hash('sha256', $data['password']);
+        $hashed = password_hash($data['password'], PASSWORD_DEFAULT);
+        //OR
+        //password_hash($data['password'], PASSWORD_BCRYPT);
 
         // Generate API key
         $apiKey = bin2hex(random_bytes(16));
@@ -211,8 +257,9 @@ class API
                                             VALUES (?, ?, ?, 'Solo')");
             $stmt->bind_param("iss", $userId, $fname, $lname);
             $stmt->execute();
-        } else // Agency
-        {
+        } 
+        else // Agency
+        { 
             $agencyName = $data['agency_name'] ?? $username;
             $stmt = $this->mysqli->prepare("INSERT INTO travelagent (agent_id, agency_name, registration_number) 
                                             VALUES (?, ?, ?)");
@@ -590,34 +637,50 @@ class API
         $this->success($favourites);
     }
 
-    // Get Accommodations ====================
-    public function getAccommodations()
-    {
-        $result = $this->mysqli->query("
-            SELECT 
-                a.acc_id,
-                a.acc_name,
-                a.acc_type,
-                a.rating,
-                a.price_per_night,
-                a.description,
-                a.img_url,
-                aa.city,
-                aa.country
-            FROM accommodation a
-            LEFT JOIN accommodationaddress aa ON a.acc_id = aa.acc_id
-            ORDER BY a.price_per_night ASC
-        ");
-
-        $accommodations = [];
-        while ($row = $result->fetch_assoc()) {
-            $accommodations[] = $row;
-        }
-        $this->success($accommodations);
+    // Filtering sub Tabs ====================
+    public function getAccommodations() {
+        $result = $this->mysqli->query("SELECT a.*, aa.city, aa.country FROM accommodation a LEFT JOIN accommodationaddress aa ON a.acc_id = aa.acc_id ORDER BY a.price_per_night ASC");
+        $this->success($result->fetch_all(MYSQLI_ASSOC));
     }
-}
 
+    private function getAttractions() {
+        $result = $this->mysqli->query("SELECT a.*, aa.city, aa.country FROM attraction a LEFT JOIN attractionaddress aa ON a.att_id = aa.att_id ORDER BY a.fee ASC");
+        $this->success($result->fetch_all(MYSQLI_ASSOC));
+    }
+
+    private function getRestaurants() {
+        $result = $this->mysqli->query("SELECT r.*, ra.city, ra.country FROM restaurant r LEFT JOIN restaurantaddress ra ON r.res_id = ra.res_id ORDER BY r.fee ASC");
+        $this->success($result->fetch_all(MYSQLI_ASSOC));
+    }
+
+    public function getflights(){
+        $stmt = $this->mysqli->query("SELECT flight_id, airline_name, Price, departure_airport, arrival_airport,
+            DATE_FORMAT(dept_date,'%d %b %Y') as dept_date,
+            DATE_FORMAT(dept_date,'%H %i') as dept_time,
+            DATE_FORMAT(arrival_datetime,'%d %b %Y') as arrival_date,
+            DATE_FORMAT(arrival_datetime,'%H %i') as arrival_time,
+            classes,img_url FROM flight");
+        $flights = [];
+        while ($row = $stmt->fetch_assoc()) {
+            $flights[] = $row;
+        }
+        return $flights;
+    }
+
+    public function getDestinations(){
+        $stmt = $this->mysqli->query("SELECT dest_id, city, country, description, img_url FROM destination");
+        $destinations = [];
+        while ($row = $stmt->fetch_assoc()) {
+            $destinations[] = $row;
+        }
+        return $destinations;
+    }
+
+}
+ 
 // Run API
-$api = new API();
-$api->handleRequest();
-?>
+if (basename(__FILE__) === basename($_SERVER['SCRIPT_FILENAME'])) {
+    $api = new API();
+    $api->handleRequest();
+}
+?> 
