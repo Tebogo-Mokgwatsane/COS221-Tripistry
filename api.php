@@ -13,6 +13,7 @@ class API
     {
         global $mysqli;
         $this->mysqli = $mysqli;
+
     }
 
     public function handleRequest()
@@ -74,17 +75,8 @@ class API
             case "Packages":
                 $this->packages($input);
                 break;
-            case "Attractions":          
-                $this->getAttractions();
-                break;
-            case "Restaurants":          
-                $this->getRestaurants();
-                break;
-            case "Flights":          
-                $this->getFlights();
-                break;
-            case "Destinations":          
-                $this->getDestinations();
+            case "GetAllPackages":
+                $this->getAllPackages($input);
                 break;
             default:
                 $this->error("Unknown request type");
@@ -147,7 +139,8 @@ class API
         $stmt->close();
         return $row ? $row['traveller_id'] : null;
     }
-    public function getflights(){
+    public function getflights()
+    {
         $stmt = $this->mysqli->query("SELECT flight_id, airline_name, Price, departure_airport, arrival_airport,
             DATE_FORMAT(dept_date,'%d %b %Y') as dept_date,
             DATE_FORMAT(dept_date,'%H %i') as dept_time,
@@ -157,17 +150,20 @@ class API
         $this->success($stmt->fetch_all(MYSQLI_ASSOC));
     }
 
-    public function getDestinations(){
-    $stmt = $this->mysqli->query("SELECT dest_id, city, country, description, img_url FROM destination ORDER BY city ASC");
-    $this->success($stmt->fetch_all(MYSQLI_ASSOC));
+    public function getDestinations()
+    {
+        $stmt = $this->mysqli->query("SELECT dest_id, city, country, description, img_url FROM destination ORDER BY city ASC");
+        $this->success($stmt->fetch_all(MYSQLI_ASSOC));
     }
 
-    private function getAttractions() {
+    private function getAttractions()
+    {
         $result = $this->mysqli->query("SELECT a.*, aa.city, aa.country FROM attraction a LEFT JOIN attractionaddress aa ON a.att_id = aa.att_id ORDER BY a.fee ASC");
         $this->success($result->fetch_all(MYSQLI_ASSOC));
     }
 
-    private function getRestaurants() {
+    private function getRestaurants()
+    {
         $result = $this->mysqli->query("SELECT r.*, ra.city, ra.country FROM restaurant r LEFT JOIN restaurantaddress ra ON r.res_id = ra.res_id ORDER BY r.fee ASC");
         $this->success($result->fetch_all(MYSQLI_ASSOC));
     }
@@ -956,7 +952,7 @@ LIMIT 30;
     }
 
     // Get Accommodations ====================
-    public function getAccommodations()
+    public function getAccommodations($data)
     {
         $result = $this->mysqli->query("
             SELECT 

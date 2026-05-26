@@ -1,45 +1,37 @@
-<?php
-require_once '../auth.php';
-requireRole('traveller');
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tripistry - My Bookings & Reviews</title>
-    <link rel="stylesheet" href="navbar.php">
     <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../css/reviews.css">
     <link rel="stylesheet" href="../css/navbar.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/reviews.css">
 </head>
 <body>
     <?php include("navbar.php"); ?>
 
-    <div class="container reviews-page">
-        <div class="search-section">
-            <h1>My Bookings & <span>Reviews</span></h1>
+    <div class="section reviews-page">
+        <div class="page-header">
+            <p class="r">MY BOOKINGS</p>
+            <h1>Bookings & Reviews</h1>
             <p class="sub">Leave a review for any package you have travelled on.</p>
         </div>
 
-        <!-- Loading -->
-        <div class="loading" id="loading">
-            <div class="spinner"></div>
-            <p>Loading your bookings...</p>
+        <div class="bookings-list" id="bookings-list">
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Loading your bookings...</p>
+            </div>
         </div>
 
-        <!-- Bookings list -->
-        <div class="bookings-list" id="bookings-list"></div>
-
-        <!-- Empty state -->
         <div class="empty-state" id="empty-state" style="display:none;">
-            <img src="../img/icons/earth.svg" alt="no bookings">
+            <div>
+                <img src="../img/icons/earth.svg" alt="no bookings">
+            </div>
             <h2>No bookings yet</h2>
             <p>Once you book a package it will appear here for you to review.</p>
-            <a href="/traveller/" class="cta-btn">Browse Packages</a>
+            <a href="packages.php" class="cta-btn">Browse Packages</a>
         </div>
     </div>
 
@@ -51,7 +43,7 @@ requireRole('traveller');
             <p id="modal-package-name" class="modal-package-name"></p>
 
             <div class="star-picker">
-                <label class="label">YOUR RATING</label>
+                <label>YOUR RATING</label>
                 <div class="stars" id="star-picker">
                     <span class="star" data-value="1">&#9733;</span>
                     <span class="star" data-value="2">&#9733;</span>
@@ -80,6 +72,10 @@ requireRole('traveller');
             </button>
         </div>
     </div>
+
+    <footer>
+        &copy; 2026 Tripistry. All rights reserved.
+    </footer>
 
     <script src="../scripts/reviews.js"></script>
 </body>
