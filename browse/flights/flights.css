@@ -56,9 +56,10 @@
 
 }
 
-h1 {
+.flight-info h1 {
     text-align: center;
-    margin: 100px 0;
+    margin: fit-content;
+    font-size: 1.6em;
 }
 
 
@@ -80,19 +81,61 @@ h1 {
 
 .flight-item h1 {
     margin: 0 0 8px 0;
-    font-size: 1.25em;
+    font-size: 1.5em;
 }
 
-.flight-item p {
-    margin: 0 15px 15px 15px;
-    color: #666;
-    font-size: 0.95em;
-}
+
 
 .price {
-    font-size: 1.35em;
+    font-size: 1.5em;
     font-weight: bold;
     color: #1a1a1a;
+    gap: 10px;
+    
+    margin: 8px 12px;
+}
+
+
+
+.flight-info .from{
+    display: flex;
+    margin: 8px 12px;
+}
+
+.flight-info .to{
+    display: flex;
+    margin: 8px 12px;
+}
+
+.flight-info .to p {
+    color: rgb(5, 181, 244);
+    font-size: fit-content;
+    
+}
+
+.flight-info .from p {
+    color: rgb(5, 181, 244);
+    font-size: fit-content;
+    
+}
+
+.flight-classes {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid #fbff16;
+    width: fit-content;
+    background-color: rgba(246, 255, 0, 0.245);
+    padding: 8px 8px;
+    border-radius: 20px;
+    margin: 8px 12px;
+}
+.flight-info .from img,
+.flight-info .to img {
+    border-radius: fit-content;
+    height: fit-content;
+    width: fit-content;
+    margin: 5px 5px 5px 5px;
 }
 
 /* Filters */

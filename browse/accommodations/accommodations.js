@@ -1,12 +1,12 @@
 let allAccommodations = [];
+let currentPage = 1;
+const itemsPerPage = 20;
 
 function loadAccommodations() {
   fetch("../../api.php", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      type: "Accommodations",
-    }),
+    body: JSON.stringify({ type: "Accommodations" }),
   })
     .then((res) => res.text())
     .then((text) => {
@@ -16,21 +16,30 @@ function loadAccommodations() {
     .then((data) => {
       if (data.status === "success") {
         allAccommodations = data.data || [];
-        renderAccommodations(allAccommodations);
+        setupPriceSlider(allAccommodations);
+        filterAccommodations();
       }
     })
     .catch((err) => console.error(err));
 }
 
-// Load on page load
 window.onload = loadAccommodations;
 
-// Filter functions
 const maxPriceSlider = document.getElementById("max-price");
 const maxPriceValue = document.getElementById("max-price-value");
 
+function setupPriceSlider(accommodations) {
+  const prices = accommodations.map((a) => parseFloat(a.price_per_night || 0));
+  const maxPrice = Math.ceil(Math.max(...prices) / 1000) * 1000;
+  maxPriceSlider.min = 0;
+  maxPriceSlider.max = maxPrice;
+  maxPriceSlider.value = maxPrice;
+  maxPriceValue.textContent = `R${maxPrice.toLocaleString()}`;
+}
+
 maxPriceSlider.addEventListener("input", () => {
-  maxPriceValue.textContent = `R${maxPriceSlider.value}`;
+  maxPriceValue.textContent = `R${parseFloat(maxPriceSlider.value).toLocaleString()}`;
+  currentPage = 1;
   filterAccommodations();
 });
 
@@ -40,6 +49,7 @@ document.querySelectorAll(".type-btn").forEach((btn) => {
       .querySelectorAll(".type-btn")
       .forEach((b) => b.classList.remove("active"));
     btn.classList.add("active");
+    currentPage = 1;
     filterAccommodations();
   });
 });
@@ -54,7 +64,39 @@ function filterAccommodations() {
     return priceMatch && typeMatch;
   });
 
-  renderAccommodations(filtered);
+  currentPage = 1;
+  displayPage(filtered);
+}
+
+function displayPage(accommodations) {
+  const totalPages = Math.ceil(accommodations.length / itemsPerPage);
+  const offset = (currentPage - 1) * itemsPerPage;
+  const paginated = accommodations.slice(offset, offset + itemsPerPage);
+
+  renderAccommodations(paginated);
+  updatePaginationButtons(currentPage, totalPages, accommodations);
+}
+
+function updatePaginationButtons(current, total, allFiltered) {
+  document.getElementById("prevBtn").disabled = current === 1;
+  document.getElementById("nextBtn").disabled =
+    current === total || total === 0;
+  document.getElementById("pageInfo").textContent =
+    `Page ${current} of ${total || 1}`;
+  document.getElementById("prevBtn").onclick = () => {
+    if (currentPage > 1) {
+      currentPage--;
+      displayPage(allFiltered);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+  document.getElementById("nextBtn").onclick = () => {
+    if (currentPage < total) {
+      currentPage++;
+      displayPage(allFiltered);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
 }
 
 function renderAccommodations(list) {
@@ -70,17 +112,15 @@ function renderAccommodations(list) {
     const div = document.createElement("div");
     div.className = "accommodation-item";
     div.innerHTML = `
-            <img src="${acc.img_url || "https://via.placeholder.com/400x220"}" alt="${acc.acc_name}">
-            <div class="accommodation-info">
-                <h3>${acc.acc_name}</h3>
-                <p class="location">${acc.city}, ${acc.country}</p>
-                <span class="type">${acc.acc_type}</span>
-                <p class="rating">★ ${parseFloat(acc.rating || 0).toFixed(1)}</p>
-                <div class="price">
-                    R${parseFloat(acc.price_per_night).toLocaleString()} <small>/night</small>
-                </div>
-            </div>
-        `;
+      <img src="${acc.img_url || "https://via.placeholder.com/400x220"}" alt="${acc.acc_name}">
+      <div class="accommodation-info">
+        <h3>${acc.acc_name}</h3>
+        <p class="location">${acc.city}, ${acc.country}</p>
+        <span class="type">${acc.acc_type}</span>
+        <p class="rating">★ ${parseFloat(acc.rating || 0).toFixed(1)}</p>
+        <div class="price">R${parseFloat(acc.price_per_night).toLocaleString()} <small>/night</small></div>
+      </div>
+    `;
     container.appendChild(div);
   });
 }

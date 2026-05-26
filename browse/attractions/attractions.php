@@ -10,7 +10,7 @@
 <body>
     <?php include("../../traveller/navbar.php"); ?>
     
-    <div class="container" style="margin-top: 100px;">
+    <div class="container" style="margin-top: 140px;">
         <h2 class="attractions-title">Attractions</h2>
         <p class="attractions-subtitle">Explore the Best Places to Visit</p>
         <div class="filters">
@@ -22,6 +22,11 @@
         </div>
 
         <div class="attraction-grid" id="attractions"></div>
+    </div>
+    <div class="pagination-container">
+        <button id="prevBtn" class="pagination-btn">Previous</button>
+        <span id="pageInfo" class="page-info">Page 1 of 1</span>
+        <button id="nextBtn" class="pagination-btn">Next</button>
     </div>
 
     <script src="attractions.js"></script>

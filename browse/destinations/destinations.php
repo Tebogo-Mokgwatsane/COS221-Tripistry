@@ -10,16 +10,15 @@
 </head>
 <body>
     <?php include ("../../traveller/navbar.php"); ?>
-    <div class="destinations-header">
+    <div class="container" style="margin-top: 150px; text-align: center;">
         <h2 class="destinations-title">Destinations</h2>
         <p class="destinations-subtitle">Browse through your favourite Destinations</p>
+        <div class="search-container">
+                <img src="../../img/icons/search.svg" alt="Search icon">
+                <input id="search-bar" type="text" placeholder="Search for a city or country">
+        </div>
+        <div id="destinations" class="destinations-grid" ></div>
     </div>
-    <div class="search-container">
-            <img src="../../img/icons/search.svg" alt="Search icon">
-            <input id="search-bar" type="text" placeholder="Search for a city or country">
-    </div>
-    
-    <div id="destinations" class="destinations-grid" ></div>
 
     <div class="pagination-container">
         <button id="prevBtn" class="pagination-btn">Previous</button>

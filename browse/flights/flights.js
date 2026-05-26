@@ -2,7 +2,7 @@
 let flights = [];
 let selectedClasses = [];
 let currentPage = 1;
-const itemsPerPage = 18;
+const itemsPerPage = 12;
 
 const loadPage = () => {
   document.getElementById("flights").innerHTML =
@@ -118,16 +118,23 @@ const displayPage = (flights) => {
   updatePaginationButtons(currentPage, totalPages, flights);
 };
 
-const updatePaginationButtons = (current, total, allFilteredFlights) => {
+const updatePaginationButtons = (current, total, allFiltered) => {
   document.getElementById("prevBtn").disabled = current === 1;
-  document.getElementById("nextBtn").disabled = current === total;
-  document.getElementById("pageInfo").textContent = `Page ${current} of ${total}`;document.getElementById("prevBtn").onclick = () => {
-    currentPage--;
-    displayPage(allFilteredFlights);
+  document.getElementById("nextBtn").disabled = current === total || total === 0;
+  document.getElementById("pageInfo").textContent = `Page ${current} of ${total || 1}`;
+  document.getElementById("prevBtn").onclick = () => {
+    if (currentPage > 1) {
+      currentPage--;
+      displayPage(allFiltered);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   };
   document.getElementById("nextBtn").onclick = () => {
-    currentPage++;
-    displayPage(allFilteredFlights);
+    if (currentPage < total) {
+      currentPage++;
+      displayPage(allFiltered);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   };
 };
 
@@ -151,13 +158,24 @@ const showFlights = (flights) => {
     flightDiv.innerHTML = `
       <img class="flight-image" src="${flight.img_url}" alt="${flight.airline_name}">
       <div class="flight-info">
-        <h3>${flight.airline_name}</h3>
-        <p class="price">Price: R${Number(flight.Price).toFixed(2)}</p>
-        <p><span>From: ${flight.departure_airport}</span></p>
-        <p>To: ${flight.arrival_airport}</p>
-        <p>Departure: ${flight.dept_date}</p>
-        <p>Arrival: ${flight.arrival_date}</p>
-        <p>Class: ${flight.classes}</p>
+        <h1>${flight.airline_name}</h1>
+        <div class="from">
+            <img src="../../img/icons/plane-takeoff.svg" alt="Landing">
+            <p>From
+            <span>${flight.departure_airport} on  ${flight.dept_date} at ${flight.dept_time}  </span>
+            </p>
+        </div>
+        <div class="to">
+          <img src="../../img/icons/plane-landing.svg" alt="landing"><p>To
+          <span>${flight.arrival_airport} on ${flight.arrival_date} at ${flight.arrival_time}</span>
+          </p>
+          </img>
+          </div>
+        </div>
+        
+        <div class="flight-classes">${flight.classes}</div>
+        <div class="price">R${Number(flight.Price).toFixed(2)}</div>
+        
       </div>
     `;
     flightsContainer.appendChild(flightDiv);

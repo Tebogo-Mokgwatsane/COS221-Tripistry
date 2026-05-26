@@ -1,7 +1,7 @@
 
 let destinations = [];
 let currentPage = 1;
-const itemsPerPage = 20;
+const itemsPerPage = 12;
 let searchQuery = "";
 
 const showDestinations = (destinations) => {
@@ -20,29 +20,38 @@ const showDestinations = (destinations) => {
       <img class="destination-image" src="${destination.img_url}" alt="${destination.city}">
       <div class="destination-info">
         <h1>${destination.city}</h1>
-        <img src="../../img/icons/map.svg" alt="map icon" class="icon">
-        <span>${destination.country}</span>
-        <p>${destination.description}</p>
-  
+        <div class="destination-header">
+          <img src="../../img/icons/map.svg" alt="map icon" class="icon">
+          <span>${destination.country}</span>
+        </div>
+      <p>${destination.description}</p>
       </div>
+      
     `;
     destinationsContainer.appendChild(destinationsDiv);
   });
 };
 
 
-const updatePaginationButtons = (current, total, allFiltereddestinations) => {
+const updatePaginationButtons = (current, total, allFiltered) => {
   document.getElementById("prevBtn").disabled = current === 1;
-  document.getElementById("nextBtn").disabled = current === total;
+  document.getElementById("nextBtn").disabled =
+    current === total || total === 0;
   document.getElementById("pageInfo").textContent =
-    `Page ${current} of ${total}`;
+    `Page ${current} of ${total || 1}`;
   document.getElementById("prevBtn").onclick = () => {
-    currentPage--;
-    displayPage(allFiltereddestinations);
+    if (currentPage > 1) {
+      currentPage--;
+      displayPage(allFiltered);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   };
   document.getElementById("nextBtn").onclick = () => {
-    currentPage++;
-    displayPage(allFiltereddestinations);
+    if (currentPage < total) {
+      currentPage++;
+      displayPage(allFiltered);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   };
 };
 
