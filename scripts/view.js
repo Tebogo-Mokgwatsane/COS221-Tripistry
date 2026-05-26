@@ -5,7 +5,9 @@ if (!id) window.location.href = "index.php";
 
 async function loadPackage() {
     try {
+
         const res = await fetch('/COS221-Tripistry/api.php', {
+
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ type: "GetPackage", package_id: id })

@@ -7,10 +7,16 @@ const emptyState   = document.getElementById("empty-state");
 const loading      = document.getElementById("loading");
 
 // ── Guard: travellers only ───────────────────────────────────
+
 //const user = JSON.parse(localStorage.getItem("user") || "{}");
+
+if(!user){ user = JSON.parse(localStorage.getItem("user")) || {};}
+//const user = JSON.parse(localStorage.getItem("user")) || {};
+
+
 if (!user || user.user_type !== "traveller") {
     alert("This page is for travellers only. Please log in.");
-    window.location.href = "login.html";
+    window.location.href = "../login.html";
 }
 
 // ── Get API key from cookie ──────────────────────────────────
@@ -33,11 +39,13 @@ function loadFavourites() {
     const apiKey = getApiKey();
     if (!apiKey) {
         alert("Session expired. Please log in.");
-        window.location.href = "login.html";
+        window.location.href = "../login.html";
         return;
     }
 
+
     fetch("/COS221-Tripistry/api.php", {
+
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ type: "GetFavourites", api_key: apiKey })
@@ -126,7 +134,9 @@ function removeFavourite(packageId, cardElement) {
     cardElement.style.opacity = "0.4";
     cardElement.style.pointerEvents = "none";
 
+
     fetch("/COS221-Tripistry/api.php", {
+
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
