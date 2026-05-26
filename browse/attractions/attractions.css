@@ -3,8 +3,6 @@
     grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
     gap: 25px;
     margin-top: 40px;
-    margin-left: 30px;
-    margin-right: 30px;
 }
 
 .attraction-item {
@@ -63,33 +61,4 @@
     font-size: 1.45em;
     font-weight: bold;
     color: #1a1a1a;
-}
-
-.attractions-title {
-    font-size: 5.5rem;
-    font-weight: 800;
-    background: linear-gradient(135deg, #6c77f3, #a78bfa);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: 5px;
-    letter-spacing: -0.5px;
-    text-align: center;
-}
-
-.attractions-subtitle {
-    font-size: 2rem;
-    color: #888;
-    font-weight: 400;
-    letter-spacing: 0.3px;
-    text-align: center;
-}
-
-.filter-group label {
-    color: rgb(121, 121, 121);
-    font-weight: bold;
-    font-size: 19px;
-    padding: 8px 12px;
-    border-radius: 10px;
-    cursor: pointer;
 }

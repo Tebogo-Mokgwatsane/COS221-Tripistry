@@ -1,6 +1,11 @@
+(function () {
 // ============================================================
 // reviews.js — Booking history + review submission
+// Wrapped in IIFE to prevent variable clashes with
+// traveller.js and navbar.js
 // ============================================================
+
+const API_BASE = "http://localhost/COS221-Tripistry/api.php"; // update if needed
 
 const bookingsList  = document.getElementById("bookings-list");
 const emptyState    = document.getElementById("empty-state");
@@ -19,21 +24,24 @@ let selectedRating  = 0;
 let activePackageId = null;
 
 // ── Guard: only travellers can access this page ──────────────
-const user = JSON.parse(localStorage.getItem("user") || "{}");
-if (!user || user.user_type !== "traveller") {
-    window.location.href = "/login.html";
+const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
+if (!currentUser || currentUser.user_type !== "traveller") {
+    alert("This page is for travellers only. Please log in.");
+    window.location.href = "/COS221-Tripistry/login.html";
 }
 
-// ── Star rating labels ───────────────────────────────────────
+// ── Get API key from cookie ──────────────────────────────────
+function getApiKey() {
+    const match = document.cookie.match(/apiKey=([^;]+)/);
+    return match ? match[1] : null;
+}
+
+// ── Star rating labels ────────────────────────────────────────
 const ratingLabels = {
-    1: "Poor",
-    2: "Fair",
-    3: "Good",
-    4: "Very Good",
-    5: "Excellent"
+    1: "Poor", 2: "Fair", 3: "Good", 4: "Very Good", 5: "Excellent"
 };
 
-// ── Render star rating (read-only) ──────────────────────────
+// ── Render star rating (read-only) ───────────────────────────
 function renderStars(rating, max = 5) {
     let html = "";
     for (let i = 1; i <= max; i++) {
@@ -42,68 +50,66 @@ function renderStars(rating, max = 5) {
     return html;
 }
 
-// ── Star picker interaction ──────────────────────────────────
+// ── Star picker interaction ───────────────────────────────────
 stars.forEach(star => {
     star.addEventListener("mouseover", () => {
         const val = parseInt(star.dataset.value);
-        stars.forEach(s => {
-            s.classList.toggle("hovered", parseInt(s.dataset.value) <= val);
-        });
+        stars.forEach(s => s.classList.toggle("hovered", parseInt(s.dataset.value) <= val));
         ratingLabel.textContent = ratingLabels[val];
     });
-
     star.addEventListener("mouseleave", () => {
         stars.forEach(s => s.classList.remove("hovered"));
-        ratingLabel.textContent = selectedRating
-            ? ratingLabels[selectedRating]
-            : "Select a rating";
+        ratingLabel.textContent = selectedRating ? ratingLabels[selectedRating] : "Select a rating";
     });
-
     star.addEventListener("click", () => {
         selectedRating = parseInt(star.dataset.value);
-        stars.forEach(s => {
-            s.classList.toggle("selected", parseInt(s.dataset.value) <= selectedRating);
-        });
+        stars.forEach(s => s.classList.toggle("selected", parseInt(s.dataset.value) <= selectedRating));
         ratingLabel.textContent = ratingLabels[selectedRating];
     });
 });
 
-// ── Character counter for textarea ──────────────────────────
+// ── Character counter ─────────────────────────────────────────
 reviewComment.addEventListener("input", () => {
     charCount.textContent = reviewComment.value.length;
 });
 
-// ── Load bookings ────────────────────────────────────────────
+// ── Load bookings ─────────────────────────────────────────────
 function loadBookings() {
-    const apiKey = user.apikey;
+    const apiKey = getApiKey();
     if (!apiKey) {
         alert("Session expired. Please log in.");
-        window.location.href = "/login.html";
+        window.location.href = "/COS221-Tripistry/login.html";
         return;
     }
 
-    fetch("/api.php", {
+    fetch(API_BASE, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ type: "GetBookings", api_key: apiKey })
     })
-    .then(res => res.json())
-    .then(data => {
-        loading.style.display = "none";
+    .then(r => r.text())
+    .then(text => {
+        try {
+            const data = JSON.parse(text);
+            loading.style.display = "none";
 
-        if (data.status !== "success") {
-            alert(data.message || "Failed to load bookings");
-            return;
+            if (data.status !== "success") {
+                bookingsList.innerHTML = `<p class="error-msg">${data.message}</p>`;
+                return;
+            }
+
+            const bookings = data.data;
+            if (!bookings || bookings.length === 0) {
+                emptyState.style.display = "flex";
+                return;
+            }
+
+            bookings.forEach(booking => renderBookingCard(booking));
+        } catch (e) {
+            loading.style.display = "none";
+            console.error("Response was not JSON:", text);
+            bookingsList.innerHTML = `<p class="error-msg">Server error. Check console for details.</p>`;
         }
-
-        const bookings = data.data;
-
-        if (!bookings || bookings.length === 0) {
-            emptyState.style.display = "flex";
-            return;
-        }
-
-        bookings.forEach(booking => renderBookingCard(booking));
     })
     .catch(err => {
         console.error(err);
@@ -112,7 +118,7 @@ function loadBookings() {
     });
 }
 
-// ── Render one booking card ──────────────────────────────────
+// ── Render one booking card ───────────────────────────────────
 function renderBookingCard(booking) {
     const card = document.createElement("div");
     card.className = "booking-card";
@@ -130,21 +136,15 @@ function renderBookingCard(booking) {
     card.innerHTML = `
         <div class="booking-left">
             <div class="booking-dest">
-                <img src="img/icons/earth.svg" alt="destination" class="dest-icon">
+                <img src="../img/icons/earth.svg" alt="destination" class="dest-icon">
                 <div>
                     <h3>${booking.package_title}</h3>
                     <p class="dest-text">${booking.destination_city}, ${booking.destination_country}</p>
                 </div>
             </div>
             <div class="booking-meta">
-                <span class="meta-item">
-                    <img src="img/icons/user.svg" alt="travellers">
-                    ${booking.num_travellers} traveller${booking.num_travellers > 1 ? "s" : ""}
-                </span>
-                <span class="meta-item">
-                    <img src="img/icons/compass.svg" alt="agency">
-                    ${booking.agency_name}
-                </span>
+                <span class="meta-item">${booking.num_travellers} traveller${booking.num_travellers > 1 ? "s" : ""}</span>
+                <span class="meta-item">${booking.agency_name}</span>
                 <span class="meta-item">Booked: ${date}</span>
             </div>
         </div>
@@ -154,39 +154,34 @@ function renderBookingCard(booking) {
             ${booking.booking_status === "confirmed"
                 ? booking.already_reviewed
                     ? `<div class="reviewed-badge">&#10003; Reviewed</div>`
-                    : `<button class="review-btn" data-id="${booking.package_id}" data-title="${booking.package_title}">
-                           Leave a Review
-                       </button>`
+                    : `<button class="review-btn" data-id="${booking.package_id}" data-title="${booking.package_title}">Leave a Review</button>`
                 : ""
             }
         </div>
     `;
 
-    // Attach click handler to the review button
     const reviewBtn = card.querySelector(".review-btn");
     if (reviewBtn) {
-        reviewBtn.addEventListener("click", () => {
-            openModal(booking.package_id, booking.package_title);
-        });
+        reviewBtn.addEventListener("click", () => openModal(booking.package_id, booking.package_title));
     }
 
     bookingsList.appendChild(card);
 }
 
-// ── Open review modal ────────────────────────────────────────
+// ── Open modal ────────────────────────────────────────────────
 function openModal(packageId, packageTitle) {
-    activePackageId = packageId;
+    activePackageId          = packageId;
     modalPkgName.textContent = packageTitle;
-    selectedRating  = 0;
-    reviewComment.value = "";
-    charCount.textContent = "0";
-    modalError.textContent = "";
-    ratingLabel.textContent = "Select a rating";
+    selectedRating           = 0;
+    reviewComment.value      = "";
+    charCount.textContent    = "0";
+    modalError.textContent   = "";
+    ratingLabel.textContent  = "Select a rating";
     stars.forEach(s => s.classList.remove("selected", "hovered"));
     modalOverlay.style.display = "flex";
 }
 
-// ── Close modal ──────────────────────────────────────────────
+// ── Close modal ───────────────────────────────────────────────
 modalClose.addEventListener("click", () => {
     modalOverlay.style.display = "none";
     activePackageId = null;
@@ -199,7 +194,7 @@ modalOverlay.addEventListener("click", (e) => {
     }
 });
 
-// ── Submit review ────────────────────────────────────────────
+// ── Submit review ─────────────────────────────────────────────
 submitBtn.addEventListener("click", () => {
     modalError.textContent = "";
 
@@ -211,10 +206,10 @@ submitBtn.addEventListener("click", () => {
     const comment = reviewComment.value.trim();
     const apiKey  = getApiKey();
 
-    submitBtn.disabled = true;
-    submitBtn.querySelector("p").textContent = "Submitting...";
+    submitBtn.disabled    = true;
+    submitBtn.textContent = "Submitting...";
 
-    fetch("api.php", {
+    fetch(API_BASE, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -225,17 +220,16 @@ submitBtn.addEventListener("click", () => {
             comment:    comment
         })
     })
-    .then(res => res.json())
+    .then(r => r.json())
     .then(data => {
-        submitBtn.disabled = false;
-        submitBtn.querySelector("p").textContent = "Submit Review";
+        submitBtn.disabled    = false;
+        submitBtn.textContent = "Submit Review";
 
         if (data.status === "success") {
             modalOverlay.style.display = "none";
-            // Replace the "Leave a Review" button with the reviewed badge
             const btn = document.querySelector(`.review-btn[data-id="${activePackageId}"]`);
             if (btn) {
-                const badge = document.createElement("div");
+                const badge     = document.createElement("div");
                 badge.className = "reviewed-badge";
                 badge.innerHTML = "&#10003; Reviewed";
                 btn.replaceWith(badge);
@@ -248,11 +242,13 @@ submitBtn.addEventListener("click", () => {
     })
     .catch(err => {
         console.error(err);
-        submitBtn.disabled = false;
-        submitBtn.querySelector("p").textContent = "Submit Review";
+        submitBtn.disabled    = false;
+        submitBtn.textContent = "Submit Review";
         modalError.textContent = "Server error. Please try again.";
     });
 });
 
-// ── Init ─────────────────────────────────────────────────────
+// ── Init ──────────────────────────────────────────────────────
 loadBookings();
+
+})();

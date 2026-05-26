@@ -70,11 +70,11 @@ C:\xampp\htdocs\Tripistry\
 # Default Test Accounts
 **Traveller:**
 - Email: `katlego@mail.com`
-- Password: `Password123!`
+- Password: `pass123`
 
 **Agency:**
 - Email: `info@sunwaytravels.co.za`
-- Password: `Password123!`
+- Password: `agent123`
 
 # Git Repository
 **Repository**: https://github.com/Tebogo-Mokgwatsane/COS221-Tripistry/

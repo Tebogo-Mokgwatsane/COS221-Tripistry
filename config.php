@@ -21,7 +21,7 @@ $pass = $_ENV['DB_PASS'] ?? '';
 $port = $_ENV['DB_PORT'] ?? '';
 
 //$mysqli = new mysqli($host, $user, $pass, $dbname);
-$mysqli = new mysqli($host, $user, $pass, $dbname, 3306);
+$mysqli = new mysqli($host, $user, $pass, $dbname, $port);
 
 if ($mysqli->connect_error) {
     die("Connection failed: " . $mysqli->connect_error . " (Port: $port)");

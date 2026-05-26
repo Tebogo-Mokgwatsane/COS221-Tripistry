@@ -158,24 +158,19 @@ form.addEventListener("submit", (e) => {
     })
     .then(data => {
         if (data.status === "success") {
-            console.log(data);
             localStorage.setItem('user', JSON.stringify({
                 username: formData.username,
-                user_type: formData.user_type,
-                email: data.data.email,
-                apikey: data.data.apikey
+                user_type: formData.user_type
             }));
-            if (formData.user_type === "traveller"){
-                window.location.href = "traveller/";
-            } else if (formData.user_type === "travel_agent"){
-                window.location.href = "agency/";
-            }
+            alert("Registration works");//For testing purposes
+            window.location.href = "login.html";
         } else {
-            passwordError.textContent = data.data;
+            alert(data.message || "Registration failed");//for testing purposes
         }
     })
     .catch(err => {
         console.error(err);
+        alert("Error connecting to server.");///catch stmt
     });
 });
 

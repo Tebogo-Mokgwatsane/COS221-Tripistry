@@ -9,12 +9,13 @@
 </head>
 <body>
     <?php include("../navbar.php"); ?>
+    
     <div class="container" style="margin-top: 100px;">
-        <h2 class="restaurants-title">Restaurants</h2>
-        <p class="restaurants-subtitle">Discover the Best Places to Eat</p>
+        <h1>Best Restaurants to Visit 🍽️</h1>
+        
         <div class="filters">
             <div class="filter-group">
-                <label class="label">Average Price</label>
+                <label>MAX AVERAGE FEE</label>
                 <input type="range" id="max-fee" min="0" max="1000" value="1000">
                 <span id="max-fee-value">R1000</span>
             </div>
@@ -22,6 +23,7 @@
 
         <div class="restaurant-grid" id="restaurants"></div>
     </div>
+
     <script src="restaurants.js"></script>
 </body>
 </html>

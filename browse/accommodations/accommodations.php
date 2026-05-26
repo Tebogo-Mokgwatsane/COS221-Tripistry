@@ -21,7 +21,7 @@ echo json_encode([
     <link rel="stylesheet" href="../../css/navbar.css">
 </head>
 <body>
-    <?php include("../../traveller/navbar.php"); ?>
+    <?php include("../navbar.php"); ?>
     
     <div class="container" style="margin-top: 100px;">
         <h1>Find Your Perfect Stay 🏨</h1>
@@ -34,7 +34,7 @@ echo json_encode([
             </div>
             
             <div class="filter-group">
-                <label  class="label">Accomodation Type:</label>
+                <label>ACCOMMODATION TYPE</label>
                 <div class="type-filters">
                     <button class="type-btn active" data-type="all">All</button>
                     <button class="type-btn" data-type="Hotel">Hotel</button>
@@ -46,6 +46,7 @@ echo json_encode([
 
         <div class="accommodation-grid" id="accommodations"></div>
     </div>
+
     <script src="accommodations.js"></script>
 </body>
 </html>
