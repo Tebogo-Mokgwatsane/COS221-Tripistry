@@ -1,7 +1,6 @@
 
-let selectedClasses = [];
-
 let flights = [];
+let selectedClasses = [];
 let currentPage = 1;
 const itemsPerPage = 20;
 
@@ -101,7 +100,6 @@ const applyFilters = () => {
   currentPage = 1;
   displayPage(filtered);
 
-  // showFlights(filtered);
 };
 
 const displayPage = (flights) => {
