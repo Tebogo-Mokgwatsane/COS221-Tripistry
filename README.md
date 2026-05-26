@@ -28,7 +28,7 @@ The system enforces two distinct user roles:
 - Link packages with destinations, flights, accommodations, attractions, and restaurants
 - View bookings and reviews
 
-  ## Browsing Features
+## Browsing Features
 - Added Traveller Browsing for destinations, flights, accommodations, attractions, and restaurants
 - Extra Features were made for the UI
 - Filtering according to specific attributes
@@ -101,4 +101,4 @@ C:\xampp\htdocs\Tripistry\
 **Submitted as part of COS221 Practical Assignment 5 2026**  
 
 # Site Demo Link
-**Link to our project**:https://tripistry.page.gd/
+**Link to our project**: https://tripistry.page.gd/
