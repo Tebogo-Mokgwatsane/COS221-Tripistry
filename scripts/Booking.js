@@ -76,7 +76,9 @@ function checkBooking()
 
     req.open("POST","/api.php", true);
 
+
    
+
     req.setRequestHeader("Content-Type", "application/json");
     var body = {
         type: "CheckBooking",
@@ -168,6 +170,8 @@ function checkBooking()
 
     req.open("POST", "/api.php", true);
 
+    req.open("POST", "/api.php", true);
+
     req.setRequestHeader("Content-Type", "application/json");
 
     var body = {
@@ -235,7 +239,8 @@ function packageInfo()
 
     req.open("POST", "/api.php", true);
 
-    
+
+  
     req.setRequestHeader("Content-Type", "application/json");
 
     var body = 

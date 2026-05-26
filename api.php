@@ -62,6 +62,9 @@ class API
             case "Accommodations":       
                 $this->getAccommodations();
                 break;
+                case "GetAgencyBookings":
+                $this->getAgencyBookings($input);
+                break;
             case "Attractions":          
                 $this->getAttractions();
                 break;
@@ -91,6 +94,21 @@ class API
                 break;
             case "GetPackage":
                 $this->packageReturnAll($input);
+                break;
+                case "GetAgencyPackages":
+                $this->getAgencyPackages($input);
+                break;
+                case "GetAgencyReviews":
+                $this->getAgencyReviews($input);
+                break;
+            case "CreatePackage":
+                $this->createPackage($input);
+                break;
+            case "UpdatePackage":
+                $this->updatePackage($input);
+                break;
+            case "DeletePackage":
+                $this->deletePackage($input);
                 break;
             default:
                 $this->error("Unknown request type");
@@ -809,6 +827,218 @@ LIMIT 30;
         return;
     }
 
+    private function getAgencyPackages($data)
+{
+    $apiKey = $data['api_key'] ?? '';
+    $user   = $this->authenticate($apiKey);
+
+    if ($user['user_type'] !== 'travel_agent') {
+        $this->error("Only agencies can access this.");
+    }
+
+    $agentId = $user['user_id'];
+
+    $stmt = $this->mysqli->prepare("
+        SELECT
+            p.package_id,
+            p.title,
+            p.description,
+            p.price,
+            p.quantity,
+            p.status,
+            p.img_url,
+            p.expiry_date,
+            p.dest_id,
+            d.city  AS destination_city,
+            d.country AS destination_country,
+            CASE WHEN gp.package_id IS NOT NULL THEN 1 ELSE 0 END AS is_group_package,
+            gp.min_group_size,
+            gp.max_group_size,
+            COALESCE(ROUND(AVG(r.rating), 1), 0) AS avg_rating,
+            COUNT(DISTINCT r.review_id)           AS review_count,
+            COUNT(DISTINCT b.booking_id)          AS booking_count
+        FROM package p
+        JOIN destination d  ON p.dest_id  = d.dest_id
+        LEFT JOIN grouppackage gp ON gp.package_id = p.package_id
+        LEFT JOIN review r        ON r.package_id  = p.package_id
+        LEFT JOIN booking b       ON b.package_id  = p.package_id
+        WHERE p.agent_id = ?
+        GROUP BY p.package_id, p.title, p.description, p.price,
+                 p.quantity, p.status, p.img_url, p.expiry_date,
+                 p.dest_id, d.city, d.country,
+                 gp.package_id, gp.min_group_size, gp.max_group_size
+        ORDER BY p.package_id DESC
+    ");
+
+    $stmt->bind_param("i", $agentId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $packages = [];
+    while ($row = $result->fetch_assoc()) {
+        $row['is_group_package'] = (bool) $row['is_group_package'];
+        $packages[] = $row;
+    }
+    $stmt->close();
+    $this->success($packages);
+}
+
+private function createPackage($data)
+{
+    $apiKey = $data['api_key'] ?? '';
+    $user   = $this->authenticate($apiKey);
+
+    if ($user['user_type'] !== 'travel_agent') {
+        $this->error("Only agencies can create packages.");
+    }
+
+    $agentId  = $user['user_id'];
+    $title    = trim($data['title']       ?? '');
+    $destId   = intval($data['dest_id']   ?? 0);
+    $price    = floatval($data['price']   ?? 0);
+    $quantity = intval($data['quantity']  ?? 0);
+    $expiry   = $data['expiry_date']      ?? '';
+    $status   = $data['status']           ?? 'active';
+    $desc     = trim($data['description'] ?? '');
+    $isGroup  = !empty($data['is_group']);
+
+    if (!$title)   $this->error("Title is required.");
+    if (!$destId)  $this->error("Destination is required.");
+    if ($price <= 0) $this->error("Valid price is required.");
+    if (!$expiry)  $this->error("Expiry date is required.");
+
+    $stmt = $this->mysqli->prepare("
+        INSERT INTO package (agent_id, dest_id, title, description, price, quantity, status, expiry_date)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    ");
+    $stmt->bind_param("iissdiss", $agentId, $destId, $title, $desc, $price, $quantity, $status, $expiry);
+    $stmt->execute();
+    $packageId = $this->mysqli->insert_id;
+    $stmt->close();
+
+    // Handle image upload
+$imgUrl = $this->handleImageUpload($packageId);
+if ($imgUrl) {
+    $stmt = $this->mysqli->prepare("UPDATE package SET img_url = ? WHERE package_id = ?");
+    $stmt->bind_param("si", $imgUrl, $packageId);
+    $stmt->execute();
+    $stmt->close();
+}
+
+    if ($isGroup) {
+        $min = intval($data['min_group_size'] ?? 2);
+        $max = intval($data['max_group_size'] ?? 10);
+        $stmt = $this->mysqli->prepare("
+            INSERT INTO grouppackage (package_id, min_group_size, max_group_size)
+            VALUES (?, ?, ?)
+        ");
+        $stmt->bind_param("iii", $packageId, $min, $max);
+        $stmt->execute();
+        $stmt->close();
+    }
+
+    $this->success(["package_id" => $packageId, "message" => "Package created successfully."]);
+}
+
+private function updatePackage($data)
+{
+    $apiKey = $data['api_key'] ?? '';
+    $user   = $this->authenticate($apiKey);
+
+    if ($user['user_type'] !== 'travel_agent') {
+        $this->error("Only agencies can update packages.");
+    }
+
+    $agentId   = $user['user_id'];
+    $packageId = intval($data['package_id'] ?? 0);
+
+    if (!$packageId) $this->error("Package ID is required.");
+
+    // Verify ownership
+    $stmt = $this->mysqli->prepare("SELECT package_id FROM package WHERE package_id = ? AND agent_id = ?");
+    $stmt->bind_param("ii", $packageId, $agentId);
+    $stmt->execute();
+    $stmt->store_result();
+    if ($stmt->num_rows === 0) { $stmt->close(); $this->error("Package not found or access denied.", 403); }
+    $stmt->close();
+
+    $title    = trim($data['title']       ?? '');
+    $destId   = intval($data['dest_id']   ?? 0);
+    $price    = floatval($data['price']   ?? 0);
+    $quantity = intval($data['quantity']  ?? 0);
+    $expiry   = $data['expiry_date']      ?? '';
+    $status   = $data['status']           ?? 'active';
+    $desc     = trim($data['description'] ?? '');
+    $isGroup  = !empty($data['is_group']);
+
+    $stmt = $this->mysqli->prepare("
+        UPDATE package
+        SET title=?, dest_id=?, price=?, quantity=?, status=?, expiry_date=?, description=?
+        WHERE package_id = ? AND agent_id = ?
+    ");
+    $stmt->bind_param("sidsssii", $title, $destId, $price, $quantity, $status, $expiry, $desc, $packageId, $agentId);
+    $stmt->execute();
+    $stmt->close();
+
+    $imgUrl = $this->handleImageUpload($packageId);
+if ($imgUrl) {
+    $stmt = $this->mysqli->prepare("UPDATE package SET img_url = ? WHERE package_id = ?");
+    $stmt->bind_param("si", $imgUrl, $packageId);
+    $stmt->execute();
+    $stmt->close();
+}
+
+    // Handle group package
+    if ($isGroup) {
+        $min = intval($data['min_group_size'] ?? 2);
+        $max = intval($data['max_group_size'] ?? 10);
+        $stmt = $this->mysqli->prepare("
+            INSERT INTO grouppackage (package_id, min_group_size, max_group_size)
+            VALUES (?, ?, ?)
+            ON DUPLICATE KEY UPDATE min_group_size = ?, max_group_size = ?
+        ");
+        $stmt->bind_param("iiiii", $packageId, $min, $max, $min, $max);
+        $stmt->execute();
+        $stmt->close();
+    } else {
+        $stmt = $this->mysqli->prepare("DELETE FROM grouppackage WHERE package_id = ?");
+        $stmt->bind_param("i", $packageId);
+        $stmt->execute();
+        $stmt->close();
+    }
+
+    $this->success("Package updated successfully.");
+}
+
+private function deletePackage($data)
+{
+    $apiKey = $data['api_key'] ?? '';
+    $user   = $this->authenticate($apiKey);
+
+    if ($user['user_type'] !== 'travel_agent') {
+        $this->error("Only agencies can delete packages.");
+    }
+
+    $agentId   = $user['user_id'];
+    $packageId = intval($data['package_id'] ?? 0);
+
+    if (!$packageId) $this->error("Package ID is required.");
+
+    // Verify ownership
+    $stmt = $this->mysqli->prepare("SELECT package_id FROM package WHERE package_id = ? AND agent_id = ?");
+    $stmt->bind_param("ii", $packageId, $agentId);
+    $stmt->execute();
+    $stmt->store_result();
+    if ($stmt->num_rows === 0) { $stmt->close(); $this->error("Package not found or access denied.", 403); }
+    $stmt->close();
+
+    $stmt = $this->mysqli->prepare("DELETE FROM package WHERE package_id = ? AND agent_id = ?");
+    $stmt->bind_param("ii", $packageId, $agentId);
+    $stmt->execute();
+    $stmt->close();
+
+    $this->success("Package deleted successfully.");
+}
+
     private function getReviews($data)
     {
         $packageId = intval($data['package_id'] ?? 0);
@@ -946,7 +1176,51 @@ LIMIT 30;
     }
 
 
+private function getAgencyBookings($data)
+{
+    $apiKey = $data['api_key'] ?? '';
+    $user   = $this->authenticate($apiKey);
 
+    if ($user['user_type'] !== 'travel_agent') {
+        $this->error("Only agencies can view this.");
+    }
+
+    $agentId = $user['user_id'];
+
+    $stmt = $this->mysqli->prepare("
+        SELECT
+            b.booking_id,
+            b.num_travellers,
+            b.total_price,
+            b.booking_status,
+            b.booking_date,
+            p.package_id,
+            p.title         AS package_title,
+            d.city          AS destination_city,
+            d.country       AS destination_country,
+            u.username      AS traveller_name,
+            u.email         AS traveller_email
+        FROM booking b
+        JOIN package     p  ON b.package_id   = p.package_id
+        JOIN destination d  ON p.dest_id      = d.dest_id
+        JOIN traveller   t  ON b.traveller_id = t.traveller_id
+        JOIN user        u  ON t.traveller_id = u.user_id
+        WHERE p.agent_id = ?
+        ORDER BY b.booking_date DESC
+    ");
+
+    $stmt->bind_param("i", $agentId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $bookings = [];
+    while ($row = $result->fetch_assoc()) {
+        $bookings[] = $row;
+    }
+    $stmt->close();
+
+    $this->success($bookings);
+}
 
     //booking
     private function handleBooking($input)
@@ -1096,6 +1370,79 @@ LIMIT 30;
         ]);
         return;
     }
+
+    private function getAgencyReviews($data)
+{
+    $apiKey = $data['api_key'] ?? '';
+    $user   = $this->authenticate($apiKey);
+
+    if ($user['user_type'] !== 'travel_agent') {
+        $this->error("Only agencies can view this.");
+    }
+
+    $agentId = $user['user_id'];
+
+    $stmt = $this->mysqli->prepare("
+        SELECT
+            r.review_id,
+            r.rating,
+            r.comment,
+            r.review_date,
+            p.package_id,
+            p.title             AS package_title,
+            u.username          AS reviewer_name
+        FROM review r
+        JOIN package     p  ON r.package_id   = p.package_id
+        JOIN traveller   t  ON r.traveller_id = t.traveller_id
+        JOIN user        u  ON t.traveller_id = u.user_id
+        WHERE p.agent_id = ?
+        ORDER BY r.review_date DESC
+    ");
+
+    $stmt->bind_param("i", $agentId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $reviews = [];
+    while ($row = $result->fetch_assoc()) {
+        $row['rating'] = (int) $row['rating'];
+        $reviews[] = $row;
+    }
+    $stmt->close();
+
+    $this->success($reviews);
+}
+
+private function handleImageUpload($packageId)
+{
+    if (empty($_FILES['image']['tmp_name'])) return null;
+
+    $file     = $_FILES['image'];
+    $maxSize  = 2 * 1024 * 1024; // 2MB
+
+    if ($file['size'] > $maxSize) {
+        $this->error("Image must be under 2MB.");
+    }
+
+    $allowed = ['image/jpeg', 'image/png', 'image/webp'];
+    $mime    = mime_content_type($file['tmp_name']);
+    if (!in_array($mime, $allowed)) {
+        $this->error("Only JPG, PNG or WebP images are allowed.");
+    }
+
+    $ext      = pathinfo($file['name'], PATHINFO_EXTENSION);
+    $filename = "package_{$packageId}_" . time() . "." . $ext;
+    $dir      = __DIR__ . "/images/packages/";
+    $savePath = $dir . $filename;
+
+    if (!is_dir($dir)) mkdir($dir, 0755, true);
+
+    if (!move_uploaded_file($file['tmp_name'], $savePath)) {
+        $this->error("Failed to save image.");
+    }
+
+    return "images/packages/" . $filename;
+}
     //handling payment
     private function handlePayment($input)
     {

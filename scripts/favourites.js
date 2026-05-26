@@ -10,8 +10,12 @@ const loading      = document.getElementById("loading");
 
 const user = JSON.parse(localStorage.getItem("user") || "{}");
 
+
+//const user = JSON.parse(localStorage.getItem("user") || "{}");
+
 if(!user){ user = JSON.parse(localStorage.getItem("user")) || {};}
 //const user = JSON.parse(localStorage.getItem("user")) || {};
+
 
 
 if (!user || user.user_type !== "traveller") {

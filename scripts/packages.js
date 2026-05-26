@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 const user = JSON.parse(localStorage.getItem("user")) || {};
+=======
+
+
+if(!user){ user = JSON.parse(localStorage.getItem("user")) || {};}
 
 const packagesUsername = document.getElementById("packages-username");
 if (packagesUsername) {
@@ -55,7 +60,7 @@ let max_price = 0;
 let in_stock_only = false;
 const loadPackagesFromAPI = async () => {
     try {
-        const response = await fetch("api.php", {
+        const response = await fetch("/api.php", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

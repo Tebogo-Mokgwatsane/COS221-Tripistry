@@ -29,7 +29,6 @@
                         <a href="bookings.php">Bookings</a>
                     </li> -->
 
-
                     <li>
                         <a href="favourites.php">Favourites</a>
                     </li>
