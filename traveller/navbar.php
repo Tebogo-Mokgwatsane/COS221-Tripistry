@@ -1,3 +1,14 @@
+<div id="logout-overlay" class="logout-overlay logout-hidden">
+  <div class="logout-popup">
+    <h3>Are you sure that you want to logout?</h3>
+    <p>You will be logged out of your ABC Flights account.</p>
+    <div>
+        <button id="cancel-button">Cancel</button>
+        <button id="confirm-button">Logout</button>
+    </div>
+  </div>
+</div>
+
 <nav>
         <div class="navbar">
             <div class="logo">
@@ -69,7 +80,7 @@
                     <img src="../img/icons/user.svg" alt="User Icon">
                     <p class="sign-in-txt" id="username"></p>
                 </div>
-                <button href="signup.html" class="logout-btn" >
+                <button href="signup.html" class="logout-btn" id="logout">
                     <img src="../img/icons/log-out.svg" alt="Logout icon" id="logout-img-default">
                     <img src="../img/icons/log-out-white.svg" alt="Logout icon" id="logout-img-hover">
                     <span>Logout</span>

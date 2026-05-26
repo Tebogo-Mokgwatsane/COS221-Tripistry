@@ -1,6 +1,27 @@
 const params = new URLSearchParams(window.location.search);
 const id = params.get("package_id");
 
+const getPackageInfo = async () => {
+    try {
+        const res = await fetch('/api.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                type: "GetPackage",
+                package_id: id
+            })
+        });
+
+        const data = await res.json();
+        console.log(data);
+        
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+getPackageInfo();
+
 const activities = [
     {
         day: 1,

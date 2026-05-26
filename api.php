@@ -75,8 +75,8 @@ class API
             case "Packages":
                 $this->packages($input);
                 break;
-            case "GetAllPackages":
-                $this->getAllPackages($input);
+            case "GetPackage":
+                $this->packageReturnAll($input);
                 break;
             default:
                 $this->error("Unknown request type");
