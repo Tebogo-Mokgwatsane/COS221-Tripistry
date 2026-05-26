@@ -53,6 +53,22 @@ class API {
             case "GetFavourites":
                 $this->getFavourites($input);
                 break;
+            case "Accommodations":       
+                $this->getAccommodations();
+                break;
+            case "Attractions":          
+                $this->getAttractions();
+                break;
+            case "Restaurants":          
+                $this->getRestaurants();
+                break;
+            case "Flights":          
+                $this->getFlights();
+                break;
+            case "Destinations":          
+                $this->getDestinations();
+                break;
+            
             default:
                 $this->jsonResponse("error", "Unknown request type");
                 break;
@@ -478,61 +494,34 @@ class API {
             DATE_FORMAT(dept_date,'%H %i') as dept_time,
             DATE_FORMAT(arrival_datetime,'%d %b %Y') as arrival_date,
             DATE_FORMAT(arrival_datetime,'%H %i') as arrival_time,
-            classes,img_url FROM flight");
-        $flights = [];
-        while ($row = $stmt->fetch_assoc()) {
-            $flights[] = $row;
-        }
-        return $flights;
+            classes,img_url FROM flight ORDER BY Price ASC;");
+        $this->jsonResponse("success", "Flights retrieved", $stmt->fetch_all(MYSQLI_ASSOC));
     }
 
     public function getDestinations(){
-        $stmt = $this->mysqli->query("SELECT dest_id, city, country, description, img_url FROM destination");
-        $destinations = [];
-        while ($row = $stmt->fetch_assoc()) {
-            $destinations[] = $row;
-        }
-        return $destinations;
+    $stmt = $this->mysqli->query("SELECT dest_id, city, country, description, img_url FROM destination ORDER BY city ASC");
+    $this->jsonResponse("success", "Destinations retrieved", $stmt->fetch_all(MYSQLI_ASSOC));
     }
 
     public function getAccommodations() {
         $result = $this->mysqli->query("SELECT a.*, aa.city, aa.country FROM accommodation a LEFT JOIN accommodationaddress aa ON a.acc_id = aa.acc_id ORDER BY a.price_per_night ASC");
-        $accommodations = [];
-        while ($row = $result->fetch_assoc()) {
-            $accommodations[] = $row;
-        }
-        return $accommodations;
+        $this->jsonResponse("success", "Accommodations retrieved", $result->fetch_all(MYSQLI_ASSOC));
     }
 
-    public function getAttractions() {
+    private function getAttractions() {
         $result = $this->mysqli->query("SELECT a.*, aa.city, aa.country FROM attraction a LEFT JOIN attractionaddress aa ON a.att_id = aa.att_id ORDER BY a.fee ASC");
-        $attractions = [];
-        while ($row = $result->fetch_assoc()) {
-            $attractions[] = $row;
-        }
-        return $attractions;
+        $this->jsonResponse("success", "Attractions retrieved", $result->fetch_all(MYSQLI_ASSOC));
     }
 
-    public function getRestaurants() {
+    private function getRestaurants() {
         $result = $this->mysqli->query("SELECT r.*, ra.city, ra.country FROM restaurant r LEFT JOIN restaurantaddress ra ON r.res_id = ra.res_id ORDER BY r.fee ASC");
-        $restaurants = [];
-        while ($row = $result->fetch_assoc()) {
-            $restaurants[] = $row;
-        }
-        return $restaurants;
+        $this->jsonResponse("success", "Restaurants retrieved", $result->fetch_all(MYSQLI_ASSOC));
     }
-
-
-
-     
-
-
-
 
 }
 // Run API
-if (basename(__FILE__) === basename($_SERVER['SCRIPT_FILENAME'])) {
-    $api = new API();
-    $api->handleRequest();
-}
+
+$api = new API();
+$api->handleRequest();
+
 ?> 
