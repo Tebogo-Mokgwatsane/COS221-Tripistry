@@ -21,9 +21,9 @@ through Apache via XAMPP.
 |----------------|--------------------|-------------------------------------------------------------|
 | u24876489      | Katlego Sentsho    | API development, Reviews, Favourites, DB schema, Agency UI  |
 | u25042239      | Tebogo Mokgwatsane | API development, Login & SignUp, Traveller Browsing         |
-| u24589137      | [Manqoba Mashego]    | [API development, Traveller UI, merging of files]                                                      |
-| u25591267      | [Ntando Dlamini]    | [API development, EER, Relational schema, Pyments, Bookings]    
-| u23535513      | Cris Rankoko        | API development, Traveller Browsing                                             |
+| u24589137      | Manqoba Mashego    | API development, Traveller UI, merging of files             |
+| u25591267      | Ntando Dlamini     | API development, EER, Relational schema, Pyments, Bookings  |
+| u23535513      | Cris Rankoko       | API development, Traveller Browsing                         |
 
 ---
 
@@ -191,13 +191,13 @@ All requests use `POST` with a JSON body containing at minimum a `type` field.
 
 ## Test Credentials
 
-| Email | Password | Role |
-|-------|----------|------|
-| `info@sunwaytravels.co.za` | `agent123` | Travel Agent |
-| `hello@globehopper.co.za` | `agent456` | Travel Agent |
-| `katlego@mail.com` | `pass123` | Traveller |
-| `thabo@mail.com` | `pass456` | Traveller |
-| `lerato@mail.com` | `pass789` | Traveller |
+| Email                      | Password  | Role         |
+|--------------------------- |---------- |--------------|
+| `info@sunwaytravels.co.za` | `agent123`| Travel Agent |
+| `hello@globehopper.co.za`  | `agent456`| Travel Agent |
+| `katlego@mail.com`         | `pass123` | Traveller    |
+| `thabo@mail.com`           | `pass456` | Traveller    |
+| `lerato@mail.com`          | `pass789` | Traveller    |
 
 ---
 
