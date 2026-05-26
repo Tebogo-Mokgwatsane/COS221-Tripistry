@@ -58,8 +58,21 @@ class API
             case "Search":
                 $this->searchPackages($input);
                 break;
-            case "Accommodations":
-                $this->getAccommodations($input);
+            case "Accommodations":       
+                $this->getAccommodations();
+                break;
+            case "Attractions":          
+                $this->getAttractions();
+                break;
+            case "Restaurants":          
+                $this->getRestaurants();
+                break;
+            case "Flights":          
+                $this->getFlights();
+                break;
+            case "Destinations":          
+                $this->getDestinations();
+                break;
             case "Booking":
                 $this->handleBooking($input);
                 break;
@@ -451,6 +464,14 @@ LIMIT 30;
 
         $stmt->close();
         $this->success($booking);
+    }
+    private function jsonResponse($status, $message, $data = []) {
+        echo json_encode([  
+            "status" => $status,
+            "message" => $message,
+            "data" => $data
+        ]);
+        exit;
     }
 
 
@@ -923,32 +944,6 @@ LIMIT 30;
         $this->success($favourites);
     }
 
-    // Get Accommodations ====================
-    public function getAccommodations()
-    {
-        $result = $this->mysqli->query("
-            SELECT 
-                a.acc_id,
-                a.acc_name,
-                a.acc_type,
-                a.rating,
-                a.price_per_night,
-                a.description,
-                a.img_url,
-                aa.city,
-                aa.country
-            FROM accommodation a
-            LEFT JOIN accommodationaddress aa ON a.acc_id = aa.acc_id
-            ORDER BY a.price_per_night ASC
-        ");
-
-        $accommodations = [];
-        while ($row = $result->fetch_assoc()) {
-            $accommodations[] = $row;
-        }
-        $this->success($accommodations);
-    }
-
 
 
 
@@ -1323,6 +1318,38 @@ LIMIT 30;
         $this->success($packages);
         return;
     }
+
+    // Additional methods for fetching data for browse
+    private function getflights(){
+        $stmt = $this->mysqli->query("SELECT flight_id, airline_name, Price, departure_airport, arrival_airport,
+            DATE_FORMAT(dept_date,'%d %b %Y') as dept_date,
+            DATE_FORMAT(dept_date,'%H %i') as dept_time,
+            DATE_FORMAT(arrival_datetime,'%d %b %Y') as arrival_date,
+            DATE_FORMAT(arrival_datetime,'%H %i') as arrival_time,
+            classes,img_url FROM flight ORDER BY Price ASC;");
+        $this->jsonResponse("success", "Flights retrieved", $stmt->fetch_all(MYSQLI_ASSOC));
+    }
+
+    private function getDestinations(){
+        $stmt = $this->mysqli->query("SELECT dest_id, city, country, description, img_url FROM destination ORDER BY city ASC");
+        $this->jsonResponse("success", "Destinations retrieved", $stmt->fetch_all(MYSQLI_ASSOC));
+    }
+
+    private function getAccommodations() {
+        $result = $this->mysqli->query("SELECT a.*, aa.city, aa.country FROM accommodation a LEFT JOIN accommodationaddress aa ON a.acc_id = aa.acc_id ORDER BY a.price_per_night ASC");
+        $this->jsonResponse("success", "Accommodations retrieved", $result->fetch_all(MYSQLI_ASSOC));
+    }
+
+    private function getAttractions() {
+        $result = $this->mysqli->query("SELECT a.*, aa.city, aa.country FROM attraction a LEFT JOIN attractionaddress aa ON a.att_id = aa.att_id ORDER BY a.fee ASC");
+        $this->jsonResponse("success", "Attractions retrieved", $result->fetch_all(MYSQLI_ASSOC));
+    }
+
+    private function getRestaurants() {
+        $result = $this->mysqli->query("SELECT r.*, ra.city, ra.country FROM restaurant r LEFT JOIN restaurantaddress ra ON r.res_id = ra.res_id ORDER BY r.fee ASC");
+        $this->jsonResponse("success", "Restaurants retrieved", $result->fetch_all(MYSQLI_ASSOC));
+    }
+
 }
 // Run API
 $api = new API();
