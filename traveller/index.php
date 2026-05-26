@@ -51,7 +51,7 @@
             </div>
         </div>
     </div>
-    <script src="../scripts/traveller.js"></script>
+    <!-- <script src="../scripts/traveller.js"></script> -->
     <script src="../scripts/packages.js"></script>
 </body>
 </html>

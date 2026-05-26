@@ -3,7 +3,7 @@
 
 header("Content-Type: application/json");
 
-require_once 'config.php';
+require_once __DIR__ . '/config.php';
 
 class API
 {
@@ -55,6 +55,7 @@ class API
                 break;
             case "GetFavourites":
                 $this->getFavourites($input);
+                break;
             case "Search":
                 $this->searchPackages($input);
                 break;
