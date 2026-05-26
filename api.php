@@ -470,7 +470,8 @@ class API {
  
         $this->jsonResponse("success", "Favourites retrieved", $favourites);
     }
-
+    
+    // Additional methods for fetching data for browse
     public function getflights(){
         $stmt = $this->mysqli->query("SELECT flight_id, airline_name, Price, departure_airport, arrival_airport,
             DATE_FORMAT(dept_date,'%d %b %Y') as dept_date,
@@ -493,6 +494,39 @@ class API {
         }
         return $destinations;
     }
+
+    public function getAccommodations() {
+        $result = $this->mysqli->query("SELECT a.*, aa.city, aa.country FROM accommodation a LEFT JOIN accommodationaddress aa ON a.acc_id = aa.acc_id ORDER BY a.price_per_night ASC");
+        $accommodations = [];
+        while ($row = $result->fetch_assoc()) {
+            $accommodations[] = $row;
+        }
+        return $accommodations;
+    }
+
+    public function getAttractions() {
+        $result = $this->mysqli->query("SELECT a.*, aa.city, aa.country FROM attraction a LEFT JOIN attractionaddress aa ON a.att_id = aa.att_id ORDER BY a.fee ASC");
+        $attractions = [];
+        while ($row = $result->fetch_assoc()) {
+            $attractions[] = $row;
+        }
+        return $attractions;
+    }
+
+    public function getRestaurants() {
+        $result = $this->mysqli->query("SELECT r.*, ra.city, ra.country FROM restaurant r LEFT JOIN restaurantaddress ra ON r.res_id = ra.res_id ORDER BY r.fee ASC");
+        $restaurants = [];
+        while ($row = $result->fetch_assoc()) {
+            $restaurants[] = $row;
+        }
+        return $restaurants;
+    }
+
+
+
+     
+
+
 
 
 }
