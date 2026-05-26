@@ -54,21 +54,22 @@
                 <p class="rating-label" id="rating-label">Select a rating</p>
             </div>
 
-            <div class="modal-field">
-                <label class="label">YOUR REVIEW</label>
+            <div class="field">
+                <label for="review-comment">YOUR REVIEW</label>
                 <textarea
                     id="review-comment"
                     placeholder="Tell other travellers about your experience..."
                     rows="5"
                     maxlength="1000"
                 ></textarea>
-                <p class="char-count"><span id="char-count">0</span>/1000</p>
+                <p class="error"><span id="char-count">0</span>/1000</p>
             </div>
 
-            <p class="modal-error" id="modal-error"></p>
+            <p class="error" id="modal-error"></p>
 
-            <button class="submit-btn" id="submit-review">
-                Submit Review
+            <button class="signin-btn" id="submit-review">
+                <p>Submit Review</p>
+                <img src="img/icons/arrow-right-black.svg" alt="arrow">
             </button>
         </div>
     </div>

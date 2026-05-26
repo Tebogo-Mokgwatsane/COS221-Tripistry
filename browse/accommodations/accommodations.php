@@ -34,7 +34,7 @@ echo json_encode([
             </div>
             
             <div class="filter-group">
-                <label>ACCOMMODATION TYPE</label>
+                <label  class="label">Accomodation Type:</label>
                 <div class="type-filters">
                     <button class="type-btn active" data-type="all">All</button>
                     <button class="type-btn" data-type="Hotel">Hotel</button>
@@ -46,7 +46,6 @@ echo json_encode([
 
         <div class="accommodation-grid" id="accommodations"></div>
     </div>
-
     <script src="accommodations.js"></script>
 </body>
 </html>

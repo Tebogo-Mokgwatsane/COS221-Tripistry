@@ -1,0 +1,41 @@
+package_title,airline_name,departure_airport,arrival_airport,dept_date,arrival_datetime,classes,price
+Cape Town Luxury Waterfront Escape,South African Airways,JNB,CPT,2026-07-03 08:00:00,2026-07-03 10:10:00,"Economy,Business",1850.00
+Cape Town Luxury Waterfront Escape,South African Airways,CPT,JNB,2026-07-08 16:00:00,2026-07-08 18:10:00,"Economy,Business",1900.00
+Cape Town Family Adventure,FlySafair,JNB,CPT,2026-07-10 09:30:00,2026-07-10 11:40:00,Economy,1450.00
+Cape Town Family Adventure,FlySafair,CPT,JNB,2026-07-15 17:30:00,2026-07-15 19:40:00,Economy,1500.00
+Cape Town Culture and Heritage Tour,Airlink,JNB,CPT,2026-07-17 07:15:00,2026-07-17 09:25:00,"Economy,Business",1750.00
+Cape Town Culture and Heritage Tour,Airlink,CPT,JNB,2026-07-22 15:15:00,2026-07-22 17:25:00,"Economy,Business",1800.00
+Cape Town Beach and Scenic Drive Break,Lift Airline,JNB,CPT,2026-07-24 10:00:00,2026-07-24 12:10:00,Economy,1650.00
+Cape Town Beach and Scenic Drive Break,Lift Airline,CPT,JNB,2026-07-29 18:00:00,2026-07-29 20:10:00,Economy,1700.00
+Cape Town Budget City Break,FlySafair,JNB,CPT,2026-08-07 06:45:00,2026-08-07 08:55:00,Economy,1250.00
+Cape Town Budget City Break,FlySafair,CPT,JNB,2026-08-11 14:45:00,2026-08-11 16:55:00,Economy,1300.00
+Johannesburg Heritage Experience,South African Airways,CPT,JNB,2026-07-04 08:20:00,2026-07-04 10:30:00,"Economy,Business",1850.00
+Johannesburg Heritage Experience,South African Airways,JNB,CPT,2026-07-09 16:20:00,2026-07-09 18:30:00,"Economy,Business",1900.00
+Johannesburg Urban Explorer,FlySafair,CPT,JNB,2026-07-11 09:10:00,2026-07-11 11:20:00,Economy,1450.00
+Johannesburg Urban Explorer,FlySafair,JNB,CPT,2026-07-16 17:10:00,2026-07-16 19:20:00,Economy,1500.00
+Johannesburg Family Weekend,Airlink,CPT,JNB,2026-07-18 07:40:00,2026-07-18 09:50:00,"Economy,Business",1750.00
+Johannesburg Family Weekend,Airlink,JNB,CPT,2026-07-22 15:40:00,2026-07-22 17:50:00,"Economy,Business",1800.00
+Johannesburg Luxury Sandton Stay,South African Airways,CPT,JNB,2026-07-25 08:00:00,2026-07-25 10:10:00,"Economy,Business",2050.00
+Johannesburg Luxury Sandton Stay,South African Airways,JNB,CPT,2026-07-30 16:00:00,2026-07-30 18:10:00,"Economy,Business",2100.00
+Johannesburg History and Wildlife Mix,Lift Airline,CPT,JNB,2026-08-01 10:30:00,2026-08-01 12:40:00,Economy,1650.00
+Johannesburg History and Wildlife Mix,Lift Airline,JNB,CPT,2026-08-06 18:30:00,2026-08-06 20:40:00,Economy,1700.00
+Zanzibar Luxury Beach Escape,Kenya Airways,JNB,ZNZ,2026-07-05 07:00:00,2026-07-05 10:35:00,"Economy,Business",6200.00
+Zanzibar Luxury Beach Escape,Kenya Airways,ZNZ,JNB,2026-07-11 15:00:00,2026-07-11 18:40:00,"Economy,Business",6400.00
+Zanzibar Stone Town and Spice Tour,Air Tanzania,JNB,ZNZ,2026-07-12 09:00:00,2026-07-12 12:35:00,"Economy,Business",5800.00
+Zanzibar Stone Town and Spice Tour,Air Tanzania,ZNZ,JNB,2026-07-18 17:00:00,2026-07-18 20:40:00,"Economy,Business",6000.00
+Zanzibar Honeymoon Retreat,Kenya Airways,JNB,ZNZ,2026-07-19 07:30:00,2026-07-19 11:05:00,"Economy,Business",6500.00
+Zanzibar Honeymoon Retreat,Kenya Airways,ZNZ,JNB,2026-07-26 15:30:00,2026-07-26 19:10:00,"Economy,Business",6700.00
+Zanzibar Adventure and Snorkelling Package,Ethiopian Airlines,JNB,ZNZ,2026-07-26 08:15:00,2026-07-26 11:50:00,"Economy,Business",6100.00
+Zanzibar Adventure and Snorkelling Package,Ethiopian Airlines,ZNZ,JNB,2026-08-01 16:15:00,2026-08-01 19:55:00,"Economy,Business",6300.00
+Zanzibar Budget Island Break,Air Tanzania,JNB,ZNZ,2026-08-09 09:30:00,2026-08-09 13:05:00,"Economy,Business",5200.00
+Zanzibar Budget Island Break,Air Tanzania,ZNZ,JNB,2026-08-14 17:30:00,2026-08-14 21:10:00,"Economy,Business",5400.00
+Nairobi Safari Starter Package,Kenya Airways,JNB,NBO,2026-07-06 08:00:00,2026-07-06 12:10:00,"Economy,Business",4800.00
+Nairobi Safari Starter Package,Kenya Airways,NBO,JNB,2026-07-11 16:00:00,2026-07-11 20:15:00,"Economy,Business",5000.00
+Nairobi Luxury Wildlife Escape,Kenya Airways,JNB,NBO,2026-07-13 07:45:00,2026-07-13 11:55:00,"Economy,Business",5200.00
+Nairobi Luxury Wildlife Escape,Kenya Airways,NBO,JNB,2026-07-18 15:45:00,2026-07-18 20:00:00,"Economy,Business",5400.00
+Nairobi Culture and City Tour,South African Airways,JNB,NBO,2026-07-20 09:15:00,2026-07-20 13:25:00,"Economy,Business",4700.00
+Nairobi Culture and City Tour,South African Airways,NBO,JNB,2026-07-25 17:15:00,2026-07-25 21:30:00,"Economy,Business",4900.00
+Nairobi Family Wildlife Holiday,Kenya Airways,JNB,NBO,2026-07-27 08:30:00,2026-07-27 12:40:00,"Economy,Business",4900.00
+Nairobi Family Wildlife Holiday,Kenya Airways,NBO,JNB,2026-08-01 16:30:00,2026-08-01 20:45:00,"Economy,Business",5100.00
+Nairobi Budget Explorer,Ethiopian Airlines,JNB,NBO,2026-08-10 09:00:00,2026-08-10 13:10:00,"Economy,Business",4300.00
+Nairobi Budget Explorer,Ethiopian Airlines,NBO,JNB,2026-08-14 17:00:00,2026-08-14 21:15:00,"Economy,Business",4500.00

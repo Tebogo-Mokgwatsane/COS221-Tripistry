@@ -46,3 +46,4 @@ logoutBtn.addEventListener("click", (e) => {
     localStorage.removeItem("user");
     window.location.href = "/";
 })
+; 

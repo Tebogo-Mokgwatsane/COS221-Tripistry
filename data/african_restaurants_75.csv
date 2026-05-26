@@ -1,0 +1,76 @@
+name,street_address,city,country,type_text,reviews_text,comments_text,price_range,postal_code
+Gold Coast Grill,15 Beach Road,Cape Town,South Africa,Seafood,4.5 of 5 bubbles,Seafood restaurant close to the waterfront with tourist friendly meals,$$ - $$$,8001
+Table Bay Kitchen,22 Long Street,Cape Town,South Africa,Local Cuisine,4 of 5 bubbles,Relaxed local restaurant suitable for lunch and group dinners,$$ - $$$,8001
+Karibu Flame House,88 Main Road,Cape Town,South Africa,Steakhouse,4.5 of 5 bubbles,Grill restaurant with generous meals and a warm city atmosphere,$$ - $$$,8005
+Signal Hill Cafe,5 Kloof Road,Cape Town,South Africa,Cafe,4 of 5 bubbles,Casual cafe serving breakfast coffee and light meals,$,8001
+Atlantic Spice Bistro,34 Regent Road,Cape Town,South Africa,Fusion,4.5 of 5 bubbles,Modern bistro with seafood curries and Cape inspired dishes,$$ - $$$,8060
+Braamfontein Braai House,12 Juta Street,Johannesburg,South Africa,African Grill,4 of 5 bubbles,Popular city grill serving braai plates and local sides,$$ - $$$,2001
+Soweto Taste Kitchen,45 Vilakazi Street,Johannesburg,South Africa,Local Cuisine,4.5 of 5 bubbles,Traditional meals in a lively tourist area,$$ - $$$,1804
+Sandton Garden Bistro,9 Rivonia Road,Johannesburg,South Africa,International,4 of 5 bubbles,Modern bistro for business travellers and families,$$ - $$$,2196
+Maboneng Street Food Cafe,28 Fox Street,Johannesburg,South Africa,Street Food,4.5 of 5 bubbles,Casual restaurant with local street food inspired plates,$,2094
+Rosebank Flame Grill,16 Oxford Road,Johannesburg,South Africa,Steakhouse,4 of 5 bubbles,Comfortable grill restaurant near hotels and shopping areas,$$ - $$$,2196
+Golden Mile Seafood,10 Marine Parade,Durban,South Africa,Seafood,4.5 of 5 bubbles,Beachfront seafood restaurant with ocean views,$$ - $$$,4001
+Umhlanga Curry House,24 Lighthouse Road,Durban,South Africa,Indian,4.5 of 5 bubbles,Curry restaurant known for spicy local Durban style dishes,$$ - $$$,4320
+Berea Garden Cafe,7 Musgrave Road,Durban,South Africa,Cafe,4 of 5 bubbles,Relaxed cafe with breakfasts light meals and desserts,$,4001
+Zulu Taste Restaurant,41 Florida Road,Durban,South Africa,Local Cuisine,4 of 5 bubbles,Restaurant serving local dishes in a tourist friendly setting,$$ - $$$,4001
+Harbour View Grill,18 Point Road,Durban,South Africa,Grill,4.5 of 5 bubbles,Grill house close to the harbour and beachfront hotels,$$ - $$$,4001
+Stone Town Spice Table,7 Market Street,Zanzibar,Tanzania,Swahili Cuisine,4.5 of 5 bubbles,Traditional island dishes with seafood and spice flavours,$$ - $$$,71101
+Nungwi Ocean Grill,45 Nungwi Beach Road,Zanzibar,Tanzania,Seafood,4.5 of 5 bubbles,Beachfront restaurant serving fresh fish and island meals,$$ - $$$,73107
+Forodhani Night Cafe,3 Seafront Walk,Zanzibar,Tanzania,Street Food,4 of 5 bubbles,Casual evening meals inspired by the local night market,$,71101
+Jambiani Beach Kitchen,21 Jambiani Road,Zanzibar,Tanzania,Local Cuisine,4.5 of 5 bubbles,Coastal restaurant with relaxed beach style dining,$$ - $$$,72107
+Coral Garden Bistro,14 Kendwa Road,Zanzibar,Tanzania,Fusion,4 of 5 bubbles,Island bistro serving seafood salads and local dishes,$$ - $$$,73109
+Nairobi Safari Grill,30 Kenyatta Avenue,Nairobi,Kenya,African Grill,4.5 of 5 bubbles,Popular grill restaurant for tourists and families,$$ - $$$,00100
+Westlands Taste House,14 Westlands Road,Nairobi,Kenya,Local Cuisine,4 of 5 bubbles,Kenyan dishes in a modern restaurant setting,$$ - $$$,00800
+Kilimani Garden Cafe,20 Argwings Kodhek Road,Nairobi,Kenya,Cafe,4 of 5 bubbles,Relaxed cafe with breakfast and lunch options,$,00100
+Karen Plains Bistro,6 Karen Road,Nairobi,Kenya,International,4.5 of 5 bubbles,Quiet bistro near popular tourist routes,$$ - $$$,00502
+Savannah Rooftop Dining,11 Moi Avenue,Nairobi,Kenya,Fine Dining,4.5 of 5 bubbles,Rooftop restaurant with city views and African inspired meals,$$$$,00100
+Mombasa Harbour Grill,18 Moi Avenue,Mombasa,Kenya,Seafood,4.5 of 5 bubbles,Seafood restaurant close to the old town and harbour,$$ - $$$,80100
+Diani Beach Kitchen,25 Beach Road,Mombasa,Kenya,Coastal Cuisine,4 of 5 bubbles,Beach style restaurant with grilled fish and local sides,$$ - $$$,80401
+Swahili Spice Cafe,4 Nkrumah Road,Mombasa,Kenya,Swahili Cuisine,4.5 of 5 bubbles,Casual restaurant with coastal spices and rice dishes,$,80100
+Old Town Curry House,9 Fort Jesus Road,Mombasa,Kenya,Indian,4 of 5 bubbles,Curry house near historic attractions,$$ - $$$,80100
+Nyali Garden Grill,13 Links Road,Mombasa,Kenya,Grill,4.5 of 5 bubbles,Family friendly grill restaurant in the Nyali area,$$ - $$$,80118
+Khan el Khalili Kitchen,8 Al Moez Street,Cairo,Egypt,Egyptian,4.5 of 5 bubbles,Traditional Egyptian meals near historic market areas,$$ - $$$,11511
+Nile View Restaurant,16 Corniche Road,Cairo,Egypt,International,4.5 of 5 bubbles,Restaurant with Nile views and tourist friendly service,$$ - $$$,11221
+Giza Pyramid Cafe,5 Pyramid Road,Cairo,Egypt,Cafe,4 of 5 bubbles,Casual cafe close to major sightseeing routes,$,12556
+Zamalek Garden Bistro,22 Taha Hussein Street,Cairo,Egypt,Mediterranean,4.5 of 5 bubbles,Stylish bistro serving light meals and dinner plates,$$ - $$$,11211
+Cairo Flame House,31 Ramses Street,Cairo,Egypt,Grill,4 of 5 bubbles,Grill restaurant with meat dishes and local sides,$$ - $$$,11522
+Marrakech Spice House,9 Medina Road,Marrakech,Morocco,Moroccan,4.5 of 5 bubbles,Traditional Moroccan meals close to the old town,$$ - $$$,40000
+Atlas Rooftop Restaurant,18 Avenue Mohammed V,Marrakech,Morocco,Fine Dining,4.5 of 5 bubbles,Rooftop restaurant with city views and Moroccan food,$$$$,40000
+Jemaa Garden Cafe,4 Souk Street,Marrakech,Morocco,Cafe,4 of 5 bubbles,Casual cafe near popular market areas,$,40000
+Palm Grove Tagine House,27 Palmeraie Road,Marrakech,Morocco,Local Cuisine,4.5 of 5 bubbles,Restaurant serving tagines couscous and Moroccan teas,$$ - $$$,40000
+Red City Grill,12 Riad Zitoun Road,Marrakech,Morocco,Grill,4 of 5 bubbles,Comfortable grill house with Moroccan inspired plates,$$ - $$$,40000
+Accra Palm Kitchen,12 Oxford Street,Accra,Ghana,Ghanaian,4.5 of 5 bubbles,Local Ghanaian meals in a tourist friendly area,$$ - $$$,00233
+Osu Garden Grill,25 Cantonments Road,Accra,Ghana,African Grill,4 of 5 bubbles,Grill restaurant with local sides and fresh juices,$$ - $$$,00233
+Jamestown Seafood House,7 High Street,Accra,Ghana,Seafood,4.5 of 5 bubbles,Seafood restaurant close to historic coastal areas,$$ - $$$,00233
+Labadi Beach Cafe,19 Beach Road,Accra,Ghana,Cafe,4 of 5 bubbles,Relaxed beach cafe with light meals and drinks,$,00233
+Independence Bistro,4 Castle Road,Accra,Ghana,International,4.5 of 5 bubbles,Modern bistro near central tourist attractions,$$ - $$$,00233
+Lagos Island Grill,25 Marina Street,Lagos,Nigeria,West African,4 of 5 bubbles,Nigerian meals and grilled dishes in the city centre,$$ - $$$,100221
+Victoria Island Bistro,11 Ahmadu Bello Way,Lagos,Nigeria,International,4.5 of 5 bubbles,Modern restaurant for travellers and business guests,$$ - $$$,101241
+Lekki Taste Kitchen,34 Admiralty Way,Lagos,Nigeria,Local Cuisine,4 of 5 bubbles,Restaurant serving jollof grilled fish and local favourites,$$ - $$$,105102
+Eko Seafood Lounge,8 Bar Beach Road,Lagos,Nigeria,Seafood,4.5 of 5 bubbles,Seafood lounge close to coastal hotel areas,$$ - $$$,101241
+Ikeja Cafe House,20 Allen Avenue,Lagos,Nigeria,Cafe,4 of 5 bubbles,Casual cafe with coffee pastries and quick meals,$,100271
+Kigali Hills Cafe,6 KN Street,Kigali,Rwanda,Cafe,4 of 5 bubbles,Modern cafe with light meals and coffee,$,00000
+Nyamirambo Taste House,13 KN Avenue,Kigali,Rwanda,Rwandan,4.5 of 5 bubbles,Local dishes served in a friendly neighbourhood setting,$$ - $$$,00000
+Kigali View Bistro,22 KG Road,Kigali,Rwanda,International,4.5 of 5 bubbles,Bistro with hillside views and dinner options,$$ - $$$,00000
+Convention Garden Grill,9 Kimihurura Road,Kigali,Rwanda,Grill,4 of 5 bubbles,Tourist friendly grill restaurant near hotel districts,$$ - $$$,00000
+Lake Kivu Seafood Table,17 Avenue de la Paix,Kigali,Rwanda,Seafood,4.5 of 5 bubbles,Seafood inspired restaurant with relaxed service,$$ - $$$,00000
+Windhoek Brau Kitchen,15 Independence Avenue,Windhoek,Namibia,Grill,4.5 of 5 bubbles,Casual grill restaurant with generous portions,$$ - $$$,9000
+Namib Desert Bistro,28 Sam Nujoma Drive,Windhoek,Namibia,Local Cuisine,4 of 5 bubbles,Namibian inspired meals in a central location,$$ - $$$,9000
+Eros Garden Cafe,6 Nelson Mandela Avenue,Windhoek,Namibia,Cafe,4 of 5 bubbles,Relaxed cafe serving breakfast lunch and coffee,$,9000
+Safari Flame House,40 Hosea Kutako Drive,Windhoek,Namibia,Steakhouse,4.5 of 5 bubbles,Steakhouse suitable for tourists and group dinners,$$ - $$$,9000
+Dune View Restaurant,3 Robert Mugabe Avenue,Windhoek,Namibia,International,4 of 5 bubbles,Restaurant offering local and international dishes,$$ - $$$,9000
+Victoria Falls River Grill,2 Falls Road,Victoria Falls,Zimbabwe,African Grill,4.5 of 5 bubbles,Grill restaurant close to the falls and hotels,$$ - $$$,00000
+Zambezi Sunset Bistro,10 Zambezi Drive,Victoria Falls,Zimbabwe,International,4.5 of 5 bubbles,Tourist friendly bistro with relaxed evening meals,$$ - $$$,00000
+Rainforest Cafe,5 Park Road,Victoria Falls,Zimbabwe,Cafe,4 of 5 bubbles,Casual cafe for light meals before or after activities,$,00000
+Falls Market Kitchen,18 Livingstone Way,Victoria Falls,Zimbabwe,Local Cuisine,4 of 5 bubbles,Local restaurant serving Zimbabwean style dishes,$$ - $$$,00000
+Baobab Seafood Grill,22 Elephant Walk,Victoria Falls,Zimbabwe,Seafood,4.5 of 5 bubbles,Seafood and grill restaurant near tourist shopping areas,$$ - $$$,00000
+Lusaka Flame Grill,16 Cairo Road,Lusaka,Zambia,African Grill,4 of 5 bubbles,Central grill restaurant with local and regional dishes,$$ - $$$,10101
+Manda Hill Cafe,9 Great East Road,Lusaka,Zambia,Cafe,4 of 5 bubbles,Casual cafe near shopping and hotel areas,$,10101
+Zambezi Taste Kitchen,25 Independence Avenue,Lusaka,Zambia,Local Cuisine,4.5 of 5 bubbles,Zambian meals served in a modern restaurant setting,$$ - $$$,10101
+Woodlands Bistro,14 Leopards Hill Road,Lusaka,Zambia,International,4 of 5 bubbles,Bistro with dinner options for travellers,$$ - $$$,10101
+Copperbelt Grill House,31 Church Road,Lusaka,Zambia,Steakhouse,4.5 of 5 bubbles,Steakhouse with family friendly service,$$ - $$$,10101
+Maputo Bay Seafood,12 Marginal Avenue,Maputo,Mozambique,Seafood,4.5 of 5 bubbles,Seafood restaurant with bay views and fresh fish,$$ - $$$,1100
+Polana Garden Bistro,8 Julius Nyerere Avenue,Maputo,Mozambique,Portuguese,4.5 of 5 bubbles,Mozambican and Portuguese inspired meals in a stylish setting,$$ - $$$,1100
+Baixa Flame Grill,20 Avenida 25 de Setembro,Maputo,Mozambique,Grill,4 of 5 bubbles,Central grill house suitable for tourists and families,$$ - $$$,1100
+Costa do Sol Cafe,5 Beach Avenue,Maputo,Mozambique,Cafe,4 of 5 bubbles,Relaxed coastal cafe with light meals and drinks,$,1100
+Matola Taste House,30 EN4 Road,Maputo,Mozambique,Local Cuisine,4 of 5 bubbles,Local cuisine restaurant with casual dining,$$ - $$$,1114
