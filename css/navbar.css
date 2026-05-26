@@ -47,21 +47,22 @@ ul {
     height: 24px;
 }
 
-.middle-section {
-    
-}
-
 .middle-section ul {
     display: flex;
     gap: 30px;
 }
 
-.middle-section a {
+.middle-section a, #explore-btn {
     font-family: sans-serif;
     font-weight: 500;
-    color: rgb(92, 92, 92);
+    color: rgb(22, 22, 22);
     font-size: 17px;
     text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.middle-section a:hover, #explore-btn:hover {
+    color: rgb(10, 72, 130);
 }
 
 
@@ -70,11 +71,15 @@ ul {
     gap: 20px;
 }
 
-.login-section a {
+.login-section a, #username-container {
     display: flex;
     gap: 6px;
     align-items: center;
     cursor: pointer;
+}
+
+#username-container {
+    cursor: default;
 }
 
 
@@ -86,9 +91,172 @@ ul {
     width: 18px;
 }
 
+
+
+
 .signup-btn {
     font-family: sans-serif;
     background-color: rgb(255, 119, 0);
     padding: 8px 14px;
     border-radius: 15px;
+    transition: all 0.2s ease;
+}
+
+.signup-btn:hover {
+    background-color: rgb(255, 140, 39)
+}
+
+#explore-btn {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    gap: 2px;
+}
+.explore-btn {
+    position: relative;
+}
+
+.explore-btn div {
+    position: absolute;
+    top: 150%;
+    background-color: rgb(254, 252, 252);
+    padding: 2px 4px;
+    border-radius: 12px;
+    border: 1px solid rgb(226, 226, 226);
+    box-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.1);
+    width: 230px;
+    display: none;
+}
+
+.explore-btn div .explore-dropdown {
+    display: flex;
+    flex-direction: column;
+    gap: 0px ;
+}
+
+
+.explore-btn div .explore-dropdown li a {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    color: black;
+    padding: 8px 0 8px 10px;
+    border-radius: 12px;
+}
+.explore-btn div .explore-dropdown li a:hover {
+    background-color: lightblue;
+}
+
+
+.explore-btn img {
+    width: 20px;
+}
+
+.logout-btn {
+    background-color: transparent;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 15px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.logout-btn img {
+    width: 16px;
+}
+
+.logout-btn:hover {
+    background-color: rgb(255, 123, 0);
+}
+
+.logout-btn:hover span {
+    color: white;
+    
+}
+#logout-img-hover {
+    display: none;
+}
+
+.logout-btn:hover #logout-img-hover {
+    display: inline;
+}
+
+.logout-btn:hover #logout-img-default {
+    display: none;
+}
+
+.logout-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100000000;
+}
+
+.logout-popup {
+  background: rgb(246, 250, 255);
+  padding: 32px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 15px;
+}
+
+.logout-popup p {
+    color: grey;
+    font-size: 15px;
+}
+
+.logout-popup h3 {
+    font-size: 19px;
+}
+
+.logout-popup div {
+    width: 100%;
+    display: flex;
+    justify-content: right;
+    column-gap: 7px;
+    margin-top: 2px;
+}
+
+#cancel-button {
+    border: 1px solid rgb(184, 184, 184);
+    background-color: rgb(246, 250, 255);
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    color: rgb(5, 123, 162);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+#cancel-button:hover {
+    background-color: #faa329;
+    /* border: none; */
+    color: white;
+}
+
+#confirm-button {
+    border: none;
+    border-radius: 10px;
+    padding: 12px 20px;
+    background-color: rgb(5, 123, 162);
+    font-weight: 600;
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+#confirm-button:hover {
+    background-color: #3490dbed;
+}
+
+.logout-hidden {
+  display: none;
 }

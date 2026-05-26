@@ -1,0 +1,296 @@
+/* ============================================================
+   reviews.css — matches traveller dashboard style
+   ============================================================ */
+
+* { font-family: "Inter", Arial, sans-serif; }
+
+/* ── Page layout ── */
+.reviews-page {
+    margin-top: 100px;
+    padding: 20px;
+    min-height: 100vh;
+}
+
+.search-section {
+    margin-bottom: 30px;
+}
+
+.search-section h1 {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+
+.search-section h1 span {
+    color: rgb(0, 106, 255);
+}
+
+.search-section .sub {
+    color: gray;
+    font-size: 15px;
+}
+
+/* ── Loading ── */
+.loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 60px 0;
+    color: gray;
+}
+
+.spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid #ccc;
+    border-top-color: rgb(0, 106, 255);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Empty state ── */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    padding: 80px 20px;
+    text-align: center;
+    color: gray;
+}
+
+.empty-state img  { width: 48px; opacity: 0.4; }
+.empty-state h2   { font-size: 22px; color: rgb(22, 22, 22); }
+.empty-state p    { font-size: 15px; }
+
+.cta-btn {
+    padding: 10px 24px;
+    background-color: rgb(0, 106, 255);
+    color: white;
+    border-radius: 20px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: bold;
+    transition: all 0.2s ease;
+    margin-top: 6px;
+}
+
+.cta-btn:hover { background-color: rgb(0, 85, 210); }
+
+/* ── Booking card — matches .package-card style ── */
+.booking-card {
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    background-color: white;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.booking-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* Left side */
+.booking-left { display: flex; flex-direction: column; gap: 10px; }
+
+.booking-dest { display: flex; align-items: center; gap: 12px; }
+
+.booking-dest h3 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 2px;
+}
+
+.dest-text { color: rgb(0, 106, 255); font-size: 14px; }
+
+.booking-meta { display: flex; flex-wrap: wrap; gap: 16px; }
+
+.meta-item { font-size: 13px; color: gray; }
+
+/* Right side */
+.booking-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+    min-width: 160px;
+}
+
+.booking-price { font-size: 20px; font-weight: bold; }
+
+/* Status badges — matches availability style */
+.booking-status {
+    border-radius: 25px;
+    padding: 4px 12px;
+    font-size: 13px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.status-confirmed { background-color: rgba(4, 171, 98, 0.9); color: white; }
+.status-pending   { background-color: rgba(255, 149, 0, 0.9); color: white; }
+.status-cancelled { background-color: rgb(217, 52, 52);       color: white; }
+
+/* Review button — matches .checked filter button */
+.review-btn {
+    padding: 8px 16px;
+    border-radius: 20px;
+    background-color: rgb(0, 106, 255);
+    color: white;
+    border: 1px solid rgb(0, 106, 255);
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.review-btn:hover { background-color: rgb(0, 85, 210); }
+
+.reviewed-badge {
+    font-size: 13px;
+    font-weight: bold;
+    color: rgb(4, 171, 98);
+    background-color: rgba(4, 171, 98, 0.1);
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid rgba(4, 171, 98, 0.3);
+}
+
+/* ── Modal — matches .filters card style ── */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100000;
+    padding: 20px;
+}
+
+.modal {
+    background: white;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    padding: 36px;
+    width: 100%;
+    max-width: 500px;
+    position: relative;
+    box-shadow: 0 12px 15px rgba(0, 0, 0, 0.15);
+}
+
+.modal h2 {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+.modal-package-name {
+    color: gray;
+    font-size: 14px;
+    margin-bottom: 24px;
+}
+
+.modal-close {
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 1.6rem;
+    cursor: pointer;
+    color: gray;
+}
+
+/* Label — matches .filters .label */
+.label {
+    color: rgb(121, 121, 121);
+    font-size: 14px;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 8px;
+}
+
+/* Star picker */
+.star-picker { margin-bottom: 20px; }
+
+.star-picker .stars {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 6px;
+}
+
+.star {
+    font-size: 2rem;
+    color: #ccc;
+    cursor: pointer;
+    transition: color 0.15s, transform 0.1s;
+}
+
+.star.hovered,
+.star.selected { color: orange; }
+.star:hover    { transform: scale(1.15); }
+
+.rating-label  { font-size: 13px; color: gray; min-height: 18px; }
+
+/* Textarea — matches .search-container input style */
+.modal-field        { margin-bottom: 12px; }
+
+.modal-field textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 12px;
+    border: 1px solid #ccc;
+    font-size: 15px;
+    resize: vertical;
+    outline: none;
+    font-family: "Inter", Arial, sans-serif;
+    transition: border-color 0.2s;
+}
+
+.modal-field textarea:focus { border-color: rgb(0, 106, 255); }
+
+.char-count {
+    text-align: right;
+    font-size: 12px;
+    color: gray;
+    margin-top: 4px;
+}
+
+.modal-error {
+    color: rgb(217, 52, 52);
+    font-size: 13px;
+    min-height: 18px;
+    margin: 6px 0;
+}
+
+/* Submit button — matches .checked button */
+.submit-btn {
+    width: 100%;
+    padding: 12px 0;
+    background-color: rgb(0, 106, 255);
+    color: white;
+    border: 1px solid rgb(0, 106, 255);
+    border-radius: 20px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-top: 6px;
+}
+
+.submit-btn:hover    { background-color: rgb(0, 85, 210); }
+.submit-btn:disabled { background-color: #ccc; cursor: not-allowed; border-color: #ccc; }
+
+.star-display        { color: #ccc; font-size: 0.95rem; }
+.star-display.filled { color: orange; }

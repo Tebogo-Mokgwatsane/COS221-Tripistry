@@ -66,7 +66,7 @@ function handleLogin() {
         return;
     }
 
-    fetch('../api.php', {
+    fetch('api.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -75,14 +75,32 @@ function handleLogin() {
             password: password
         })
     })
-    .then(res => res.json())
+    //.then(res => res.json())
+    .then(res => {//debugging
+    return res.text().then(text => {
+        try {
+            return JSON.parse(text);
+        } catch (err) {
+            console.error("The raw server login response was:", text);
+            throw new Error("Server did not return valid JSON");
+        }
+    });
+    })
     .then(data => {
         if (data.status === "success") {
+            const selectedType = activeTab;                    // "traveller" or "agency" to correspond with slider in html
+            const userType = data.data.user_type;
+
+            //User type should match selected tab
+            if ((selectedType === "traveller" && userType !== "traveller") || (selectedType === "agency" && (userType !== "travel_agent"))) {
+                alert("Wrong account type. Please select the correct tab.");
+                return;
+            }
 
             // Save to localStorage
             localStorage.setItem('user', JSON.stringify({
                 username: data.data.username,
-                user_type: data.data.user_type
+                user_type: userType
             }));
 
             // Store API key in cookie
@@ -90,10 +108,10 @@ function handleLogin() {
 
             alert("Welcome back, " + data.data.username + "!");
 
-            if (data.data.user_type === "travel_agent") {
-                window.location.href = "Tripistry/agent.html";
+            if (userType === "travel_agent") {
+                window.location.href = "agency/index.php";
             } else {
-                window.location.href = "Tripistry/traveller.html";
+                window.location.href = "traveller/index.php";
             }
 
         } else {
@@ -102,6 +120,7 @@ function handleLogin() {
     })
     .catch(err => {
         console.error(err);
+        console.error("The raw server login response was:", err);
         alert("Error connecting to server. Please try again.");
     });
 }

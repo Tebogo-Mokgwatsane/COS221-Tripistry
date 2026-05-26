@@ -63,43 +63,6 @@ const switchToAgency = () => {
     agencyEmail.required = true;
 }
 
-const signup = async (formData) => {
-    const res = await fetch('/api.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-    });
-
-    const data = await res.json();
-
-    if (data.status === "success"){
-        console.log(data);
-    } else {
-        console.log(data);
-    }
-    // .then(data => {
-    //     if (data.status === "success") {
-
-    //         //localStorage??
-    //         localStorage.setItem('user', JSON.stringify({
-    //             username: formData.username,
-    //             email: formData.email,
-    //             user_type: formData.user_type
-    //         }));
-
-    //         alert("🧳Registration Successful!");
-    //         window.location.href = "login.html";
-    //     } else {
-    //         alert(data.message || "Registration failed");
-    //     }
-    // })
-    // .catch(err => {
-    //     console.error(err);
-    //     alert("Error. Please try again.");
-    // });
-}
-
-
 const type = localStorage.getItem("type");
 if (type !== null){
     if (type === "agency"){
@@ -113,45 +76,102 @@ if (type !== null){
 form.addEventListener("submit", (e) => {
     e.preventDefault();
 
-    const emailRegex = /^[a-zA-Z0-9._% +-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    let formData = {
+        type: "Register",
+        user_type: activeTab
+    };
+
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
-    
 
-    if (fname.value.trim().length < 2 || lname.value.trim().length < 2){
-        fnameError.textContent = "First and last name need to be at least 2 characters long"
-    } else {
-        fnameError.textContent = "";
-        if (!emailRegex.test(email.value)){
+    if (activeTab === "traveller") {
+        const fname = document.getElementById("fname").value.trim();
+        const lname = document.getElementById("lname").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value.trim();
+
+        if (fname.length < 2 || lname.length < 2) {
+            fnameError.textContent = "First and last name need to be at least 2 characters long";
+            return;
+        } else {fnameError.textContent = "";}
+
+        if (!emailRegex.test(email)){
             emailError.textContent = "Enter a valid email address";
-        } else {
-            emailError.textContent = "";
-            if (!passwordRegex.test(password.value)){
-                passwordError.textContent = "Password should be at least 8 characters long, contain upper and lower case letters, at least one digit and one symbol."
-                passwordError.style.marginBottom = "15px";
-            } else {
-                passwordError.textContent = "";
-                passwordError.style.marginBottom = "0";
+            return;
+        } else {emailError.textContent = "";}
 
-                const formData = {
-                    type: "Register",
-                    username: fname.value.trim() + " " + lname.value.trim(),
-                    email: email.value.trim(),
-                    password: password.value,
-                    user_type: activeTab // "traveller" or "travel_agent" based on active tab
-                };
+        if (!passwordRegex.test(password)){
+            passwordError.textContent = "Password should be at least 8 characters long, contain upper and lower case letters, at least one digit and one symbol."
+            passwordError.style.marginBottom = "15px";
+            return;
+        } else {passwordError.textContent = ""; passwordError.style.marginBottom = "0";}
 
-                signup(formData);
-            }
+        formData.username = fname + " " + lname;
+        formData.fname= fname;
+        formData.lname= lname;
+        formData.email = email;
+        formData.password = password;
+
+    } else { // Agency
+        const agencyName = document.getElementById("agency-name").value.trim();
+        const email = document.getElementById("agency-email").value.trim();
+        const password = document.getElementById("agency-password").value.trim();
+        const regNum = document.getElementById("registration-num").value.trim();
+
+        if (!agencyName || !email || !password || !regNum) {
+            alert("All agency fields are required");// since we dont have error elements for agency form, using alert for now
+            return;
         }
-    
+
+        formData.username = agencyName;
+        formData.email = email;
+        formData.password = password;
+        formData.registration_num = regNum;
+        formData.agency_name = agencyName;
     }
 
-
-
-    //  sending data to api
-    
-
-    
+    //Sending data to api
+    fetch('api.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+    })
+    /*.then(res => res.json())
+    /*.then(res => {//debugging
+    return res.text().then(text => {
+        try {
+            return JSON.parse(text);
+        } catch (err) {
+            console.error("The raw server login response was:", text);
+            throw new Error("Server did not return valid JSON");
+        }
+    });
+    })*/
+    .then(res => res.text())
+    .then(text => {
+        console.log("Raw Response:", text);   // ← Debug
+        try {
+            return JSON.parse(text);
+        } catch (e) {
+            throw new Error("Invalid JSON response");
+        }
+    })
+    .then(data => {
+        if (data.status === "success") {
+            localStorage.setItem('user', JSON.stringify({
+                username: formData.username,
+                user_type: formData.user_type
+            }));
+            alert("Registration works");//For testing purposes
+            window.location.href = "login.html";
+        } else {
+            alert(data.message || "Registration failed");//for testing purposes
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        alert("Error connecting to server.");///catch stmt
+    });
 });
 
 tabs.forEach((tab, index) => {

@@ -1,0 +1,499 @@
+.package-page {
+  margin-top: 150px;
+}
+
+.back {
+  color: gray;
+  font-weight: 500;
+  display: flex;
+  gap: 5px;
+  text-decoration: none;
+  margin-bottom: 30px;
+}
+
+.back:hover {
+  color: rgb(75, 75, 75);
+}
+
+.back img {
+  width: 16px;
+}
+
+.package-img-container {
+  background-image: url("https://alpsinsight.com/wp-content/uploads/2018/12/14SPsk0091.jpg");
+  width: 100%;
+  height: 550px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  border-top-left-radius: 50px;
+  border-top-right-radius: 50px;
+  position: relative;
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  padding: 50px;
+}
+
+.package-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-top-left-radius: 50px;
+  border-top-left-radius: 50px;
+  border-top-right-radius: 50px;
+}
+
+.package-details {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.package-details,
+.package-price {
+  z-index: 10;
+}
+
+.package-details h1 {
+  color: white;
+  font-size: 45px;
+  font-weight: bold;
+}
+
+.top-details,
+.bottom-details {
+  display: flex;
+  gap: 15px;
+}
+
+.top-details div {
+  padding: 5px 12px;
+  border-radius: 30px;
+}
+
+.in-stock {
+  background-color: rgba(4, 171, 71, 0.9);
+}
+
+.out-of-stock {
+  background-color: rgb(239, 31, 31);
+}
+
+.group-package {
+  border: 1px solid #2ac6ff;
+  width: fit-content;
+  background-color: rgba(0, 106, 255, 0.871);
+}
+
+.solo-package {
+  border: 1px solid rgb(250, 80, 18);
+  width: fit-content;
+  background-color: rgba(250, 80, 18, 0.9);
+}
+
+.location {
+  border: 1px solid #ccc;
+  background-color: rgb(128, 128, 128, 0.9);
+}
+
+.package-sticker {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.package-sticker span {
+  color: white;
+}
+
+.package-sticker img {
+  width: 18px;
+}
+
+.package-details .bottom-details .package-rating .reviews-count {
+  color: rgb(217, 216, 216);
+}
+
+.package-price {
+  color: rgb(200, 200, 200);
+}
+
+.package-price span {
+  font-size: 28px;
+  color: white;
+  font-weight: bold;
+}
+
+.wrapper {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 40px;
+  align-items: start;
+}
+
+.activities-title {
+  margin-bottom: 30px;
+}
+
+.timeline {
+  position: relative;
+  padding-left: 50px;
+}
+
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 20px;
+  top: 0;
+  width: 2px;
+  height: 100%;
+  background: #d7e3ea;
+}
+
+.day-card {
+  position: relative;
+  background: white;
+  border-radius: 24px;
+  padding: 28px;
+  margin-bottom: 24px;
+  border: 1px solid #dbe6ec;
+}
+
+.day-number {
+  position: absolute;
+  left: -63px;
+  top: 25px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #0067b8;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  z-index: 2;
+}
+
+.day-label {
+  color: #0077cc;
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.day-title {
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.activities-count {
+  color: #64748b;
+  margin-bottom: 25px;
+}
+
+.day-activity {
+  display: grid;
+  grid-template-columns: 90px 1px 1fr;
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.day-activity:last-child {
+  margin-bottom: 0;
+}
+
+.activity-time {
+  font-weight: bold;
+  color: #0077cc;
+  font-size: 20px;
+}
+
+.divider {
+  background: #cfe0ea;
+  width: 1px;
+}
+
+.activity-content h2 {
+  margin-bottom: 8px;
+  font-size: 22px;
+}
+
+.activity-content p {
+  color: #64748b;
+  line-height: 1.5;
+  font-size: 18px;
+}
+
+.sidebar {
+  position: sticky;
+  top: 100px;
+  background: white;
+  border-radius: 28px;
+  padding: 30px;
+  border: 1px solid #dbe6ec;
+}
+
+.sidebar-price {
+  font-size: 30px;
+  font-weight: 700;
+  margin-bottom: 25px;
+}
+
+.sidebar-price span {
+  font-size: 18px;
+  color: #64748b;
+  font-weight: normal;
+}
+
+.sidebar button {
+  width: 100%;
+  border: none;
+  border-radius: 16px;
+  padding: 18px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.25s;
+  font-weight: 600;
+}
+
+.book-btn {
+  background: linear-gradient(to right, #0c7ac5, #003f87);
+  color: white;
+  margin-bottom: 15px;
+}
+
+.book-btn:hover {
+  transform: translateY(-1px);
+}
+
+.fav-btn {
+  background: #f4f8fb;
+  color: #0f172a;
+  border: 1px solid #dbe6ec !important;
+}
+
+.fav-btn:hover {
+  background: #eaf2f7;
+}
+
+.trip-details {
+  margin-top: 40px;
+  position: relative;
+}
+
+.trip-description {
+  color: rgb(98, 98, 98);
+  margin-top: 12px;
+  margin-bottom: 30px;
+}
+
+h2.section-title {
+  margin-bottom: 30px;
+}
+
+.accommodation-card {
+  background: white;
+  border: 1px solid #dce6ed;
+  border-radius: 30px;
+  padding: 20px;
+  display: flex;
+  gap: 30px;
+  align-items: flex-start;
+  margin-bottom: 70px;
+}
+
+.accommodation-img img {
+  width: 210px;
+  border-radius: 15px;
+}
+
+.accommodation-content {
+  flex: 1;
+}
+
+.accommodation-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 15px;
+}
+
+.accommodation-type {
+  color: #0b78b7;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.accommodation-name {
+  font-size: 25px;
+  font-weight: 700;
+  color: #071b2b;
+}
+
+.accommodation-rating {
+  color: #ff7b31;
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 18px;
+}
+
+.accommodation-description {
+  color: #475569;
+  line-height: 1.3;
+  font-size: 20px;
+  max-width: 800px;
+}
+
+.flight-card {
+  background: white;
+  border: 1px solid #dce6ed;
+  border-radius: 28px;
+  padding: 30px;
+  margin-bottom: 70px;
+}
+
+.flight-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.flight-badge {
+  background: #e9f5ff;
+  color: #0b78b7;
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.flight-route {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 25px;
+}
+
+.airport {
+  text-align: center;
+}
+
+.airport-code {
+  font-size: 45px;
+  font-weight: 700;
+}
+
+.airport-label {
+  color: #64748b;
+  margin-top: 8px;
+  font-size: 18px;
+}
+
+.flight-line {
+  flex: 1;
+  max-width: 180px;
+  height: 2px;
+  background: #cfe0ea;
+  position: relative;
+}
+
+.flight-line::after {
+  content: "✈";
+  position: absolute;
+  right: -10px;
+  top: -16px;
+  font-size: 28px;
+  color: #0b78b7;
+}
+
+#reviews-section {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.review-card {
+  background: white;
+  border: 1px solid #dce6ed;
+  border-radius: 28px;
+  padding: 30px;
+}
+
+.review-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(to bottom right, #0b78b7, #003f87);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.review-name {
+  font-size: 22px;
+  font-weight: 700;
+  /* margin-bottom: 10px; */
+}
+
+.review-meta {
+  color: #64748b;
+  font-size: 16px;
+}
+
+.review-stars {
+  color: #ff7b31;
+  font-size: 20px;
+}
+
+.review-text {
+  line-height: 1.3;
+  color: #1e293b;
+  font-size: 18px;
+}
+
+/* =========================
+       RESPONSIVE
+    ========================== */
+
+@media (max-width: 950px) {
+  .stay-card,
+  .dining-grid,
+  .reviews-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .flight-route {
+    flex-direction: column;
+  }
+
+  .flight-line {
+    width: 2px;
+    height: 100px;
+  }
+
+  .flight-line::after {
+    transform: rotate(90deg);
+    top: auto;
+    bottom: -10px;
+    right: -12px;
+  }
+}
+
+/* end */
