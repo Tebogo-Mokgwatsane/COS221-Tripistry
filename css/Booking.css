@@ -1,0 +1,192 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f5f8fc;
+    color: #222;
+}
+
+/* Main page heading */
+h1 {
+    text-align: center;
+    color: #0b4f8a;
+    margin-top: 35px;
+    margin-bottom: 25px;
+    font-size: 34px;
+}
+
+/* Package card */
+.package {
+    width: 85%;
+    max-width: 850px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 15px;
+    padding: 25px;
+    text-align: center;
+    border-top: 6px solid #f28c28;
+    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.12);
+}
+
+#title {
+    font-size: 25px;
+    font-weight: bold;
+    color: #0b4f8a;
+    margin-bottom: 15px;
+}
+
+#packageImage {
+    width: 100%;
+    max-width: 430px;
+    height: 240px;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 2px solid #f28c28;
+    margin-bottom: 15px;
+}
+
+#description {
+    color: #555;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+/* Form card */
+.form {
+    width: 85%;
+    max-width: 850px;
+    margin: 0 auto;
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    border-top: 6px solid #0b4f8a;
+    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.12);
+}
+
+.form-group {
+    margin-bottom: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+label {
+    font-weight: bold;
+    color: #333;
+}
+
+/* Inputs */
+input[type="text"],
+input[type="email"],
+input[type="phone"],
+input[type="number"] {
+    width: 100%;
+    padding: 12px;
+    margin-top: 7px;
+    border: 1px solid #cbd6e2;
+    border-radius: 8px;
+    font-size: 15px;
+    outline: none;
+    background: #fbfdff;
+}
+
+input:focus {
+    border-color: #0b4f8a;
+    box-shadow: 0 0 0 3px rgba(11, 79, 138, 0.15);
+}
+
+/* Booking details heading */
+h2 {
+    color: #0b4f8a;
+    margin-top: 25px;
+    border-bottom: 2px solid #f28c28;
+    padding-bottom: 8px;
+}
+
+/* Total price */
+#totalPrice {
+    color: #f28c28;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* Buttons */
+button {
+    border: none;
+    border-radius: 8px;
+    padding: 12px 22px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    background: #0b4f8a;
+    color: white;
+    transition: 0.2s ease;
+}
+
+button:hover {
+    background: #083b67;
+    transform: translateY(-1px);
+}
+
+/* Proceed button */
+.payment-link {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.payment-link button {
+    background: #f28c28;
+}
+
+.payment-link button:hover {
+    background: #d97706;
+}
+
+/* Cancel button */
+a {
+    text-decoration: none;
+}
+
+a button {
+    display: block;
+    margin: 15px auto;
+    background: #6c757d;
+}
+
+a button:hover {
+    background: #545b62;
+}
+
+/* Response message */
+#response {
+    width: 85%;
+    max-width: 850px;
+    margin: 18px auto;
+    text-align: center;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+/* Mobile */
+@media screen and (max-width: 700px) {
+    h1 {
+        font-size: 28px;
+    }
+
+    .package,
+    .form {
+        width: 92%;
+        padding: 22px;
+    }
+
+    button {
+        width: 100%;
+    }
+
+    a button {
+        width: 92%;
+    }
+}

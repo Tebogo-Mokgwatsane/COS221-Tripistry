@@ -1,2 +1,7 @@
 # Environment variables
 .env
+.env.*
+
+# Password files
+DatabasePassword
+DatabasePassword.*

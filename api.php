@@ -13,6 +13,7 @@ class API
     {
         global $mysqli;
         $this->mysqli = $mysqli;
+
     }
 
     public function handleRequest()
@@ -74,8 +75,13 @@ class API
             case "Packages":
                 $this->packages($input);
                 break;
+<<<<<<< HEAD
+            case "GetPackage":
+                $this->packageReturnAll($input);
+=======
             case "GetAllPackages":
                 $this->getAllPackages($input);
+>>>>>>> 28a7d9b6a4e0cfb3f36e948cfe61b6b4e9132f60
                 break;
             default:
                 $this->error("Unknown request type");

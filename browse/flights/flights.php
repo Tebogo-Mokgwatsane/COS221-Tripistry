@@ -1,3 +1,14 @@
+<?php 
+ include ("../../../api.php");
+
+ $api = new API();
+ $flights = $api->getflights();
+
+ header('Content-Type: application/json');
+ echo json_encode($flights);
+
+
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -10,7 +21,12 @@
 
 </head>
 <body>
-    <?php include("../navbar.php"); ?>
+    <?php include ("../../../navbar.php"); ?>
+    <div class="flight-grid" id="flights">
+    </div>
+
+</body>
+<script src="flights.js"></script>
     <div class="flights-header">
         <h2 class="flights-title">Flights</h2>
         <p class="flights-subtitle">Browse through your favourite flights</p>
