@@ -56,43 +56,42 @@ Before running the application, ensure the following are installed:
 
 ### Step 1 — Clone the Repository
 
-```bash
+
 git clone https://github.com/[your-repo-url]/COS221-Tripistry.git
-```
+
 
 Or extract the submitted ZIP archive into your XAMPP web root:
 
-```
+
 C:\xampp\htdocs\COS221-Tripistry\
-```
+
 
 ### Step 2 — Create the Database
 
 Open a terminal and run:
 
-```bash
+
 "C:\Program Files\MariaDB 12.2\bin\mysql.exe" -u root -p -e "CREATE DATABASE IF NOT EXISTS tripistry;"
-```
+
 
 ### Step 3 — Import the Schema
 
-```bash
+
 "C:\Program Files\MariaDB 12.2\bin\mysql.exe" -u root -p tripistry < "sql/create_tables.sql"
-```
+
 
 ### Step 4 — Populate the Data
 
-```bash
+
 "C:\Program Files\MariaDB 12.2\bin\mysql.exe" -u root -p tripistry < "sql/populate_data.sql"
-```
+
 
 ### Step 5 — Configure the Database Connection
 
 Open `Tripistry/config.php` and update the password to match your MariaDB root password:
 
-```php
+
 $mysqli = new mysqli('127.0.0.1', 'root', 'YOUR_PASSWORD', 'tripistry', 3306);
-```
 
 If you have no password set, leave it as an empty string `''`.
 
@@ -105,15 +104,14 @@ Ensure MariaDB is running as a Windows service (check Services via Win+R → `se
 
 Navigate to:
 
-```
+
 http://localhost/COS221-Tripistry/Tripistry/
-```
+
 
 ---
 
 ## Folder Structure
 
-```
 COS221-Tripistry/
 ├── api.php                  ← REST API entry point (all endpoints)
 ├── Tripistry/
@@ -145,9 +143,8 @@ COS221-Tripistry/
     ├── create_database.sql  ← Creates the tripistry database
     ├── create_tables.sql    ← All table definitions and constraints
     └── populate_data.sql    ← All seed data inserts
-```
 
----
+
 
 ## API Reference
 
@@ -227,10 +224,10 @@ All requests use `POST` with a JSON body containing at minimum a `type` field.
 
 Access to pages is enforced at the PHP level using `auth.php`:
 
-```php
+
 require_once '../Tripistry/auth.php';
 requireRole('travel_agent'); // or 'traveller'
-```
+
 
 - A traveller visiting an agency page is redirected to the traveller dashboard
 - An agency visiting a traveller page is redirected to the agency dashboard
@@ -259,19 +256,19 @@ The team used a feature-branch workflow:
 - `feature/[name]` — individual feature branches (e.g. `feature/reviews`, `feature/agency-dashboard`)
 
 Commit message format:
-```
+
 [type]: short description
 
 types: feat, fix, refactor, docs, style, chore
-```
+
 
 Examples:
-```
+
 feat: add GetBookings endpoint with already_reviewed flag
 fix: resolve variable scope clash between reviews.js and navbar.js
 docs: update README with installation steps
 refactor: wrap all traveller JS files in IIFE to prevent global clashes
-```
+
 
 ---
 
@@ -286,12 +283,10 @@ Located in the `sql/` folder:
 | `populate_data.sql` | All `INSERT INTO` statements for seed data |
 
 To reimport from scratch:
-```bash
+
 "C:\Program Files\MariaDB 12.2\bin\mysql.exe" -u root -p -e "DROP DATABASE IF EXISTS tripistry; CREATE DATABASE tripistry;"
 "C:\Program Files\MariaDB 12.2\bin\mysql.exe" -u root -p tripistry < sql/create_tables.sql
 "C:\Program Files\MariaDB 12.2\bin\mysql.exe" -u root -p tripistry < sql/populate_data.sql
-```
 
----
 
-*COS 221 — Database Systems | Department of Computer Science | University of Pretoria*
+
