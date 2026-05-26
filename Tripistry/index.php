@@ -1,10 +1,7 @@
-<<<<<<< Updated upstream
-=======
 <?php
 require_once '../Tripistry/auth.php';
 requireRole('travel_agent');
 ?>
->>>>>>> Stashed changes
 <!DOCTYPE html>
 <html lang="en">
 <head>

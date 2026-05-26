@@ -1145,13 +1145,14 @@ CREATE TABLE `package` (
   `expiry_date` date NOT NULL,
   `quantity` int(11) NOT NULL CHECK (`quantity` >= 0),
   `status` enum('active','inactive','sold_out') NOT NULL DEFAULT 'active',
+  `img_url` varchar(500) DEFAULT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`package_id`),
   KEY `agent_id` (`agent_id`),
   KEY `dest_id` (`dest_id`),
   CONSTRAINT `1` FOREIGN KEY (`agent_id`) REFERENCES `travelagent` (`agent_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `2` FOREIGN KEY (`dest_id`) REFERENCES `destination` (`dest_id`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1162,30 +1163,30 @@ SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
 LOCK TABLES `package` WRITE;
 /*!40000 ALTER TABLE `package` DISABLE KEYS */;
 INSERT INTO `package` VALUES
-(1,1,1,'Cape Town Explorer','7-day Cape Town experience including Table Mountain, wine estates and coastal drives.',15999.00,'2026-09-30',20,'active','2026-05-13 00:04:36'),
-(2,1,2,'Zanzibar Island Escape','10-day tropical getaway to the spice island with beach resorts and cultural tours.',28500.00,'2026-10-31',15,'active','2026-05-13 00:04:36'),
-(3,2,4,'Nairobi Safari Adventure','8-day Kenyan safari including Nairobi National Park and the Masai Mara.',42000.00,'2026-11-30',10,'active','2026-05-13 00:04:36'),
-(4,2,1,'Cape Town Budget Break','5-day budget-friendly Cape Town trip for solo backpackers.',8500.00,'2026-08-31',30,'active','2026-05-13 00:04:36'),
-(5,1,1,'Cape Town Luxury Waterfront Escape','A premium Cape Town package including luxury accommodation, waterfront dining, Table Mountain and coastal sightseeing.',28999.00,'2026-12-31',12,'active','2026-05-25 20:21:00'),
-(6,1,1,'Cape Town Family Adventure','A family-friendly Cape Town holiday with aquarium visits, beaches, Table Mountain and relaxed restaurant options.',18999.00,'2026-12-31',20,'active','2026-05-25 20:21:00'),
-(7,2,1,'Cape Town Culture and Heritage Tour','A cultural package focused on Robben Island, District Six, Bo-Kaap, museums and local food experiences.',16999.00,'2026-11-30',18,'active','2026-05-25 20:21:00'),
-(8,2,1,'Cape Town Beach and Scenic Drive Break','A coastal Cape Town package including Camps Bay, Clifton, Chapmans Peak, Hout Bay and seafood restaurants.',15999.00,'2026-10-31',25,'active','2026-05-25 20:21:00'),
-(9,1,1,'Cape Town Budget City Break','A shorter affordable Cape Town package for travellers who want hotels, city attractions and flexible activities.',8999.00,'2026-09-30',30,'active','2026-05-25 20:21:00'),
-(10,1,3,'Johannesburg Heritage Experience','A Johannesburg package covering the Apartheid Museum, Constitution Hill, Soweto, Mandela House and local restaurants.',12999.00,'2026-12-31',20,'active','2026-05-25 20:21:00'),
-(11,2,3,'Johannesburg Urban Explorer','A city package with Maboneng, Rosebank, Sandton, food markets, shopping and cultural attractions.',10999.00,'2026-11-30',24,'active','2026-05-25 20:21:00'),
-(12,2,3,'Johannesburg Family Weekend','A family-focused Johannesburg package including the zoo, Gold Reef City, parks and relaxed hotel stays.',9999.00,'2026-10-31',28,'active','2026-05-25 20:21:00'),
-(13,1,3,'Johannesburg Luxury Sandton Stay','A premium Sandton package with luxury accommodation, fine dining, shopping and private city transfers.',21999.00,'2026-12-31',10,'active','2026-05-25 20:21:00'),
-(14,2,3,'Johannesburg History and Wildlife Mix','A mixed package combining city heritage attractions with nature stops such as Walter Sisulu Botanical Garden and nearby wildlife experiences.',14999.00,'2026-11-30',16,'active','2026-05-25 20:21:00'),
-(15,1,2,'Zanzibar Luxury Beach Escape','A luxury island package with beachfront resort accommodation, beach activities, Stone Town and seafood dining.',34999.00,'2026-12-31',14,'active','2026-05-25 20:21:00'),
-(16,2,2,'Zanzibar Stone Town and Spice Tour','A cultural Zanzibar package focused on Stone Town, spice farms, Forodhani Gardens and Swahili cuisine.',22999.00,'2026-11-30',18,'active','2026-05-25 20:21:00'),
-(17,1,2,'Zanzibar Honeymoon Retreat','A romantic island package with resort accommodation, beach dinners, sunset experiences and relaxed sightseeing.',39999.00,'2026-12-31',8,'active','2026-05-25 20:21:00'),
-(18,2,2,'Zanzibar Adventure and Snorkelling Package','An active package including Mnemba Atoll, Prison Island, beaches, marine attractions and casual island restaurants.',26999.00,'2026-10-31',16,'active','2026-05-25 20:21:00'),
-(19,1,2,'Zanzibar Budget Island Break','A more affordable Zanzibar package with guesthouse or mid-range hotel stays, beaches and selected cultural activities.',17999.00,'2026-09-30',25,'active','2026-05-25 20:21:00'),
-(20,2,4,'Nairobi Safari Starter Package','A Nairobi package including Nairobi National Park, the Giraffe Centre, elephant nursery and comfortable hotel stays.',24999.00,'2026-12-31',18,'active','2026-05-25 20:21:00'),
-(21,1,4,'Nairobi Luxury Wildlife Escape','A premium Nairobi package with luxury accommodation, wildlife attractions, private transfers and curated dining.',36999.00,'2026-12-31',10,'active','2026-05-25 20:21:00'),
-(22,2,4,'Nairobi Culture and City Tour','A city-focused Nairobi package including museums, markets, cultural stops, restaurants and central accommodation.',15999.00,'2026-11-30',22,'active','2026-05-25 20:21:00'),
-(23,1,4,'Nairobi Family Wildlife Holiday','A family-friendly package with Nairobi National Park, Giraffe Centre, museums, parks and relaxed dining options.',19999.00,'2026-10-31',20,'active','2026-05-25 20:21:00'),
-(24,2,4,'Nairobi Budget Explorer','An affordable Nairobi package with selected attractions, mid-range accommodation and flexible restaurant options.',12999.00,'2026-09-30',30,'active','2026-05-25 20:21:00');
+(1,1,1,'Cape Town Explorer','7-day Cape Town experience including Table Mountain, wine estates and coastal drives.',15999.00,'2026-09-30',20,'active','images/packages/one.jpg','2026-05-13 00:04:36'),
+(2,1,2,'Zanzibar Island Escape','10-day tropical getaway to the spice island with beach resorts and cultural tours.',28500.00,'2026-10-31',15,'active','images/packages/two.jpg','2026-05-13 00:04:36'),
+(3,2,4,'Nairobi Safari Adventure','8-day Kenyan safari including Nairobi National Park and the Masai Mara.',42000.00,'2026-11-30',10,'active','images/packages/three.jpg','2026-05-13 00:04:36'),
+(4,2,1,'Cape Town Budget Break','5-day budget-friendly Cape Town trip for solo backpackers.',8500.00,'2026-08-31',30,'active','images/packages/four.jpg','2026-05-13 00:04:36'),
+(5,1,1,'Cape Town Luxury Waterfront Escape','A premium Cape Town package including luxury accommodation, waterfront dining, Table Mountain and coastal sightseeing.',28999.00,'2026-12-31',9,'active','images/packages/five.jpg','2026-05-25 20:21:00'),
+(6,1,1,'Cape Town Family Adventure','A family-friendly Cape Town holiday with aquarium visits, beaches, Table Mountain and relaxed restaurant options.',18999.00,'2026-12-31',20,'active','images/packages/six.jpg','2026-05-25 20:21:00'),
+(7,2,1,'Cape Town Culture and Heritage Tour','A cultural package focused on Robben Island, District Six, Bo-Kaap, museums and local food experiences.',16999.00,'2026-11-30',18,'active','images/packages/seven.jpg','2026-05-25 20:21:00'),
+(8,2,1,'Cape Town Beach and Scenic Drive Break','A coastal Cape Town package including Camps Bay, Clifton, Chapmans Peak, Hout Bay and seafood restaurants.',15999.00,'2026-10-31',25,'active','images/packages/eight.jpg','2026-05-25 20:21:00'),
+(9,1,1,'Cape Town Budget City Break','A shorter affordable Cape Town package for travellers who want hotels, city attractions and flexible activities.',8999.00,'2026-09-30',30,'active','images/packages/nine.jpg','2026-05-25 20:21:00'),
+(10,1,3,'Johannesburg Heritage Experience','A Johannesburg package covering the Apartheid Museum, Constitution Hill, Soweto, Mandela House and local restaurants.',12999.00,'2026-12-31',20,'active','images/packages/ten.jpg','2026-05-25 20:21:00'),
+(11,2,3,'Johannesburg Urban Explorer','A city package with Maboneng, Rosebank, Sandton, food markets, shopping and cultural attractions.',10999.00,'2026-11-30',24,'active','images/packages/eleven.jpg','2026-05-25 20:21:00'),
+(12,2,3,'Johannesburg Family Weekend','A family-focused Johannesburg package including the zoo, Gold Reef City, parks and relaxed hotel stays.',9999.00,'2026-10-31',28,'active','images/packages/twelve.jpg','2026-05-25 20:21:00'),
+(13,1,3,'Johannesburg Luxury Sandton Stay','A premium Sandton package with luxury accommodation, fine dining, shopping and private city transfers.',21999.00,'2026-12-31',10,'active','images/packages/thirteen.jpg','2026-05-25 20:21:00'),
+(14,2,3,'Johannesburg History and Wildlife Mix','A mixed package combining city heritage attractions with nature stops such as Walter Sisulu Botanical Garden and nearby wildlife experiences.',14999.00,'2026-11-30',16,'active','images/packages/fourteen.jpg','2026-05-25 20:21:00'),
+(15,1,2,'Zanzibar Luxury Beach Escape','A luxury island package with beachfront resort accommodation, beach activities, Stone Town and seafood dining.',34999.00,'2026-12-31',14,'active','images/packages/fifteen.jpg','2026-05-25 20:21:00'),
+(16,2,2,'Zanzibar Stone Town and Spice Tour','A cultural Zanzibar package focused on Stone Town, spice farms, Forodhani Gardens and Swahili cuisine.',22999.00,'2026-11-30',18,'active','images/packages/sixteen.jpg','2026-05-25 20:21:00'),
+(17,1,2,'Zanzibar Honeymoon Retreat','A romantic island package with resort accommodation, beach dinners, sunset experiences and relaxed sightseeing.',39999.00,'2026-12-31',8,'active','images/packages/seventeen.jpg','2026-05-25 20:21:00'),
+(18,2,2,'Zanzibar Adventure and Snorkelling Package','An active package including Mnemba Atoll, Prison Island, beaches, marine attractions and casual island restaurants.',26999.00,'2026-10-31',16,'active','images/packages/eighteen.jpg','2026-05-25 20:21:00'),
+(19,1,2,'Zanzibar Budget Island Break','A more affordable Zanzibar package with guesthouse or mid-range hotel stays, beaches and selected cultural activities.',17999.00,'2026-09-30',25,'active','images/packages/nineteen.jpg','2026-05-25 20:21:00'),
+(20,2,4,'Nairobi Safari Starter Package','A Nairobi package including Nairobi National Park, the Giraffe Centre, elephant nursery and comfortable hotel stays.',24999.00,'2026-12-31',18,'active','images/packages/twenty.jpg','2026-05-25 20:21:00'),
+(21,1,4,'Nairobi Luxury Wildlife Escape','A premium Nairobi package with luxury accommodation, wildlife attractions, private transfers and curated dining.',36999.00,'2026-12-31',10,'active','images/packages/twentyone.jpg','2026-05-25 20:21:00'),
+(22,2,4,'Nairobi Culture and City Tour','A city-focused Nairobi package including museums, markets, cultural stops, restaurants and central accommodation.',15999.00,'2026-11-30',22,'active','images/packages/twentytwo.jpg','2026-05-25 20:21:00'),
+(23,1,4,'Nairobi Family Wildlife Holiday','A family-friendly package with Nairobi National Park, Giraffe Centre, museums, parks and relaxed dining options.',19999.00,'2026-10-31',20,'active','images/packages/twentythree.jpg','2026-05-25 20:21:00'),
+(24,2,4,'Nairobi Budget Explorer','An affordable Nairobi package with selected attractions, mid-range accommodation and flexible restaurant options.',12999.00,'2026-09-30',30,'active','images/packages/twentyfour.jpg','2026-05-25 20:21:00');
 /*!40000 ALTER TABLE `package` ENABLE KEYS */;
 UNLOCK TABLES;
 COMMIT;
@@ -2349,4 +2350,4 @@ SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2026-05-25 20:51:40
+-- Dump completed on 2026-05-26  2:12:13
