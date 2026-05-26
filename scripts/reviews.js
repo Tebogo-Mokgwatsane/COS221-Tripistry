@@ -27,7 +27,7 @@ let activePackageId = null;
 const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
 if (!currentUser || currentUser.user_type !== "traveller") {
     alert("This page is for travellers only. Please log in.");
-    window.location.href = "/COS221-Tripistry/login.html";
+    window.location.href = "../login.html";
 }
 
 // ── Get API key from cookie ──────────────────────────────────
@@ -78,7 +78,7 @@ function loadBookings() {
     const apiKey = getApiKey();
     if (!apiKey) {
         alert("Session expired. Please log in.");
-        window.location.href = "/COS221-Tripistry/login.html";
+        window.location.href = "../login.html";
         return;
     }
 

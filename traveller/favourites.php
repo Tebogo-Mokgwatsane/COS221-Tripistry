@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tripistry - My Favourites</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/navbar.css">
-    <link rel="stylesheet" href="css/favourites.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/navbar.css">
+    <link rel="stylesheet" href="../css/favourites.css">
 </head>
 <body>
     <?php include("navbar.php"); ?>
@@ -31,7 +31,7 @@
             </div>
             <h2>No favourites yet</h2>
             <p>Browse packages and tap the heart icon to save them here.</p>
-            <a href="traveller/index.php" class="cta-btn">Browse Packages</a>
+            <a href="index.php" class="cta-btn">Browse Packages</a>
         </div>
     </div>
 
@@ -39,6 +39,6 @@
         &copy; 2026 Tripistry. All rights reserved.
     </footer>
 
-    <script src="scripts/favourites.js"></script>
+    <script src="../scripts/favourites.js"></script>
 </body>
 </html>

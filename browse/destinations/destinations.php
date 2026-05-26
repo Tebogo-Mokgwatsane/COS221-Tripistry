@@ -9,7 +9,7 @@
 
 </head>
 <body>
-    <?php include ("../../traveller/navbar.php"); ?>
+    <?php include ("../navbar.php"); ?>
     <div class="container" style="margin-top: 150px; text-align: center;">
         <h2 class="destinations-title">Destinations</h2>
         <p class="destinations-subtitle">Browse through your favourite Destinations</p>

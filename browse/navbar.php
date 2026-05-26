@@ -22,7 +22,7 @@
             <div class="middle-section">
                 <ul>
                     <li>
-                        <a href="../../traveller/packages.php">Packages</a>
+                        <a href="../../traveller/index.php">Packages</a>
                     </li>
                     <li>
                         <a href="../../traveller/bookings.php">Bookings</a>
