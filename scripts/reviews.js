@@ -5,7 +5,7 @@
 // traveller.js and navbar.js
 // ============================================================
 
-const API_BASE = "http://localhost/COS221-Tripistry/api.php"; // update if needed
+const API_BASE = "../api.php";
 
 const bookingsList  = document.getElementById("bookings-list");
 const emptyState    = document.getElementById("empty-state");

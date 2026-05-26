@@ -27,7 +27,7 @@
 
         <div class="empty-state" id="empty-state" style="display:none;">
             <div>
-                <img src="img/icons/badge-check.svg" alt="no favourites">
+                <img src="../img/icons/badge-check.svg" alt="no favourites">
             </div>
             <h2>No favourites yet</h2>
             <p>Browse packages and tap the heart icon to save them here.</p>
