@@ -1,6 +1,4 @@
-<<<<<<< HEAD
 const user = JSON.parse(localStorage.getItem("user")) || {};
-=======
 
 
 if(!user){ user = JSON.parse(localStorage.getItem("user")) || {};}
@@ -190,7 +188,7 @@ const renderPackages = (packagesArray, firstRender = false) => {
         packageCard.classList.add("package-card");
         packageCard.innerHTML = `
             <div class="card-img-container">
-                <img src="${package.image_url}" alt="${package.title}">  
+                <img src="/${package.image_url}" alt="${package.title}">  
                 <div class="availability-rating">
                     <div class="availability ${package.in_stock ? "in-stock" : "out-of-stock"}">
                         <span class="dot">•</span>
