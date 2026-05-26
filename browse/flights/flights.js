@@ -8,7 +8,7 @@ const loadPage = () => {
   document.getElementById("flights").innerHTML =
     `<p style="color:#888;">Loading flights...</p>`;
 
-  fetch("../../api.php", {
+  fetch("/api.php", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({

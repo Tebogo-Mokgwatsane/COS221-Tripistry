@@ -66,7 +66,7 @@ const handleLogin = async () => {
         return;
     }
     try {
-        const res = await fetch('api.php', {
+        const res = await fetch('/api.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -75,7 +75,6 @@ const handleLogin = async () => {
                 password: password
             })
         })
-    
         try {
             const data = await res.json();
             if (data.status === "success") {
