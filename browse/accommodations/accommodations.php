@@ -11,17 +11,17 @@
     <?php include("../../traveller/navbar.php"); ?>
     
     <div class="container" style="margin-top: 100px;">
-        <h1>Find Your Perfect Stay 🏨</h1>
-        
+        <h2 class="accommodations-title">Accommodations</h2>
+        <p class="accommodations-subtitle">Find Your Perfect Stay</p>
         <div class="filters">
             <div class="filter-group">
-                <label>MAX PRICE PER NIGHT</label>
+                <label  class="label">Price Per Night</label>
                 <input type="range" id="max-price" min="0" max="5000" value="5000">
                 <span id="max-price-value">R5000</span>
             </div>
             
             <div class="filter-group">
-                <label>ACCOMMODATION TYPE</label>
+                <label  class="label">Accomodation Type:</label>
                 <div class="type-filters">
                     <button class="type-btn active" data-type="all">All</button>
                     <button class="type-btn" data-type="Hotel">Hotel</button>
