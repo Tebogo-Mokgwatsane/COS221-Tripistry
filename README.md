@@ -28,6 +28,12 @@ The system enforces two distinct user roles:
 - Link packages with destinations, flights, accommodations, attractions, and restaurants
 - View bookings and reviews
 
+  ## Browsing Features
+- Added Traveller Browsing for destinations, flights, accommodations, attractions, and restaurants
+- Extra Features were made for the UI
+- Filtering according to specific attributes
+- Create and manage travel packages
+
 ## General
 - Secure login with role-based access
 - Responsive, modern UI
