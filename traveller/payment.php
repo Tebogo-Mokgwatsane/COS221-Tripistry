@@ -37,7 +37,7 @@
             </form>
         </div>
         <br>
-        <a href="booking.html"><button>Back</button></a>
+        <button onclick="history.back()">Back</button></a>
         <p id="response"></p>
     </body>
     <script src="../scripts/payment.js"></script>

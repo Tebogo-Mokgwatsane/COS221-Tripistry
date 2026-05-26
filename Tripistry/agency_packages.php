@@ -1,10 +1,10 @@
-<<<<<<< Updated upstream
-=======
+
+
 <?php
 require_once '../auth.php';
 requireRole('travel_agent');
 ?>
->>>>>>> Stashed changes
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -109,6 +109,7 @@ requireRole('travel_agent');
             <h2 id="modal-title">Create Package</h2>
 
             <div class="modal-grid">
+                
                 <div class="modal-field full">
                     <label class="label">PACKAGE TITLE</label>
                     <input type="text" id="pkg-title" placeholder="e.g. Cape Town Explorer">
@@ -119,6 +120,7 @@ requireRole('travel_agent');
                         <option value="">Select destination...</option>
                     </select>
                 </div>
+                
                 <div class="modal-field">
                     <label class="label">PRICE (R)</label>
                     <input type="number" id="pkg-price" placeholder="e.g. 15999" min="0">
@@ -143,6 +145,11 @@ requireRole('travel_agent');
                     <label class="label">DESCRIPTION</label>
                     <textarea id="pkg-desc" placeholder="Describe your package..." rows="4"></textarea>
                 </div>
+                <div class="modal-field full">
+    <label class="label">PACKAGE IMAGE</label>
+    <input type="file" id="pkg-image" accept="image/*">
+    <p style="font-size:12px;color:gray;margin-top:4px;">JPG, PNG or WebP. Max 2MB.</p>
+</div>
                 <div class="modal-field full">
                     <div class="toggle-row">
                         <label class="label">GROUP PACKAGE</label>

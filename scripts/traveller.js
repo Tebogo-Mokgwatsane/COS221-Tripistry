@@ -9,7 +9,7 @@ if (user.user_type !== "traveller"){
         localStorage.removeItem("user");
         window.location.href = "../login.html";    
     }
-    return;
+    //return;
 }
 
 // loading the username

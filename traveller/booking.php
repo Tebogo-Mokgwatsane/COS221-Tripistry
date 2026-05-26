@@ -35,7 +35,7 @@
             <div id="paymentLink" class="payment-link">
                 <a href="payment.php"><button>Proceed to Payment</button></a>
             </div>
-            <a href="/traveller/index.php"><button>Cancel</button></a>
+            <a href="index.php"><button>Cancel</button></a>
         </div>
     </body>
     <script src="../scripts/booking.js"></script>
