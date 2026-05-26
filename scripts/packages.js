@@ -45,104 +45,7 @@ soloBtn.addEventListener("click", (e) => {
 });
 
 // some mock data
-let packages = [
-  {
-    package_id: 1,
-    image_url: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e",
-    in_stock: true,
-    rating: 4.9,
-    agency: "CAPE TOWN TOURS",
-    location: "Cape Town, South Africa",
-    title: "Table Mountain Adventure",
-    package_type: "group",
-    nights: "5 nights",
-    price: 6125
-  },
-  {
-    package_id: 2,
-    image_url: "https://images.unsplash.com/photo-1516026672322-bc52d61a55d5",
-    in_stock: false,
-    rating: 4.7,
-    agency: "WILD ESCAPES",
-    location: "Kruger National Park, South Africa",
-    title: "Big Five Safari Experience",
-    package_type: "group",
-    nights: "3 nights",
-    price: 9850
-  },
-  {
-    package_id: 3,
-    image_url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
-    in_stock: true,
-    rating: 4.8,
-    agency: "OCEANIC GETAWAYS",
-    location: "Durban, South Africa",
-    title: "Beachfront Relaxation Tour",
-    package_type: "solo",
-    nights: "7 nights",
-    price: 4999
-  },
-  {
-    package_id: 4,
-    image_url: "https://images.unsplash.com/photo-1493246507139-91e8fad9978e",
-    in_stock: true,
-    rating: 5.0,
-    agency: "JOZI TRAVEL CO.",
-    location: "Johannesburg, South Africa",
-    title: "City Lights Weekend",
-    package_type: "group",
-    nights: "2 nights",
-    price: 2450
-  },
-  {
-    package_id: 5,
-    image_url: "https://images.unsplash.com/photo-1521295121783-8a321d551ad2",
-    in_stock: true,
-    rating: 4.6,
-    agency: "MOUNTAIN TRAILS",
-    location: "Drakensberg, South Africa",
-    title: "Hiking & Camping Escape",
-    package_type: "solo",
-    nights: "4 nights",
-    price:5300
-  },
-  {
-    package_id: 6,
-    image_url: "https://images.unsplash.com/photo-1470770841072-f978cf4d019e",
-    in_stock: true,
-    rating: 4.9,
-    agency: "SUNSET VOYAGES",
-    location: "Garden Route, South Africa",
-    title: "Garden Route Discovery",
-    package_type: "group",
-    nights: "6 nights",
-    price: 8700
-  },
-  {
-    package_id: 7,
-    image_url: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee",
-    in_stock: true,
-    rating: 4.5,
-    agency: "CITYSCAPE TOURS",
-    location: "Pretoria, South Africa",
-    title: "Historical Landmarks Tour",
-    package_type: "solo",
-    nights: "1 night",
-    price: 1799
-  },
-  {
-    package_id: 8,
-    image_url: "https://images.unsplash.com/photo-1469474968028-56623f02e42e",
-    in_stock: false,
-    rating: 4.8,
-    agency: "BY AFRICAN SUN TRAVEL",
-    location: "Limpopo, South Africa",
-    title: "Luxury Bush Retreat",
-    package_type: "group",
-    nights: "8 nights",
-    price: 12400
-  }
-];
+let package = [];
 
 
 
@@ -238,55 +141,29 @@ inStockOnly.addEventListener("change", (e) => {
     filterPackages();
 })
 
-/*function performSearch(query) {
-    fetch('../api.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            type: "Search",
-            query: query
-        })
-    })
-    //.then(res => res.json())
-    .then(res => {//debugging
-    return res.text().then(text => {
-        try {
-            return JSON.parse(text);
-        } catch (err) {
-            console.error("The raw server login response was:", text);
-            throw new Error("Server did not return valid JSON");
-        }
-    });
-    })
-    .then(data => {
-        if (data.status === "success") {
-            renderPackages(data.data.packages, true);
-        }
-    })
-    .catch(err => console.error(err));
-}*/
+
 
 async function performSearch(query) {
     try {
-        const res = await fetch('../api.php', {
+        const res = await fetch('/api.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ type: "Search", query: query })
         });
 
-        const text = await res.text();
-        console.log("Raw Response:", text);   // for debugging
-
-        const data = JSON.parse(text);
+        const data = await res.json();
 
         if (data.status === "success") {
-            allPackages = data.data.packages || [];
+            allPackages = data.data || [];
             renderPackages(allPackages, true);
+            console.log(allPackages);
         }
     } catch (err) {
         console.error("Search error:", err);
     }
-}       
+}  
+
+performSearch("");
 const renderPackages = (packagesArray, firstRender = false) => {
     cardsContainer.innerHTML = "";
     if (packagesArray.length === 0){
@@ -335,7 +212,7 @@ const renderPackages = (packagesArray, firstRender = false) => {
                     </div>
                     <div class="nights">
                         <img src="../img/icons/clock.svg" alt="Clock">
-                        <span>${package.nights}</span>
+                        <span>${package.activities.length} nights</span>
                     </div>
                 </div>
                 <div class="hr"></div>
@@ -353,4 +230,4 @@ const renderPackages = (packagesArray, firstRender = false) => {
     })
 }
 
-renderPackages(packages, true);
+
