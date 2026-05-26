@@ -228,7 +228,7 @@ class API
             $stmt->close();
             $this->error("Email already registered", 409);
         }
-        $stmt->close();*/
+        $stmt->close();
 
         // Hash password
         //changed to SHA2 hashing for better security. 

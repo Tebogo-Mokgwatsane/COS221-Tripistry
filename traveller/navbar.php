@@ -11,16 +11,16 @@
             <div class="middle-section">
                 <ul>
                     <li>
-                        <a href="">Packages</a>
+                        <a href="index.php">Packages</a>
                     </li>
                     <li>
                         <a href="">Bookings</a>
                     </li>
                     <li>
-                        <a href="">Favourites</a>
+                        <a href="../favourites.html">Favourites</a>
                     </li>
                     <li>
-                        <a href="">Reviews</a>
+                        <a href="reviews.php">Reviews</a>
                     </li>
                     <li class="explore-btn">
                         <button id="explore-btn">

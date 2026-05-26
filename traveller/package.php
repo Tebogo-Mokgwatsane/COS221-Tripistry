@@ -1,5 +1,5 @@
 <?php
-require_once '../Tripistry/auth.php';
+require_once '../auth.php';
 requireRole('traveller');
 ?>
 <!DOCTYPE html>
@@ -16,7 +16,7 @@ requireRole('traveller');
 <body>
     <?php include("navbar.php"); ?>
     <div class="container package-page">
-        <a href="/traveller/" class="back"><img src="../img/icons/arrow-left.svg" alt="Arrow left">Back to packages</a>
+        <a href="index.php" class="back"><img src="../img/icons/arrow-left.svg" alt="Arrow left">Back to packages</a>
         <div class="package-img-container">
             <div class="package-overlay" ></div>
             <div class="package-details">

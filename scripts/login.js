@@ -109,7 +109,7 @@ function handleLogin() {
             alert("Welcome back, " + data.data.username + "!");
 
             if (userType === "travel_agent") {
-                window.location.href = "agency/index.html";
+                window.location.href = "agency/index.php";
             } else {
                 window.location.href = "traveller/index.php";
             }

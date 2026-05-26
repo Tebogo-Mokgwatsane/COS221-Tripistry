@@ -1,7 +1,7 @@
 <<<<<<< Updated upstream
 =======
 <?php
-require_once '../Tripistry/auth.php';
+require_once '../auth.php';
 requireRole('travel_agent');
 ?>
 
