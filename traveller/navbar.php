@@ -25,7 +25,7 @@
                         <a href="index.php">Packages</a>
                     </li>
                     <li>
-                        <a href="bookings.php">Bookings</a>
+                        <a href="booking.php">Bookings</a>
                     </li>
                     <li>
                         <a href="favourites.php">Favourites</a>

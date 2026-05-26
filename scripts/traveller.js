@@ -1,4 +1,3 @@
-
 if (user === null){
     window.location.href = "../login.html"
 }
@@ -9,11 +8,11 @@ if (user.user_type !== "traveller"){
         localStorage.removeItem("user");
         window.location.href = "../login.html";    
     }
-    return;
 }
 
 // loading the username
-const username = document.getElementById("username") || document.getElementById("packages-username");
+if(!username){username = document.getElementById("username") || document.getElementById("packages-username");}
+//const username = document.getElementById("username") || document.getElementById("packages-username");
 if (username) {
     username.textContent = user.username || "Traveller";
 }
