@@ -8,7 +8,7 @@ const loading      = document.getElementById("loading");
 
 // ── Guard: travellers only ───────────────────────────────────
 
-//const user = JSON.parse(localStorage.getItem("user") || "{}");
+const user = JSON.parse(localStorage.getItem("user") || "{}");
 
 if(!user){ user = JSON.parse(localStorage.getItem("user")) || {};}
 //const user = JSON.parse(localStorage.getItem("user")) || {};
@@ -44,7 +44,7 @@ function loadFavourites() {
     }
 
 
-    fetch("/COS221-Tripistry/api.php", {
+    fetch("/api.php", {
 
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -113,7 +113,7 @@ function renderPackageCard(pkg) {
             </div>
             <div class="card-actions">
                 <span class="pkg-status ${statusClass}">${pkg.status}</span>
-                <a href="/COS221-Tripistry/traveller/package.php?package_id=${pkg.package_id}" class="view-btn">View Package</a>
+                <a href="/traveller/package.php?package_id=${pkg.package_id}" class="view-btn">View Package</a>
             </div>
         </div>
         <p class="saved-date">Saved ${new Date(pkg.added_at).toLocaleDateString("en-ZA")}</p>
@@ -135,7 +135,7 @@ function removeFavourite(packageId, cardElement) {
     cardElement.style.pointerEvents = "none";
 
 
-    fetch("/COS221-Tripistry/api.php", {
+    fetch("/api.php", {
 
         method: "POST",
         headers: { "Content-Type": "application/json" },

@@ -172,7 +172,7 @@ form.addEventListener("submit", (e) => {
     })
     .catch(err => {
         console.error(err);
-        alert("Error connecting to server.");///catch stmt
+        alert("Error connecting to server.");///catch stmtgit
     });
 });
 

@@ -74,7 +74,7 @@ function checkBooking()
     };
 
 
-    req.open("POST","/COS221-Tripistry/api.php", true);
+    req.open("POST","/api.php", true);
 
    
     req.setRequestHeader("Content-Type", "application/json");
@@ -89,7 +89,7 @@ function checkBooking()
     function confirmBooking()
 {
     if (!user || !user.email) {
-        window.location.href = "/COS221-Tripistry/login.html";
+        window.location.href = "/login.html";
         return;
     }
 
@@ -166,7 +166,7 @@ function checkBooking()
     };
 
 
-    req.open("POST", "/COS221-Tripistry/api.php", true);
+    req.open("POST", "/api.php", true);
 
     req.setRequestHeader("Content-Type", "application/json");
 
@@ -202,7 +202,7 @@ function packageInfo()
                     title.textContent = ob.data.title;
                     description.textContent = ob.data.description;
 
-                    image.src = "/COS221-Tripistry/" +ob.data.img_url;
+                    image.src = "/" +ob.data.img_url;
 
                     image.alt = ob.data.title;
                 }
@@ -233,7 +233,7 @@ function packageInfo()
     };
 
 
-    req.open("POST", "/COS221-Tripistry/api.php", true);
+    req.open("POST", "/api.php", true);
 
     
     req.setRequestHeader("Content-Type", "application/json");

@@ -3,7 +3,7 @@
 // agency.js — Agency dashboard logic
 // ============================================================
 
-const API_BASE = "http://localhost/COS221-Tripistry/api.php";
+const API_BASE = "/api.php";
 
 // ── Guard: agencies only ─────────────────────────────────────
 const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
@@ -76,7 +76,10 @@ function loadDestinations() {
     })
     .then(r => r.json())
     .then(data => {
-        if (data.status !== "success") return;
+        if (data.status !== "success") {
+            console.log(data);
+            return;
+        };
         const seen = new Set();
         data.data.forEach(pkg => {
             if (!seen.has(pkg.dest_id)) {

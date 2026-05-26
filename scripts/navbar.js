@@ -13,11 +13,10 @@ document.addEventListener("scroll", () => {
     dropDown.style.display = "none";
 }); 
 
-const user = JSON.parse(localStorage.getItem("user"));
-if (user !== null){
-    const firstName = user.username.split(" ")[0];
-    const username = document.getElementById("username");
-    username.textContent = firstName;
+let userr = JSON.parse(localStorage.getItem("user"));
+if (userr !== null){
+
+    username.textContent = userr.fname;
 }
 
 // logout
@@ -44,6 +43,6 @@ overlay.addEventListener("click", (e) => {
 
 logoutBtn.addEventListener("click", (e) => {
     localStorage.removeItem("user");
-    window.location.href = "/COS221-Tripistry/login.html";
+    window.location.href = "/";
 })
 ; 
