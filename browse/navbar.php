@@ -1,9 +1,20 @@
+<div id="logout-overlay" class="logout-overlay logout-hidden">
+  <div class="logout-popup">
+    <h3>Are you sure that you want to logout?</h3>
+    <p>You will be logged out of your Tripistry account.</p>
+    <div>
+        <button id="cancel-button">Cancel</button>
+        <button id="confirm-button">Logout</button>
+    </div>
+  </div>
+</div>
+
 <nav>
         <div class="navbar">
             <div class="logo">
-                <a href="../traveller/">
+                <a href="../../traveller/">
                     <div class="img-container">
-                        <img src="../img/icons/compass.svg" alt="Compass Logo">
+                        <img src="../../img/icons/compass.svg" alt="Compass Logo">
                     </div>
                 </a>
                 <p>Tripistry</p>
@@ -11,13 +22,13 @@
             <div class="middle-section">
                 <ul>
                     <li>
-                        <a href="../../traveller/">Packages</a>
+                        <a href="../../traveller/packages.php">Packages</a>
                     </li>
                     <li>
                         <a href="../../traveller/bookings.php">Bookings</a>
                     </li>
                     <li>
-                        <a href="../../favourites.html">Favourites</a>
+                        <a href="../../traveller/favourites.php">Favourites</a>
                     </li>
                     <li>
                         <a href="../../traveller/reviews.php">Reviews</a>
@@ -25,37 +36,37 @@
                     <li class="explore-btn">
                         <button id="explore-btn">
                             Explore
-                            <img src="../img/icons/chevron-down.svg" alt="Chevron Down">
+                            <img src="../../img/icons/chevron-down.svg" alt="Chevron Down">
                         </button>
                         <div id="dropdown">
                             <ul class="explore-dropdown">
                                 <li>
                                     <a href="../destinations/destinations.php">
-                                        <img src="../img/icons/map-pin.svg" alt="Map Pin">
+                                        <img src="../../img/icons/map-pin.svg" alt="Map Pin">
                                         Destinations
                                     </a>
                                 </li>
                                 <li>
                                     <a href="../flights/flights.php">
-                                        <img src="../img/icons/plane-black.svg" alt="Plane">
+                                        <img src="../../img/icons/plane-black.svg" alt="Plane">
                                         Flights
                                     </a>
                                 </li>
                                 <li>
                                     <a href="../accommodations/accommodations.php">
-                                        <img src="../img/icons/bed.svg" alt="Bed icon">
+                                        <img src="../../img/icons/bed.svg" alt="Bed icon">
                                         Accommodations
                                     </a>
                                 </li>
                                 <li>
                                     <a href="../attractions/attractions.php">
-                                        <img src="../img/icons/camera.svg" alt="Camera icon">
+                                        <img src="../../img/icons/camera.svg" alt="Camera icon">
                                         Attractions
                                     </a>
                                 </li>
                                 <li>
                                     <a href="../restaurants/restaurants.php">
-                                        <img src="../img/icons/utensils-crossed.svg" alt="Utinsils icons">
+                                        <img src="../../img/icons/utensils-crossed.svg" alt="Utinsils icons">
                                         Restaurants
                                     </a>
                                 </li>
@@ -66,12 +77,12 @@
             </div>
             <div class="login-section" id="login-section">
                 <div id="username-container">
-                    <img src="../img/icons/user.svg" alt="User Icon">
+                    <img src="../../img/icons/user.svg" alt="User Icon">
                     <p class="sign-in-txt" id="username"></p>
                 </div>
                 <button href="../../signup.html" class="logout-btn" >
-                    <img src="../img/icons/log-out.svg" alt="Logout icon" id="logout-img-default">
-                    <img src="../img/icons/log-out-white.svg" alt="Logout icon" id="logout-img-hover">
+                    <img src="../../img/icons/log-out.svg" alt="Logout icon" id="logout-img-default">
+                    <img src="../../img/icons/log-out-white.svg" alt="Logout icon" id="logout-img-hover">
                     <span>Logout</span>
                 </button>
             </div>

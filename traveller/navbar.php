@@ -1,7 +1,7 @@
 <div id="logout-overlay" class="logout-overlay logout-hidden">
   <div class="logout-popup">
     <h3>Are you sure that you want to logout?</h3>
-    <p>You will be logged out of your ABC Flights account.</p>
+    <p>You will be logged out of your Tripistry account.</p>
     <div>
         <button id="cancel-button">Cancel</button>
         <button id="confirm-button">Logout</button>
@@ -12,7 +12,7 @@
 <nav>
         <div class="navbar">
             <div class="logo">
-                <a href="/traveller/">
+                <a href="index.php">
                     <div class="img-container">
                         <img src="../img/icons/compass.svg" alt="Compass Logo">
                     </div>
@@ -22,7 +22,7 @@
             <div class="middle-section">
                 <ul>
                     <li>
-                        <a href="/traveller/">Packages</a>
+                        <a href="packages.php">Packages</a>
                     </li>
                     <li>
                         <a href="bookings.php">Bookings</a>
@@ -41,31 +41,31 @@
                         <div id="dropdown">
                             <ul class="explore-dropdown">
                                 <li>
-                                    <a href="browse/destinations.html">
+                                    <a href="../browse/destinations/destinations.php">
                                         <img src="../img/icons/map-pin.svg" alt="Map Pin">
                                         Destinations
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="browse/flights.html">
+                                    <a href="../browse/flights/flights.php">
                                         <img src="../img/icons/plane-black.svg" alt="Plane">
                                         Flights
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="browse/accommodations.html">
+                                    <a href="../browse/accommodations/accommodations.php">
                                         <img src="../img/icons/bed.svg" alt="Bed icon">
                                         Accommodations
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="browse/attractions.html">
+                                    <a href="../browse/attractions/attractions.php">
                                         <img src="../img/icons/camera.svg" alt="Camera icon">
                                         Attractions
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="browse/restaurants.html">
+                                    <a href="../browse/restaurants/restaurants.php">
                                         <img src="../img/icons/utensils-crossed.svg" alt="Utinsils icons">
                                         Restaurants
                                     </a>

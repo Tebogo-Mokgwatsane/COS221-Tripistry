@@ -1,16 +1,3 @@
-<?php 
-include("../../api.php");
-
-/*$api = new API();
-$accommodations = $api->getAccommodations();
-
-header('Content-Type: application/json');
-echo json_encode([
-    "status" => "success",
-    "data" => $accommodations
-]);*/
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,18 +10,17 @@ echo json_encode([
 <body>
     <?php include("../navbar.php"); ?>
     
-    <div class="container" style="margin-top: 100px;">
-        <h1>Find Your Perfect Stay 🏨</h1>
-        
+    <div class="container" style="margin-top: 140px;">
+        <h2 class="accommodations-title">Accommodations</h2>
+        <p class="accommodations-subtitle">Find Your Perfect Stay</p>
         <div class="filters">
             <div class="filter-group">
-                <label>MAX PRICE PER NIGHT</label>
+                <label  class="label">Price Per Night</label>
                 <input type="range" id="max-price" min="0" max="5000" value="5000">
                 <span id="max-price-value">R5000</span>
             </div>
             
             <div class="filter-group">
-                <label>ACCOMMODATION TYPE</label>
                 <div class="type-filters">
                     <button class="type-btn active" data-type="all">All</button>
                     <button class="type-btn" data-type="Hotel">Hotel</button>
@@ -46,7 +32,11 @@ echo json_encode([
 
         <div class="accommodation-grid" id="accommodations"></div>
     </div>
-
+    <div class="pagination-container">
+        <button id="prevBtn" class="pagination-btn">Previous</button>
+        <span id="pageInfo" class="page-info">Page 1 of 1</span>
+        <button id="nextBtn" class="pagination-btn">Next</button>
+    </div>
     <script src="accommodations.js"></script>
 </body>
 </html>

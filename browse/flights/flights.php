@@ -1,47 +1,39 @@
-<?php 
- include ("../../../api.php");
-
- $api = new API();
- $flights = $api->getflights();
-
- header('Content-Type: application/json');
- echo json_encode($flights);
-
-
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flights</title>
+    <title>Tripinstry - Flights</title>
     <link rel="stylesheet" href="flights.css">
     <link rel="stylesheet" href="../../css/navbar.css">
 
 </head>
 <body>
     <?php include("../navbar.php"); ?>
+    <div class="flights-header">
+        <h2 class="flights-title">Flights</h2>
+        <p class="flights-subtitle">Browse through your favourite flights</p>
+    </div>
     <div class="flights-section">
         <div class="filters">
             <div class="top">
-                    <img src="../img/icons/sliders-horizontal.svg" alt="Sliders icon">
+                    <img src="../../img/icons/sliders-horizontal.svg" alt="Sliders icon">
                     <p>Filters</p>
             </div>
             <div class="filter-group">
                 <label class="label">Price</label>
-                <input type="range" id="priceFilter" >
-                <span id="priceDisplay"></span>
+                <input type="range" id="priceFilter" class="pricefilter">
+                <span id="priceDisplay" class="pricedisplay">R0.00</span>
             </div>
             <div class="filter-group">
                 <label>From: </label>
-                <select id="fromFilter">
+                <select id="fromFilter" class="dropdown">
                     <option value="">All Airports</option>
                 </select>
             </div>
             <div class="filter-group">
                 <label>To:</label>
-                <select id="toFilter">
+                <select id="toFilter" class="dropdown">
                     <option value="">All Airports</option>
                 </select>
             </div>
@@ -62,11 +54,10 @@
         <button id="nextBtn" class="pagination-btn">Next</button>
     </div>
 
-    
-<script src="flights.js"></script>
-<script src="../scripts/navbar.js"></script>
-</body>
 
+</body>
+<script src="flights.js"></script>
+<script src="../../scripts/navbar.js"></script>
 </html>
 
 
