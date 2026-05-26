@@ -10,34 +10,22 @@
 </head>
 <body>
     <?php include("../navbar.php"); ?>
-    <div class="filter-container">
-        <div class="filter-group">
-            <label>Airline:</label>
-            <select id="airlineFilter">
-                <option value="">All Airlines</option>
-            </select>
-        </div>
-        <div class="filter-group">
-            <label>Price Range:</label>
-            <input type="range" id="priceFilter" min="0" max="5000" value="5000">
-            <span id="priceDisplay">$5000</span>
-        </div>
-        <div class="filter-group">
-            <label>From:</label>
-            <select id="fromFilter">
-                <option value="">All Airports</option>
-            </select>
-        </div>
-        <div class="filter-group">
-            <label>To:</label>
-            <select id="toFilter">
-                <option value="">All Airports</option>
-            </select>
-        </div>
+    <div class="destinations-header">
+        <h2 class="destinations-title">Destinations</h2>
+        <p class="destinations-subtitle">Browse through your favourite Destinations</p>
+    </div>
+    <div class="search-container">
+            <img src="../../img/icons/search.svg" alt="Search icon">
+            <input id="search-bar" type="text" placeholder="Search for a city or country">
     </div>
     
     <div id="destinations" class="destinations-grid" ></div>
 
+    <div class="pagination-container">
+        <button id="prevBtn" class="pagination-btn">Previous</button>
+        <span id="pageInfo" class="page-info">Page 1 of 1</span>
+        <button id="nextBtn" class="pagination-btn">Next</button>
+    </div>
 <script src="destinations.js"></script>
 <!-- <script src="scripts/navbar.js"></script>-->
 </body>

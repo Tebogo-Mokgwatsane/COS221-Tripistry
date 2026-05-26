@@ -14,7 +14,7 @@
                         <a href="index.php">Packages</a>
                     </li>
                     <li>
-                        <a href="">Bookings</a>
+                        <a href="booking.html">Bookings</a>
                     </li>
                     <li>
                         <a href="../favourites.html">Favourites</a>

@@ -57,7 +57,7 @@ tabs.forEach((tab, index) => {
 
 });
 
-function handleLogin() {
+const handleLogin = async () => {
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value.trim();
 
@@ -65,62 +65,61 @@ function handleLogin() {
         alert("Please fill in all fields");
         return;
     }
-
-    fetch('api.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            type: "Login",
-            email: email,
-            password: password
+    try {
+        const res = await fetch('api.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                type: "Login",
+                email: email,
+                password: password
+            })
         })
-    })
-    //.then(res => res.json())
-    .then(res => {//debugging
-    return res.text().then(text => {
+    
         try {
-            return JSON.parse(text);
-        } catch (err) {
-            console.error("The raw server login response was:", text);
-            throw new Error("Server did not return valid JSON");
-        }
-    });
-    })
-    .then(data => {
-        if (data.status === "success") {
-            const selectedType = activeTab;                    // "traveller" or "agency" to correspond with slider in html
-            const userType = data.data.user_type;
-
-            //User type should match selected tab
-            if ((selectedType === "traveller" && userType !== "traveller") || (selectedType === "agency" && (userType !== "travel_agent"))) {
-                alert("Wrong account type. Please select the correct tab.");
-                return;
-            }
-
-            // Save to localStorage
-            localStorage.setItem('user', JSON.stringify({
-                username: data.data.username,
-                user_type: userType
-            }));
-
-            // Store API key in cookie
-            document.cookie = `apiKey=${data.data.apikey}; path=/; max-age=18000`;//expires in 5hrs
-
-            alert("Welcome back, " + data.data.username + "!");
-
-            if (userType === "travel_agent") {
-                window.location.href = "agency/index.php";
+            const data = await res.json();
+            if (data.status === "success") {
+                passwordError.textContent = "";
+                const selectedType = activeTab;                    // "traveller" or "agency" to correspond with slider in html
+                const userType = data.data.user_type;
+    
+                //User type should match selected tab
+                if ((selectedType === "traveller" && userType !== "traveller") || (selectedType === "agency" && (userType !== "travel_agent"))) {
+                    alert("Wrong account type. Please select the correct tab.");
+                    return;
+                }
+    
+                // Save to localStorage
+                localStorage.setItem('user', JSON.stringify({
+                    username: data.data.username,
+                    user_type: userType,
+                    email: data,
+                    apikey: data.data.apikey 
+                }));
+    
+                // Store API key in cookie
+                document.cookie = `apiKey=${data.data.apikey}; path=/; max-age=18000`;//expires in 5hrs
+    
+    
+                
+    
+                    if (userType === "travel_agent") {
+                        window.location.href = "traveller/";
+                    } else {
+                        window.location.href = "traveller/";
+                    }
+                
+    
             } else {
-                window.location.href = "traveller/index.php";
+                console.log(res);
+                passwordError.textContent = "Email or password is incorrect";
             }
-
-        } else {
-            alert(data.message || "Login failed");
-        }
-    })
-    .catch(err => {
-        console.error(err);
-        console.error("The raw server login response was:", err);
-        alert("Error connecting to server. Please try again.");
-    });
+    
+        } catch (err) {
+            console.error("The raw server login response was:", err);
+            throw new Error("Server did not return valid JSON");
+        }      
+    } catch (err) {
+        console.log(err);
+    }
 }

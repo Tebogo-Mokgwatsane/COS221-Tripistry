@@ -69,11 +69,11 @@ C:\xampp\htdocs\Tripistry\
 
 # Default Test Accounts
 **Traveller:**
-- Email: `test@traveller.com`
+- Email: `katlego@mail.com`
 - Password: `Password123!`
 
 **Agency:**
-- Email: `test@agency.co.za`
+- Email: `info@sunwaytravels.co.za`
 - Password: `Password123!`
 
 # Git Repository
