@@ -72,25 +72,20 @@ function loadDestinations() {
     fetch(API_BASE, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ type: "GetPackages" })
+        body: JSON.stringify({ type: "Destinations" })
     })
     .then(r => r.json())
     .then(data => {
         if (data.status !== "success") return;
-        const seen = new Set();
-        data.data.forEach(pkg => {
-            if (!seen.has(pkg.dest_id)) {
-                seen.add(pkg.dest_id);
-                const opt = document.createElement("option");
-                opt.value = pkg.dest_id;
-                opt.textContent = `${pkg.destination_city}, ${pkg.destination_country}`;
-                pkgDest.appendChild(opt);
-            }
+        data.data.forEach(dest => {
+            const opt = document.createElement("option");
+            opt.value = dest.dest_id;
+            opt.textContent = `${dest.city}, ${dest.country}`;
+            pkgDest.appendChild(opt);
         });
     })
-    .catch(err => console.error(err));
+    .catch(err => console.error("Failed to load destinations:", err));
 }
-
 // ── Load agency packages ─────────────────────────────────────
 function loadPackages() {
     const apiKey = getApiKey();
@@ -282,7 +277,7 @@ modalOverlay.addEventListener("click", e => {
 });
 
 // ── Submit create / edit ──────────────────────────────────────
-modalSubmit.addEventListener("click", () => {
+modalSubmit.addEventListener("click",  () => {
     modalError.textContent = "";
 
     if (!pkgTitle.value.trim())  { modalError.textContent = "Title is required.";       return; }
@@ -290,30 +285,42 @@ modalSubmit.addEventListener("click", () => {
     if (!pkgPrice.value || pkgPrice.value <= 0) { modalError.textContent = "Valid price is required."; return; }
     if (!pkgExpiry.value)        { modalError.textContent = "Expiry date is required."; return; }
 
-    const payload = {
-        type:        editingPkgId ? "UpdatePackage" : "CreatePackage",
-        api_key:     getApiKey(),
-        title:       pkgTitle.value.trim(),
-        dest_id:     parseInt(pkgDest.value),
-        price:       parseFloat(pkgPrice.value),
-        quantity:    parseInt(pkgQuantity.value) || 0,
-        expiry_date: pkgExpiry.value,
-        status:      pkgStatus.value,
-        description: pkgDesc.value.trim(),
-        is_group:    pkgIsGroup.checked,
-        min_group_size: pkgIsGroup.checked ? parseInt(pkgMinGroup.value) : null,
-        max_group_size: pkgIsGroup.checked ? parseInt(pkgMaxGroup.value) : null,
-    };
+    // Build FormData instead of JSON so image can be included
+    const formData = new FormData();
+    formData.append("type",        editingPkgId ? "UpdatePackage" : "CreatePackage");
+    formData.append("api_key",     getApiKey());
+    formData.append("title",       pkgTitle.value.trim());
+    formData.append("dest_id",     pkgDest.value);
+    formData.append("price",       pkgPrice.value);
+    formData.append("quantity",    pkgQuantity.value || 0);
+    formData.append("expiry_date", pkgExpiry.value);
+    formData.append("status",      pkgStatus.value);
+    formData.append("description", pkgDesc.value.trim());
+    formData.append("is_group",    pkgIsGroup.checked ? "1" : "0");
 
-    if (editingPkgId) payload.package_id = editingPkgId;
+    if (pkgIsGroup.checked) {
+        formData.append("min_group_size", pkgMinGroup.value);
+        formData.append("max_group_size", pkgMaxGroup.value);
+    }
+
+    if (editingPkgId) {
+        formData.append("package_id", editingPkgId);
+    }
+
+    const imageFile = document.getElementById("pkg-image").files[0];
+    if (imageFile) {
+        formData.append("image", imageFile);
+    }
 
     modalSubmit.disabled    = true;
     modalSubmit.textContent = "Saving...";
 
+    
+
+    // No Content-Type header — browser sets it automatically for FormData
     fetch(API_BASE, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
+        body: formData
     })
     .then(r => r.json())
     .then(data => {
@@ -324,7 +331,7 @@ modalSubmit.addEventListener("click", () => {
             closeModal();
             loadPackages();
         } else {
-            modalError.textContent = data.message || "Failed to save package.";
+            modalError.textContent = data.data || data.message || "Failed to save package.";
         }
     })
     .catch(err => {
@@ -336,7 +343,7 @@ modalSubmit.addEventListener("click", () => {
 });
 
 // ── Delete modal ──────────────────────────────────────────────
-function openDeleteModal(pkgId, title) {
+ function openDeleteModal(pkgId, title) {
     deletingPkgId = pkgId;
     deletePkgName.textContent = title;
     deleteOverlay.style.display = "flex";
@@ -359,6 +366,8 @@ deleteConfirm.addEventListener("click", () => {
 
     deleteConfirm.disabled    = true;
     deleteConfirm.textContent = "Deleting...";
+
+    
 
     fetch(API_BASE, {
         method: "POST",

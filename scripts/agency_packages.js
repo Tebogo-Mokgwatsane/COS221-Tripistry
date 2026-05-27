@@ -350,7 +350,7 @@ modalSubmit.addEventListener("click", () => {
 });
 
 // ── Delete modal ──────────────────────────────────────────────
-function openDeleteModal(pkgId, title) {
+ function openDeleteModal(pkgId, title) {
     deletingPkgId = pkgId;
     deletePkgName.textContent  = title;
     deleteOverlay.style.display = "flex";
@@ -373,6 +373,8 @@ deleteConfirm.addEventListener("click", () => {
     deleteConfirm.disabled    = true;
     deleteConfirm.textContent = "Deleting...";
 
+    
+    
     fetch(API_BASE, {
         method: "POST",
         headers: { "Content-Type": "application/json" },

@@ -1,0 +1,1560 @@
+<?php
+header("Content-Type: application/json");
+//define('USE_LOCAL_CONFIG', true);
+require_once __DIR__ . '/Tripistry/config.php';
+class API
+{
+    private $mysqli; // mysqli connection
+    public function __construct() {
+        global $mysqli;
+        $this->mysqli = $mysqli;
+    }
+    public function handleRequest() {
+        $input = [];
+
+        if (strpos($_SERVER['CONTENT_TYPE'] ?? '', 'application/json') !== false) {
+            $input = json_decode(file_get_contents("php://input"), true) ?? [];
+        } else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $input = $_POST;
+        }
+
+        if (!isset($input['type']) || empty($input['type'])) {
+            $this->error("Missing 'type' parameter");
+        }
+
+        $type = $input['type'];
+        switch ($type) {
+            case "Register":
+                $this->registerUser($input);
+                break;
+            case "Login":
+                $this->loginUser($input);
+                break;
+            case "Booking":
+                $this->handleBooking($input);
+                break;
+            case "Payment":
+                $this->handlePayment($input);
+                break;
+            case "CheckBooking":
+                $this->checkBooking($input);
+                break;
+            case "Packageinfo":
+                $this->packageInfo($input);
+                break;
+            case "Packages":
+                $this->packages($input);
+                break;
+            case "createPackage":
+                $this->createPackage($input);
+                break;
+            case "Updatepackage":
+                $this->updatePackage($input);
+                break;
+            case "deletepackage":
+                $this->deletePackage($input);
+                break;
+            case "allpackages":
+                $this->allPackages($input);
+                break;
+            default:
+                $this->error("Unknown request type");
+                break;
+        }
+    }
+    private function jsonResponse($status, $message, $data = []) 
+    {
+        echo json_encode([
+            "status" => $status,
+            "message" => $message,
+            "data" => $data
+        ]);
+        exit;
+    }
+    private function success($data = []) 
+    {
+        http_response_code(200);
+        echo json_encode([
+            "status" => "success",
+            "timestamp" =>(int)(microtime(true) * 1000),
+            "data" => $data
+        ]);
+        exit;
+    }
+    private function error($message, $code=400)
+    {
+        http_response_code($code);
+        echo json_encode([
+            "status" => "error",
+            "timestamp" =>(int)(microtime(true) * 1000),
+            "message" => $message
+        ]);
+        exit;
+    }
+    // Registering user ====================
+    private function registerUser($data) 
+    {
+        if (empty($data['email']) || empty($data['password']) || empty($data['user_type'])) {
+            $this->jsonResponse("error", "All fields are required");
+        }
+
+        if (empty($data['username'])) {
+            $this->jsonResponse("error", "Username is required");
+        }
+
+        if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+            $this->jsonResponse("error", "Invalid email address");
+        }
+
+        $passRegex = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/";
+        if (!preg_match($passRegex, $data['password'])) {
+            $this->jsonResponse("error", "Password must be 8+ chars with upper, lower, number and symbol");
+        }
+
+        // Check if email exists
+        $stmt = $this->mysqli->prepare("SELECT user_id FROM user WHERE email = ?");
+        $stmt->bind_param("s", $data['email']);
+        $stmt->execute();
+        $stmt->store_result();
+        if ($stmt->num_rows > 0) {
+            $stmt->close();
+            $this->jsonResponse("error", "Email already registered");
+        }
+        $stmt->close();
+        
+        // Check if username already exists
+        $stmt = $this->mysqli->prepare("SELECT user_id FROM user WHERE username = ?");
+        $stmt->bind_param("s", $data['username']);
+        $stmt->execute();
+        $stmt->store_result();
+        if ($stmt->num_rows > 0) {
+            $stmt->close();
+            $this->jsonResponse("error", "Username already taken");
+        }
+        $stmt->close();
+
+        // Hash password
+        $hashed = password_hash($data['password'], PASSWORD_DEFAULT);
+
+        // Generate API key
+        $apiKey = bin2hex(random_bytes(16));
+
+        // Insert user
+        $stmt = $this->mysqli->prepare("INSERT INTO user (username, email, password_hash, user_type, api_key)
+                                     VALUES (?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssss", $data['username'], $data['email'], $hashed, $data['user_type'], $apiKey);
+        $success = $stmt->execute();
+        $stmt->close();
+
+        if ($success) {
+            $this->jsonResponse("success", "Registration Successful!");
+        } else {
+            $this->jsonResponse("error", "Failed to register user");
+        }
+    }
+    // Logging in user ====================
+    private function loginUser($data) {
+        if (empty($data['email']) || empty($data['password'])) {
+            $this->jsonResponse("error", "Email and password required");
+        }
+
+        $stmt = $this->mysqli->prepare("SELECT user_id,user_type,username,email, password_hash, api_key FROM user WHERE email = ?");
+        $stmt->bind_param("s", $data['email']);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+        $stmt->close();
+
+        if (!$user || !password_verify($data['password'], $user['password_hash'])) {
+            $this->jsonResponse("error", "Invalid Credentials");
+        }
+
+        session_start();
+        $_SESSION['user_id'] = $user['user_id'];
+        $_SESSION['username']   = $user['username'];
+
+        //Return API key in response
+        $this->jsonResponse("success", "Login successful", [
+            "apikey" => $user['api_key'],
+            "username"   => $user['username'],
+            "user_type"   => $user['user_type']
+        ]);
+        
+    }
+    //booking
+    private function handleBooking($input)
+    {
+            // Validate inputs
+            if (!isset($input["Quantity"])) {
+                $this->error("Missing number of packages to be booked", 400);
+                return;
+            }
+
+            if (!isset($input["Email"])) {
+                $this->error("Missing Email", 400);
+                return;
+            }
+
+            if (!isset($input["package_id"])) {
+                $this->error("Missing Package_id", 400);
+                return;
+            }
+
+            $Quantity = (int)$input["Quantity"];
+            $pack_id = (int)$input["package_id"];
+            $email = $input["Email"];
+
+            if ($Quantity <= 0) {
+                $this->error("Invalid number of packages to be booked", 400);
+                return;
+            }
+
+            if ($pack_id <= 0) {
+                $this->error("Invalid package_id", 400);
+                return;
+            }
+
+            // Get user details
+            $sql = "SELECT user_id, user_type FROM user WHERE email = ?";
+            $stmt = $this->mysqli->prepare($sql);
+
+            if (!$stmt) {
+                $this->error("Failed to prepare user statement", 500);
+                return;
+            }
+
+            $stmt->bind_param("s", $email);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            if ($result->num_rows === 0) {
+                $stmt->close();
+                $this->error("Invalid email", 401);
+                return;
+            }
+
+            $user = $result->fetch_assoc();
+            $stmt->close();
+
+            if ($user["user_type"] !== "traveller") {
+                $this->error("Only travellers can book packages", 403);
+                return;
+            }
+
+            $traveller_id = (int)$user["user_id"];
+
+            // Prevent duplicate active booking for the same package
+            $sql = "SELECT booking_id 
+                    FROM booking 
+                    WHERE traveller_id = ? 
+                    AND package_id = ? 
+                    AND booking_status='pending'";
+
+            $stmt = $this->mysqli->prepare($sql);
+
+            if (!$stmt) {
+                $this->error("Failed to prepare duplicate booking check", 500);
+                return;
+            }
+
+            $stmt->bind_param("ii", $traveller_id, $pack_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            if ($result->num_rows > 0) {
+                $stmt->close();
+                $this->error("You have already booked this package.", 409);
+                return;
+            }
+
+            $stmt->close();
+
+            // Get package quantity and price
+            $sql = "SELECT quantity, price FROM package WHERE package_id = ?";
+            $stmt = $this->mysqli->prepare($sql);
+
+            if (!$stmt) {
+                $this->error("Failed to prepare package statement", 500);
+                return;
+            }
+
+            $stmt->bind_param("i", $pack_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            if ($result->num_rows === 0) {
+                $stmt->close();
+                $this->error("Invalid package_id", 401);
+                return;
+            }
+
+            $package = $result->fetch_assoc();
+            $stmt->close();
+
+            if ((int)$package["quantity"] < $Quantity) {
+                $this->error("Sorry, only " . $package["quantity"] . " package(s) are available.", 409);
+                return;
+            }
+
+            $price = (float)$package["price"];
+            $total_price = $price * $Quantity;
+
+            // Insert booking
+            $sql = "INSERT INTO booking 
+                    (traveller_id, package_id, num_travellers, total_price, booking_status) 
+                    VALUES (?, ?, ?, ?, 'pending')";
+
+            $stmt = $this->mysqli->prepare($sql);
+
+            if (!$stmt) {
+                $this->error("Failed to prepare booking statement", 500);
+                return;
+            }
+
+            $stmt->bind_param("iiid", $traveller_id, $pack_id, $Quantity, $total_price);
+
+            if (!$stmt->execute()) {
+                $stmt->close();
+                $this->error("Failed to book package", 500);
+                return;
+            }
+
+            $booking_id = $this->mysqli->insert_id;
+            $stmt->close();
+
+            $this->success([
+                "total_price" => $total_price,
+                "Message" => "Booking is Successful",
+                "Booking_id" => $booking_id
+            ]);
+            return;
+        }
+        //handling payment
+        private function handlePayment($input)
+        {
+            if(!isset($input["Method"]))
+            {
+                $this->error("Method is not set",400);
+                return;
+            }
+            if(!isset($input["Quantity"]))
+            {
+                $this->error("Quantity missing",400);
+                return;
+            }
+            if(!isset($input["Booking_id"]))
+            {
+                $this->error("Missing booking id",400);
+                return;
+            }
+            if(!isset($input["amount"]))
+            {
+                $this->error("Missing amount",400);
+                return;
+            }
+            if(!isset($input["Reference"]))
+            {
+                $this->error("Missing reference",400);
+                return;
+            }
+            $Booking_id=(int)$input["Booking_id"];
+            $Quantity=(int)$input["Quantity"];
+            if($Booking_id<=0)
+            {
+                $this->error("Booking id can't be zero or negative",400);
+                return;
+            }
+            $Method=$input["Method"];
+            $allowedmethod=["Credit Card","Debit Card","Cash","EFT","Paypal"];
+            if(!in_array($Method,$allowedmethod))
+            {
+                $this->error("Payment method is not allowed",400);
+                return;
+            }
+            $amount=(double)$input["amount"];
+            if($amount<=0)
+            {
+                $this->error("Enter correct amount",400);
+                return;
+            }
+            $reference=$input["Reference"];
+            //check if pacakge has already been purchased
+            $sql="SELECT * FROM payment WHERE booking_id=?";
+            $stmt=$this->mysqli->prepare($sql);
+            $stmt->bind_param("i",$Booking_id);
+            $stmt->execute();
+            $result=$stmt->get_result();
+            if($result->num_rows!==0)
+            {
+                $stmt->close();
+                $this->error("Package is Already purchased",400);
+                return;
+            }
+            $stmt->close();
+            //check if the amount entered matches the amount in the booking id
+            $sql="SELECT total_price,package_id FROM booking where booking_id=?";
+            $stmt=$this->mysqli->prepare($sql);
+            if(!$stmt)
+            {
+                $this->error('Failed to prepare statement',500);
+                return;
+            }
+            $stmt->bind_param("i",$Booking_id);
+            if($stmt->execute())
+            $result=$stmt->get_result();
+            if($result->num_rows===0)
+            {
+                $stmt->close();
+                $this->error('Invalid booking_id',401);
+                return;
+            }
+            $row = $result->fetch_assoc();
+            $price = $row["total_price"];
+            $pack_id = $row["package_id"];
+            $stmt->close();
+            if($amount!=$price)
+            {
+                $this->error("Amount entered is less than checkout price",400);
+                return;
+            }
+            //make payment
+            $status="";
+            if($Method=="cash")
+            {
+                $status="pending";
+            }
+            else 
+            {
+                $status="completed";
+            }
+            $sql="INSERT INTO payment (booking_id,payment_method,status,reference,amount) Values(?,?,?,?,?)";
+            $stmt=$this->mysqli->prepare($sql);
+            $stmt->bind_param("isssd",$Booking_id,$Method,$status,$reference,$amount);
+            if($stmt->execute())
+            {
+                $stmt->close();
+                $sqs="UPDATE booking SET booking_status='confirmed' WHERE booking_id=?";
+                $st=$this->mysqli->prepare($sqs);
+                $st->bind_param("i",$Booking_id);
+                if($st->execute())
+                {
+                    $st->close();
+                }
+                else
+                {
+                    $st->close();
+                    $this->error("Failed to update booking status", 500);
+                    return;
+                }
+                $sql="UPDATE package set quantity=quantity-? WHERE package_id=?";
+                $stmt=$this->mysqli->prepare($sql);
+                $stmt->bind_param("ii",$Quantity,$pack_id);
+                if($stmt->execute())
+                {
+                    $stmt->close();
+                    $this->success([]);
+                    return;
+                }
+                $stmt->close();
+                $this->error("Failed to update package", 500);
+                return;
+            }
+            $stmt->close();
+            $this->error('Failed to Transfer',500);
+            
+        }
+        private function checkBooking($input)
+        {
+            if(!isset($input["package_id"]))
+            {
+                $this->error("Missing Package_id",400);
+                return;
+            }
+            if(!isset($input["Quantity"]))
+            {
+                $this->error("Missing number of packages to be booked",400);
+                return;
+            }
+            $pack_id=(int)$input["package_id"];
+            $Quantity=(int)$input["Quantity"];
+            if($Quantity<=0)
+            {
+                $this->error("invalid number of packages to be booked",400);
+                return;
+            }
+            $sql="SELECT quantity FROM package where package_id=?";
+            $stmt=$this->mysqli->prepare($sql);
+            $stmt->bind_param("i",$pack_id);
+            $stmt->execute();
+            $result=$stmt->get_result();
+            if($result->num_rows===0) 
+            {
+                $stmt->close();
+                $this->error('Invalid package_id',401);
+                return;
+            } 
+            $r=$result->fetch_assoc();
+            $stmt->close();
+            if($r["quantity"]<$Quantity)
+            {
+                $this->error("Sorry, only $Quantity package(s) are available.",409);
+                return;
+            }
+            $price=100;
+            $sql="SELECT price FROM package where package_id=?";
+            $stmt=$this->mysqli->prepare($sql);
+            $stmt->bind_param("i",$pack_id);
+            if($stmt->execute())
+            {
+                $result=$stmt->get_result();
+                $price=$result->fetch_assoc()["price"];
+                $stmt->close();
+            }
+            else
+            {
+                $stmt->close();
+                $this->error('Invalid package_id',401);
+                return;
+            }
+            $price=$price*$Quantity;
+            $this->success(["total_price"=>$price]);
+        }
+        private function packageInfo($Input)
+        {
+            if(!isset($Input["package_id"]))
+            {
+                $this->error("Missing Package_id");
+                return;
+            }
+            $package=(int)$Input["package_id"];
+            $sql="SELECT * FROM package where package_id=?";
+            $stmt=$this->mysqli->prepare($sql);
+            if(!$stmt)
+            {
+                $this->error("Failed to prepare statement",500);
+                return;
+            }
+            $stmt->bind_param("i",$package);
+            $packageinfo;
+            if($stmt->execute())
+            {
+                
+                $result=$stmt->get_result();
+                if($result->num_rows===0)
+                {
+                    $this->error("Invalid Pacakge_id");
+                    return;
+                }
+                $packageinfo=$result->fetch_assoc();
+                $stmt->cose();
+                $this->success($packageInfo);
+                return;
+            }
+            $stmt->close();
+            $this->error("Failed to pullpackage info");
+            return;
+        }
+        private function packages($input)
+        {
+            $sql="SELECT p.*, a.agency_name,d.city FROM package p left join travelagent a ON a.agent_id=p.agent_id INNER JOIN destination d ON d.dest_id=p.dest_id";
+            $stmt=$this->mysqli->prepare($sql);
+            if(!$stmt)
+            {
+                $this->error("failed to prepare a statement",500);
+                return;
+            }
+            $stmt->execute();
+            $result=$stmt->get_result();
+            if($result->num_rows===0)
+            {
+                $this->error("failed to pull pacakges",500);
+                return;
+            }
+            $packges=[];
+            while($row=$result->fetch_assoc())
+            {
+                $packages[]=
+                [
+                    "package_id"=>(int)$row["package_id"],
+                    "in_stock" => ((int)$row["quantity"] > 0) ? "In stock" : "Out of stock",
+                    "agency" => strtoupper($row["agency_name"]),
+                    "location" =>strtoupper($row["city"]),
+                    "title" =>$row["title"],
+                    "description" => $row["description"],
+                    "price" => (float)$row["price"]
+                ];
+            }
+            $stmt->close();
+            $this->success($packages);
+            return;
+        }
+        private function createPackage($input)
+        {
+            if(!isset($input["Agencyid"]))
+            {
+                $this-error("Missing Agencyid");
+                return;
+            }
+            if(!isset($input["img_url"]))
+            {
+                $this-error("Missing image_url");
+                return;
+            }
+            if(!isset($input["AgencyName"]))
+            {
+                $this-error("Missing AgencyName");
+                return;
+            }
+            if(!isset($input["Title"]))
+            {
+                $this-error("Missing Package title");
+                return;
+            }
+            if(!isset($input["packageDescription"]))
+            {
+                $this-error("Missing package Description");
+                return;
+            }
+            if(!isset($input["city"]))
+            {
+                $this-error("Missing City");
+                return;
+            }
+            if(!isset($input["Numberofpacks"]))
+            {
+                $this-error("Missing Number of packages to be created");
+                return;
+            }
+            if(!isset($input["country"]))
+            {
+                $this-error("Missing country");
+                return;
+            }
+            if(!isset($input["Destdescription"]))
+            {
+                $this-error("Missing destination Description");
+                return;
+            }
+            if(!isset($input["Typepackage"]))
+            {
+                $this-error("Missing Type of package");
+                return;
+            }
+            if(!isset($input["Price"]))
+            {
+                $this-error("Missing Price");
+                return;
+            }
+            if(!isset($input["ExpiryDate"]))
+            {
+                $this-error("Missing ExpiryDate");
+                return;
+            }
+            if(!isset($input["pquantity"]))
+            {
+                $this-error("Missing number of packages to be created");
+                return;
+            }
+            //accomodation
+            $accomodation="";
+            $accType="";
+            $accrating=4.0;
+            $accprice=0.0;
+            $description="";
+            //depture flight
+            $flightairline="";
+            $flightdeptair="";
+            $flightarrAir="";
+            $flightprice=0;
+            $flightdeptdate="";
+            $flightarrdate="";
+            $flightclass="";
+
+            //return flight details
+            $flightrairline="";
+            $rflightdeptair="";
+            $rflightarrAir="";
+            $rflightprice=0;
+            $rflightdeptdate="";
+            $rflightarrdate="";
+            $rflightclass="";
+            
+            $tourista="";
+            $catergory="";
+            $Tfee=0;
+            $Tdes="";
+            $trating=4.5;
+            $Topen="";
+            $tclose="";
+            
+
+            //restuarant
+            $restaurant="";
+            $restType="";
+            $resDesc="";
+            $resprice=0;
+            $resrating="";
+
+            if(isset($input["accomodation"]) && isset($input["accomodationType"]) && isset($input["accomodationrat"])&& isset($input["accomodationPrice"]) && isset($input["accDes"]))
+            {
+                $accomodation=$input["accomodation"];
+                $accType=$input["accomodationType"];
+                $accrating=(double)$input["accomodationrat"];
+                $accprice=(double)$input["accomodationPrice"];
+                $description=$input["accDes"];
+
+            }
+            if(isset($input["DeptAirline"]) && isset($input["DeptAir"])&& isset($input["ArrAir"]) && isset($input["flightprice"]) && isset($input["deptdate"]) && isset($input["arridate"])&& isset($input["class"]))
+            {
+                $flightairline=$input["DeptFlight"];
+                $flightdeptair=$input["DeptAir"];
+                $flightarrAir=$input["ArrAir"];
+                $flightprice=$input["flightprice"];
+                $flightdeptdate=$input["deptdate"];
+                $flightarrdate=$input["arridate"];
+                $flightclass=$input["class"];
+
+            }
+            if(isset($input["RetFlight"]) && isset($input["RDeptAir"])&& isset($input["RArrAir"]) && isset($input["Rflightprice"]) && isset($input["Rdeptdate"]) && isset($input["Rarridate"])&& isset($input["Rclass"]))
+            {
+                $flightrairline=$input["RetFlight"];
+                $rflightdeptair=$input["RDeptAir"];
+                $rflightarrAir=$input["RArrAir"];
+                $rflightprice=$input["Rflightprice"];
+                $rflightdeptdate=$input["Rdeptdate"];
+                $rflightarrdate=$input["Rarridate"];
+                $rflightclass=$input["Rclass"];
+            }
+            if(isset($input["tourist"]) && isset($input["Tcategory"]) && isset($input["Tfee"]) && isset($input["Tdescription"]) && isset($input["Trating"])&& isset($input["Topen"]) && isset($input["Tclose"]))
+            {
+                $tourista=$input["tourist"];
+                $catergory=$input["Tcategory"];
+                $Tfee=(double)$input["Tfee"];
+                $Tdes=$input["Tdescription"];
+                $trating=(double)$input["Trating"];
+                $Topen=$input["Topen"];
+                $tclose=$input["Tclose"];
+            }
+            if(isset($input["restaurant"]) && isset($input['restaurantType'])&& isset($input['restaurantPrice']) && isset($input["restaurantDes"]) && isset($input["restaurantRating"]))
+            {
+                $restaurant=$input["restaurant"];
+                $restType=$input['restaurantType'];
+                $resDesc=$input["restaurantDes"];
+                $resprice=(double)$input['restaurantPrice'];
+                $resrating=$input["restaurantRating"];
+            }
+            $id=(int)$input["Agencyid"];
+            $img_url=$input["image_url"];
+            $title=$input["Title"];
+            $name=$input["AgencyName"];
+            $description=$input["Description"];
+            $Type=$input["Typepackage"];
+            $price=(double)($input["Price"]);
+            $expdate=$input["ExpiryDate"];
+            $city=$input["city"];
+            $country=$input["country"];
+            $destdes=$input["Destdescription"];
+            $pquantity=$input["pquantity"];
+            if($name==""||$description==""||$Type==""||$city||$country||$destdes)
+            {
+                $this->error("Empty name or description or type of package or country or city");
+                return;
+            }
+            if($price<=0)
+            {
+                $this->error("Price can't be zero or negative");
+                return;
+            }
+            //checking if destination exists or i should put
+            if(!$this->desexist($city,$country,$destdes))
+            {
+                $this->error("Destination doesn't exist and couldn't be created");
+                return;
+            }
+            if(!$this->agencyexist($name,$id))
+            {
+                $this->error("Agency doesn't exist");
+                return;
+            }
+            if($flightairline!="")
+            {
+                if(!$this->checkflight($flightairline,$flightdeptair,$flightarrAir,$flightprice,$flightdeptdate,$flightarrdate,$flightclass))
+                {
+                    $this->error("The flight doesn't exist");
+                    return;
+                }
+            }
+            if($flightrairline!="")
+            {
+                if(!$this->checkflight($flightrairline,$rflightdeptair,$rflightarrAir,$rflightprice,$rflightdeptdate,$rflightarrdate,$rflightclass))
+                {
+                    $this->error("The return flight doesn't exist");
+                    return;
+                }
+            }
+            if($accomodation!="")
+            {
+                if(!$this->checkaccomodation($accomodation,$accType,$accrating,$accprice,$description,$city,$country,$destdes))
+                {
+                    $this->error("The flight doesn't exist");
+                    return;
+                }
+            }
+            if($restuarant!="")
+            {
+                if(!$this->checkrestuarnt($restaurant,$restType,$resDesc,$resprice,$resrating,$city,$country,$destdes))
+                {
+                    $this->error("The restuarant doesn't exist");
+                    return;
+                }
+            }
+            if($tourista!="")
+            {
+                if(!$this->tourist($tourista,$catergory,$Tfee,$Tdes,$trating,$Topen,$tclose,$city,$country,$destdes))
+                {
+                    $this->error("The restuarant doesn't exist");
+                    return;
+                }
+            }
+            //creating the package
+            //getting destination id
+            $sql="SELECT dest_id FROM destination WHERE city=? AND country=? AND description=?";
+            $stmt=$this->mysqli->prepare($sql);
+            $stmt->bind_param("sss",$city,$country,$destdes);
+            $stmt->execute();
+            $result=$stmt->get_result();
+            $row;
+            if($result=num_rows==0)
+            {
+                $stmt->close();
+                $this->error("this city doesn't exist");
+                return;
+            }
+            $row=$result->fetch_assoc();
+            $destid=$row["dest_id"];
+            $stmt->close(); 
+            //creating package 
+            $sql="INSERT INTO package (agent_id,dest_id,title,description,price,expirydate,quantity,type,img_url) VALUES(?,?,?,?,?,?,?,?,?)";
+            $stmt=$this->mysqli->prepare($sql);
+            if(!$stmt)
+            {
+                $this->error("failed to prepare statement to create package",500);
+                return;
+            }
+            $stmt->bind_param("iissdsiss",$id,$destid,$title,$description,$price,$expdate,$pquantity,$Type,$img_url);
+            if($stmt->execute())
+            {
+                if($flightrairline!="")
+                {
+                    $this->updateflight($airline,$deptair,$arrAir,$price,$deptdate,$arrdate,$class,$id,$destid,$title);
+                }
+                if($flightrairline!="")
+                {
+                    $this->updateflight($flightrairline,$rflightdeptair,$rflightarrAir,$rflightprice,$rflightdeptdate,$rflightarrdate,$rflightclass,$id,$destid,$title);
+                }
+                if($accomodation!="")
+                {
+                    $this->updateaccomodation($accomodation,$accType,$accrating,$accprice,$description,$city,$country,$destdes,$id,$destid,$title);
+                }
+                if($restuarant!="")
+                {
+                    $this->updaterestaurant($restaurant,$restType,$resDesc,$resprice,$resrating,$city,$country,$destdes,$id,$destid,$title);
+                }
+                if($tourista!="")
+                {
+                    $this->updateattraction($tourista,$catergory,$Tfee,$Tdes,$trating,$Topen,$tclose,$id,$destid,$title);
+                }
+                $stmt->close();
+                $this->success();
+                return;
+        }
+        $stmt->close();
+        $this->error("Failed to create package",500);
+        return;
+        }
+        private function desexist($city,$country,$destdes)
+        {
+            $slq="SELECT * FROM destination WHERE city=? AND country=? AND description=?";
+            $stmt=$this->mysqli->prepare($sql);
+            if(!$stmt)
+            {
+                $this->error("failed to prepare statement");
+                return;
+            }
+            $stmt->bind_param("sss",$city,$country,$destdes);
+            $stmt->execute();
+            $result=$stmt->get_result();
+            if($result->num_rows===0)
+            {
+                $stmt->close();
+                $slq="INSERT INTO destination (city,country,description) VALUES(?,?,?)";
+                $stmt=$this->mysqli->prepare($sql);
+                $stmt->bind_param("sss",$city,$country,$destdes);
+                if($stmt->execute())
+                {
+                    $stmt->close();
+                    return true;
+                }
+            }
+            else if($result->num_rows>=0)
+            {   
+                $stmt->close();
+                return true;
+            }
+            return false;
+        }
+        private function agencyexist($name,$id)
+        {
+            //checking if id works
+            $slq="SELECT * FROM travelagent where user_id=? AND agency_name";
+            $stmt=$this->mysqli->prepare($sql);
+            if(!$stmt)
+            {
+                $this->error("Failed to prepare statement",500);
+                return;
+            }
+            $stmt->bind_param("is",$id,$name);
+            $stmt->execute();
+            $result=$stm->get_result();
+            if($result->num_rows===0)
+            {
+                $stmt->close();
+                return false;
+            }
+            else if($result->num_rows===1)
+            {
+                $stmt->close();
+                return true;
+            }
+            return false;
+        }
+        private function checkflight($airline,$deptair,$arrAir,$price,$deptdate,$arrdate,$class)
+        {
+            $sql="SELECT * FROM flight where airline_name=?,departure_airport=?,arrival_airport=?,dept_date=?,arrival_datetime=?,classes=?,price=?";
+            $stmt=$this->mysqli->prepare($sql);
+            if(!$stmt)
+            {
+                $this->error("failed to prepare statement",500);
+                return;
+            }
+            $stmt->bind_param("ssssssd",$airline,$deptair,$arrAir,$deptdate,$arrdate,$class,$price);
+            $stmt->execute();
+            $result=$stmt->get_result();
+            if($result->num_rows==0)
+            {
+                $stmt->close();
+                $sql="INSERT INTO flight(airline_name,departure_airport,arrival_airport,dept_date,arrival_datetime,classes,price) Values(?,?,?,?,?,?,?)";
+                if(!$stmt)
+                {
+                    $this->error("failed to prepare statement",500);
+                    return;
+                }
+                $stmt->bind_param("ssssssd",$airline,$deptair,$arrAir,$deptdate,$arrdate,$class,$price);
+                if($stmt->execute())
+                {
+                    $stmt->close();
+                    return true;
+                }
+            }
+            else if($result->num_rows==1)
+            {
+                $stmt->close();
+                return true;
+            }
+            return false;
+        }
+        private function updateflight($airline,$deptair,$arrAir,$price,$deptdate,$arrdate,$class,$id,$destid,$title)
+        {
+            $sql="SELECT * FROM flight where airline_name=?,departure_airport=?,arrival_airport=?,dept_date=?,arrival_datetime=?,classes=?,price=?";
+            $stmt=$this->mysqli->prepare($sql);
+            if(!$stmt)
+            {
+                $this->error("failed to prepare statement",500);
+                return;
+            }
+            $stmt->bind_param("ssssssd",$airline,$deptair,$arrAir,$deptdate,$arrdate,$class,$price);
+            $stmt->execute();
+            $result=$stmt->get_result();
+            if($result->num_rows==0)
+            {
+                $stmt->close();
+                $this->error("Missing flight");
+                return;
+            }
+            $row=$result->fetch_assoc();
+            $flightid=$row["flight_id"];
+            $stmt->close();
+
+            //getting pack_id
+            $sql="SELECT package_id FROM package WHERE agency_id=? AND dest_id=? AND title=?";
+            $stmt=$this->mysqli->prepare($sql);
+            $stmt->bind_param("iis",$id,$destid,$title);
+            $stmt->execute();
+            $result=$stmt->get_result();
+            if($result->num_rows==0)
+            {
+                $stmt->close();
+                $this->error("Missing package");
+                return;
+            }
+            $row=$result->fetch_assoc();
+            $pack_id=$row["package_id"];
+            $stmt->close();
+            $sql="INSERT INTO packageflight (package_id,flight_id)VALUES(?,?)";
+            $stmt->$this->mysqli->prepare($slq);
+            if(!$stmt)
+            {
+                $this->error("failed to prepare statement for packageflight",500);
+                return;
+            }
+            $stmt->bind_param("ii",$pack_id,$flightid);
+            if(!$stmt->execute())
+            {
+                $stmt->close();
+                $this->error("failed to insert to packageflight",500);
+                return;
+            }
+            $stmt->close();
+            return;
+        }
+        private function checkaccomodation($accomodation,$accType,$accrating,$accprice,$description,$city,$country,$destdes)
+        {
+            $sql="SELECT * from accomodation WHERE acc_name=? AND acc_type=? AND rating=? AND price_per_night=? AND description=?";
+            $stmt=$this->mysqli->prepare($sql);
+            if(!$stmt)
+            {
+                $this->error("failed to prepare statement",500);
+                return;
+            }
+            $stmt->bind_param("ssdds",$accomodation,$accType,$accrating,$accprice,$description);
+            $stmt->execute();
+            $result=$stmt->get_result();
+            if($result->num_rows===0)
+            {
+                $stmt->close();
+                $sql="SELECT dest_id FROM destination WHERE city=? AND country=? AND description=?";
+                $stmt=$this->mysqli->prepare($sql);
+                $stmt->bind_param("sss",$city,$country,$destdes);
+                $stmt->execute();
+                $result=$stmt->get_result();
+                $row;
+                if($result=num_rows==0)
+                {
+                    $stmt->close();
+                    $this->error("this city doesn't exist");
+                    return;
+                }
+                $row=$result->fetch_assoc();
+                $destid=$row["dest_id"];
+                $stmt->close();
+                //inserting accomodation
+                $sql="INSERT INTO accomodation (dest_id,acc_name,acc_type,rating,price_per_night,description) VALUES(?,?,?,?,?,?)";
+                $stmt=$this->mysqli->prepare($sql);
+                $stmt->bind_param("issdds",$destid,$accomodation,$accType,$accrating,$accprice,$description);
+                if($stmt->execute())
+                {
+                    $stmt->close();
+                    return true;
+                }
+                $stmt->close();
+                return false;
+            }
+            else if($result->num_rows===1)
+            {
+                $stmt->close();
+                return true;
+            }
+            return false;
+        }
+        private function updateaccomodation($accomodation,$accType,$accrating,$accprice,$description,$city,$country,$destdes,$id,$destid,$title)
+        {
+            $sql="SELECT * from accomodation WHERE acc_name=? AND acc_type=? AND rating=? AND price_per_night=? AND description=?";
+            $stmt=$this->mysqli->prepare($sql);
+            if(!$stmt)
+            {
+                $this->error("failed to prepare statement",500);
+                return;
+            }
+            $stmt->bind_param("ssdds",$accomodation,$accType,$accrating,$accprice,$description);
+            $stmt->execute();
+            $result=$stmt->get_result();
+            if($result->num_rows===0)
+            {
+                $this->error("Missing accomodation in table");
+                return;
+            }   
+            $row=$result->fetch_assoc();
+            $acc_id=$row["acc_id"];
+            $stmt->close();
+            //getting pack_id
+            $sql="SELECT package_id FROM package WHERE agency_id=? AND dest_id=? AND title=?";
+            $stmt=$this->mysqli->prepare($sql);
+            $stmt->bind_param("iis",$id,$destid,$title);
+            $stmt->execute();
+            $result=$stmt->get_result();
+            if($result->num_rows==0)
+            {
+                $stmt->close();
+                $this->error("Missing package");
+                return;
+            }
+            $row=$result->fetch_assoc();
+            $pack_id=$row["package_id"];
+            $stmt->close();
+            $sql="INSERT INTO packageaccommodation (package_id,acc_id)VALUES(?,?)";
+            $stmt->$this->mysqli->prepare($slq);
+            if(!$stmt)
+            {
+                $this->error("failed to prepare statement for packageaccommodation",500);
+                return;
+            }
+            $stmt->bind_param("ii",$pack_id,$acc_id);
+            if(!$stmt->execute())
+            {
+                $stmt->close();
+                $this->error("failed to insert to packageflight",500);
+                return;
+            }
+            $stmt->close();
+            return;
+        }
+        private function checkrestuarnt($restaurant,$restType,$resDesc,$resprice,$resrating,$city,$country,$destdes)
+        {
+            $sql="SELECT * FROM restaurant WHERE name=? AND type=? AND fee=? AND description=? AND rating=?";
+            $stmt=$this->mysqli->prepare($sql);
+            if(!$stmt)
+            {
+                $this->error("failed to prepare statement",500);
+                return;
+            }
+            $stmt->bind_param("ssdsd",$restaurant,$restType,$resprice,$resDesc,$resrating);
+            $stmt->execute();
+            $result=$stmt->get_result();
+            if($result->num_rows===0)
+            {
+                $stmt->close();
+                $sql="SELECT dest_id FROM destination WHERE city=? AND country=? AND description=?";
+                $stmt=$this->mysqli->prepare($sql);
+                $stmt->bind_param("sss",$city,$country,$destdes);
+                $stmt->execute();
+                $result=$stmt->get_result();
+                $row;
+                if($result=num_rows==0)
+                {
+                    $stmt->close();
+                    $this->error("this city doesn't exist");
+                    return;
+                }
+                $row=$result->fetch_assoc();
+                $destid=$row["dest_id"];
+                $stmt->close();
+                //inserting restuarant
+                $sql="INSERT INTO restaurant (dest_id,name,type,fee,description,rating) VALUES(?,?,?,?)";
+                $stmt->bind_param("issdsi",$destid,$restaurant,$restType,$resprice,$resDesc,$resrating);
+                if($stmt->execute())
+                {
+                    $stmt->close();
+                    return true;
+                }
+                $stmt->close();
+                return false;
+            }
+            else if($result->num_rows===1)
+            {
+                $stmt->close();
+                return true;
+            }
+            $stmt->close();
+            return false;
+        }
+        private function updaterestaurant($restaurant,$restType,$resDesc,$resprice,$resrating,$destdes,$id,$destid,$title)
+        {
+            $sql="SELECT * FROM restaurant WHERE name=? AND type=? AND fee=? AND description=? AND rating=?";
+            $stmt=$this->mysqli->prepare($sql);
+            if(!$stmt)
+            {
+                $this->error("failed to prepare statement",500);
+                return;
+            }
+            $stmt->bind_param("ssdsd",$restaurant,$restType,$resprice,$resDesc,$resrating);
+            $stmt->execute();
+            $result=$stmt->get_result();
+            if($result->num_rows===0)
+            {
+                $this->error("Missing restaurant in table");
+                return;
+            }
+            $row=$result->fetch_assoc();
+            $rest_id=$row["res_id"];
+            //getting pack_id
+            $sql="SELECT package_id FROM package WHERE agency_id=? AND dest_id=? AND title=?";
+            $stmt=$this->mysqli->prepare($sql);
+            $stmt->bind_param("iis",$id,$destid,$title);
+            $stmt->execute();
+            $result=$stmt->get_result();
+            if($result->num_rows==0)
+            {
+                $stmt->close();
+                $this->error("Missing package");
+                return;
+            }
+            $row=$result->fetch_assoc();
+            $pack_id=$row["package_id"];
+            $stmt->close();
+
+            $sql="INSERT INTO packagerestaurant (package_id,res_id)VALUES(?,?)";
+            $stmt->$this->mysqli->prepare($slq);
+            if(!$stmt)
+            {
+                $this->error("failed to prepare statement for packageaccommodation",500);
+                return;
+            }
+            $stmt->bind_param("ii",$pack_id,$rest_id);
+            if(!$stmt->execute())
+            {
+                $stmt->close();
+                $this->error("failed to insert to packageflight",500);
+                return;
+            }
+            $stmt->close();
+            return;
+        }
+        private function tourist($tourista,$catergory,$Tfee,$Tdes,$trating,$Topen,$tclose,$city,$country,$destdes)
+        {
+            $sql="SELECT * FROM attraction WHERE name=? AND category=? AND fee=?";
+            $stmt=$this->mysqli->prepare($sql);
+            if(!$stmt)
+            {
+                $this->error("failed to prepare statement",500);
+                return;
+            }
+            $stmt->bind_param("ssd",$tourista,$catergory,$Tfee);
+            $stmt->execute();
+            $result=$stmt->get_result();
+            if($result->num_rows===0)
+            {
+                $stmt->close();
+                $stmt->close();
+                $sql="SELECT dest_id FROM destination WHERE city=? AND country=? AND description=?";
+                $stmt=$this->mysqli->prepare($sql);
+                $stmt->bind_param("sss",$city,$country,$destdes);
+                $stmt->execute();
+                $result=$stmt->get_result();
+                $row;
+                if($result=num_rows==0)
+                {
+                    $stmt->close();
+                    $this->error("this city doesn't exist");
+                    return;
+                }
+                $row=$result->fetch_assoc();
+                $destid=$row["dest_id"];
+                $stmt->close();
+                //inserting in tourist attraction
+                $sql="INSERT INTO attraction (dest_id,name,catergory,fee,description,rating,opening_time,closing_time) VALUES(?,?,?,?,?,?,?,?)";
+                $stmt->bind_param("issdsdss",$destid,$tourista,$catergory,$Tfee,$Tdes,$trating,$Topen,$tclose);
+                if($stmt->execute())
+                {
+                    $stmt->close();
+                    return true;
+                }
+                $stmt->close();
+                return false;
+            }
+            else if($result->num_rows===1)
+            {
+                $stmt->close();
+                return true;
+            }
+            $stmt->close();
+            return false;
+        }
+        private function updateattraction($tourista,$catergory,$Tfee,$Tdes,$trating,$Topen,$tclose,$id,$destid,$title)
+        {
+            $sql="SELECT * FROM attraction WHERE name=? AND category=? AND fee=?";
+            $stmt=$this->mysqli->prepare($sql);
+            if(!$stmt)
+            {
+                $this->error("failed to prepare statement",500);
+                return;
+            }
+            $stmt->bind_param("ssd",$tourista,$catergory,$Tfee);
+            $stmt->execute();
+            $result=$stmt->get_result();
+            if($result->num_rows===0)
+            {
+                $this->error("Failed to update packagedattraction due to no attraction in table");
+                return;
+            }
+            $row=$result->fetch_assoc();
+            $att_id=$row["att_id"];
+            //getting pack_id
+            $sql="SELECT package_id FROM package WHERE agency_id=? AND dest_id=? AND title=?";
+            $stmt=$this->mysqli->prepare($sql);
+            $stmt->bind_param("iis",$id,$destid,$title);
+            $stmt->execute();
+            $result=$stmt->get_result();
+            if($result->num_rows==0)
+            {
+                $stmt->close();
+                $this->error("Missing package");
+                return;
+            }
+            $row=$result->fetch_assoc();
+            $pack_id=$row["package_id"];
+            $stmt->close();
+
+            $sql="INSERT INTO packageattraction (package_id,att_id)VALUES(?,?)";
+            $stmt->$this->mysqli->prepare($slq);
+            if(!$stmt)
+            {
+                $this->error("failed to prepare statement for packageaccommodation",500);
+                return;
+            }
+            $stmt->bind_param("ii",$pack_id,$att_id);
+            if(!$stmt->execute())
+            {
+                $stmt->close();
+                $this->error("failed to insert to packageflight",500);
+                return;
+            }
+            $stmt->close();
+            return;
+        }
+        private function updatePackage($input)
+        {
+            if(!isset($input["Agencyid"]))
+            {
+                $this-error("Missing Agencyid");
+                return;
+            }
+            if(!isset($input["packageTitle"]))
+            {
+                $this-error("Missing Package Title");
+                return;
+            }
+            $packdes="";
+            $expdate="";
+            $price=-1.0;
+            $status="";
+            $Quantity=-1;
+            $img_url="";
+            if(isset($input["packageDescription"]))
+            {
+                $packdes=$input["packageDescription"];
+            }
+            if(isset($input["img_url"]))
+            {
+                $img_url=$input["img_url"];
+            }
+            if(isset($input["expdate"]))
+            {
+                $expdate=$input["packageDescription"];
+            }
+            if(isset($input["price"]))
+            {
+                $price=$input["price"];
+            }
+            if(isset($input["status"]))
+            {
+                $status=$input["status"];
+            }
+            if(isset($input["Quantity"]))
+            {
+                $Quantity=$input["Quantity"];
+            }
+            $Agen_id=$input["Agencyid"];
+            $title=$input["packageTitle"];
+            if($packdes!="")
+            {
+                $sql="UPDATE package SET description=? where agent_id=? AND title=? ";
+                $stmt=$this->mysqli->prepare($slq);
+                if(!$stmt)
+                {
+                    $this->error("failed to prepare statement for updating package",500);
+                    return;
+                }
+                $stmt->bind_param("sis",$packdes,$Agen_id,$title);
+                if(!$stmt->execute())
+                {
+                    $stmt->close();
+                    $this->error("failed to update package description",500);
+                    return; 
+                }
+
+            }
+            if($expdate!="")
+            {
+                $sql="UPDATE package SET expiry_date=? where agent_id=? AND title=? ";
+                $stmt=$this->mysqli->prepare($slq);
+                if(!$stmt)
+                {
+                    $this->error("failed to prepare statement for updating package",500);
+                    return;
+                }
+                $stmt->bind_param("sis",$expdate,$Agen_id,$title);
+                if(!$stmt->execute())
+                {
+                    $stmt->close();
+                    $this->error("failed to update package expirydate",500);
+                    return; 
+                }
+            }
+            if(!$price<=0)
+            {
+                $sql="UPDATE package SET price=? where agent_id=? AND title=? ";
+                $stmt=$this->mysqli->prepare($slq);
+                if(!$stmt)
+                {
+                    $this->error("failed to prepare statement for updating package",500);
+                    return;
+                }
+                $stmt->bind_param("dis",$price,$Agen_id,$title);
+                if(!$stmt->execute())
+                {
+                    $stmt->close();
+                    $this->error("failed to update package price",500);
+                    return; 
+                }
+            }
+            if($status!="")
+            {
+                $sql="UPDATE package SET status=? where agent_id=? AND title=?";
+                $stmt=$this->mysqli->prepare($slq);
+                if(!$stmt)
+                {
+                    $this->error("failed to prepare statement for updating package",500);
+                    return;
+                }
+                $stmt->bind_param("sis",$status,$Agen_id,$title);
+                if(!$stmt->execute())
+                {
+                    $stmt->close();
+                    $this->error("failed to update package status",500);
+                    return; 
+                }
+            }
+            if(!$Quantity<=0)
+            {
+                $sql="UPDATE package SET quantity=? where agent_id=? AND title=?";
+                $stmt=$this->mysqli->prepare($slq);
+                if(!$stmt)
+                {
+                    $this->error("failed to prepare statement for updating package",500);
+                    return;
+                }
+                $stmt->bind_param("iis",$Quantity,$Agen_id,$title);
+                if(!$stmt->execute())
+                {
+                    $stmt->close();
+                    $this->error("failed to update package quantity",500);
+                    return; 
+                }
+            }
+            if($img_url!="")
+            {
+                $sql="UPDATE package SET img_url=? where agent_id=? AND title=?";
+                $stmt=$this->mysqli->prepare($slq);
+                if(!$stmt)
+                {
+                    $this->error("failed to prepare statement for updating package",500);
+                    return;
+                }
+                $stmt->bind_param("sis",$Quantity,$Agen_id,$title);
+                if(!$stmt->execute())
+                {
+                    $stmt->close();
+                    $this->error("failed to update package img_url",500);
+                    return; 
+                }
+            }
+        }
+        private function deletePackage($input)
+        {
+            if(!isset($input["Agencyid"]))
+            {
+                $this-error("Missing Agencyid");
+                return;
+            }
+            if(!isset($input["packageTitle"]))
+            {
+                $this-error("Missing Package Title");
+                return;
+            }
+            if(!isset($input["packagetype"]))
+            {
+                $this-error("Missing Package Type");
+                return;
+            }
+            if(!isset($inpute["expiry_date"]))
+            {
+                $this-error("Missing expiry_date");
+                return;
+            }
+            $agency_id=$input["Agencyid"];
+            $packagetitle=$input["packageTitle"];
+            $packagetype=$input["packagetype"];
+            $expirydate=$input["expiry_date"];
+            $slq="DELETE package where agent_id=? AND title=? AND type=? AND expiry_date=?";
+            $stmt=$this->mysqli->prepare($sql);
+            if(!$stmt)
+            {
+                $this->error("failed to prepare statement for deleting package",500);
+                return;
+            }
+            $stmt->bind_param("isss",$agency_id,$packagetitle,$packagetype,$expirydate);
+            if($stmt->execute())
+            {
+                $stmt->close();
+                $this->success();
+                return;
+            }
+            $stmt->close();
+            $this->error("failed to delete package",500);
+            return;
+        }
+        private function allPackages($input)
+        {
+            if(!isset($input["Agencyid"]))
+            {
+                $this-error("Missing Agencyid");
+                return;
+            }
+            $sql="SELECT * From package where agent_id=?";
+            $stmt=$this->mysqli->prepare($sql);
+            if(!$stmt)
+            {
+                $this->error("failed to prepare statement for deleting package",500);
+                return;
+            }
+            $stmt->bind_param("i",$agent_id);
+            $stmt->execute();
+            $result=$stmt->get_result();
+            if($result->num_rows==0)
+            {
+                $this->error("invalid agency_id");
+                return;
+            }
+            $allpackages=[];
+            while($row=$result->fetch_assoc())
+            {
+                $allpackages[]=
+                [
+                    "title"=>$row["title"],
+                    "description"=>$row["description"],
+                    "img_url"=>$row["img_url"],
+                    "price"=>$row["price"],
+                    "type"=>$row["title"],
+                    "status"=>$row["status"],
+                    "quantity"=>$row["quantity"],
+                    "creation"=>$row["created_at"]
+                ];
+            }
+            $this->success($allpackages);
+            return;
+        }
+}
+// Run API
+$api = new API();
+$api->handleRequest();
+?> 

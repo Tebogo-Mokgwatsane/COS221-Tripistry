@@ -234,7 +234,8 @@ submitBtn.addEventListener("click", () => {
                 badge.innerHTML = "&#10003; Reviewed";
                 btn.replaceWith(badge);
             }
-            alert("Thank you! Your review has been submitted.");
+            //alert("Thank you! Your review has been submitted.");
+            console.log("Review submitted successfully.");
             activePackageId = null;
         } else {
             modalError.textContent = data.message || "Failed to submit review.";

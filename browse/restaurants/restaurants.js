@@ -100,7 +100,7 @@ function renderRestaurants(list) {
         ? `<span class="free">Free</span>`
         : `R${parseFloat(r.fee).toLocaleString()}`;
     div.innerHTML = `
-            <img src="${r.img_url || "https://via.placeholder.com/400x220"}" alt="${r.name}">
+            
             <div class="restaurant-info">
                 <h3>${r.name}</h3>
                 <p class="location">${r.city || ""}, ${r.country || ""}</p>

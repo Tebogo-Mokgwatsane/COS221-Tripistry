@@ -12,9 +12,9 @@
 <nav>
         <div class="navbar">
             <div class="logo">
-                <a href="../../traveller/">
+                <a href="../../index.php">
                     <div class="img-container">
-                        <img src="../../img/icons/compass.svg" alt="Compass Logo">
+                        <img src="/COS221-Tripistry/img/icons/compass.svg" alt="Compass Logo">
                     </div>
                 </a>
                 <p>Tripistry</p>
@@ -22,51 +22,51 @@
             <div class="middle-section">
                 <ul>
                     <li>
-                        <a href="../../traveller/index.php">Packages</a>
+                        <a href="/COS221-Tripistry/traveller/index.php">Packages</a>
+                    </li>
+                    <!-- <li>
+                        <a href="bookings.php">Bookings</a>
+                    </li> -->
+                    <li>
+                        <a href="/COS221-Tripistry/traveller/favourites.php">Favourites</a>
                     </li>
                     <li>
-                        <a href="../../traveller/bookings.php">Bookings</a>
-                    </li>
-                    <li>
-                        <a href="../../traveller/favourites.php">Favourites</a>
-                    </li>
-                    <li>
-                        <a href="../../traveller/reviews.php">Reviews</a>
+                        <a href="/COS221-Tripistry/traveller/reviews.php">Reviews</a>
                     </li>
                     <li class="explore-btn">
                         <button id="explore-btn">
                             Explore
-                            <img src="../../img/icons/chevron-down.svg" alt="Chevron Down">
+                            <img src="/COS221-Tripistry/img/icons/chevron-down.svg" alt="Chevron Down">
                         </button>
                         <div id="dropdown">
                             <ul class="explore-dropdown">
                                 <li>
-                                    <a href="../destinations/destinations.php">
-                                        <img src="../../img/icons/map-pin.svg" alt="Map Pin">
+                                    <a href="/COS221-Tripistry/browse/destinations/destinations.php">
+                                        <img src="/COS221-Tripistry/img/icons/map-pin.svg" alt="Map Pin">
                                         Destinations
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="../flights/flights.php">
-                                        <img src="../../img/icons/plane-black.svg" alt="Plane">
+                                    <a href="/COS221-Tripistry/browse/flights/flights.php">
+                                        <img src="/COS221-Tripistry/img/icons/plane-black.svg" alt="Plane">
                                         Flights
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="../accommodations/accommodations.php">
-                                        <img src="../../img/icons/bed.svg" alt="Bed icon">
+                                    <a href="/COS221-Tripistry/browse/accommodations/accommodations.php">
+                                        <img src="/COS221-Tripistry/img/icons/bed.svg" alt="Bed icon">
                                         Accommodations
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="../attractions/attractions.php">
-                                        <img src="../../img/icons/camera.svg" alt="Camera icon">
+                                    <a href="/COS221-Tripistry/browse/attractions/attractions.php">
+                                        <img src="/COS221-Tripistry/img/icons/camera.svg" alt="Camera icon">
                                         Attractions
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="../restaurants/restaurants.php">
-                                        <img src="../../img/icons/utensils-crossed.svg" alt="Utinsils icons">
+                                    <a href="/COS221-Tripistry/browse/restaurants/restaurants.php">
+                                        <img src="/COS221-Tripistry/img/icons/utensils-crossed.svg" alt="Utinsils icons">
                                         Restaurants
                                     </a>
                                 </li>
@@ -77,12 +77,12 @@
             </div>
             <div class="login-section" id="login-section">
                 <div id="username-container">
-                    <img src="../../img/icons/user.svg" alt="User Icon">
+                    <img src="/COS221-Tripistry/img/icons/user.svg" alt="User Icon">
                     <p class="sign-in-txt" id="username"></p>
                 </div>
-                <button href="../../signup.html" class="logout-btn" >
-                    <img src="../../img/icons/log-out.svg" alt="Logout icon" id="logout-img-default">
-                    <img src="../../img/icons/log-out-white.svg" alt="Logout icon" id="logout-img-hover">
+                <button href="signup.html" class="logout-btn" id="logout">
+                    <img src="/COS221-Tripistry/img/icons/log-out.svg" alt="Logout icon" id="logout-img-default">
+                    <img src="/COS221-Tripistry/img/icons/log-out-white.svg" alt="Logout icon" id="logout-img-hover">
                     <span>Logout</span>
                 </button>
             </div>

@@ -1,4 +1,3 @@
-
 let flights = [];
 let selectedClasses = [];
 let currentPage = 1;
@@ -156,7 +155,7 @@ const showFlights = (flights) => {
     const flightDiv = document.createElement("div");
     flightDiv.classList.add("flight-item");
     flightDiv.innerHTML = `
-      <img class="flight-image" src="${flight.img_url}" alt="${flight.airline_name}">
+      
       <div class="flight-info">
         <h1>${flight.airline_name}</h1>
         <div class="from">
@@ -181,5 +180,3 @@ const showFlights = (flights) => {
     flightsContainer.appendChild(flightDiv);
   });
 };
-
-

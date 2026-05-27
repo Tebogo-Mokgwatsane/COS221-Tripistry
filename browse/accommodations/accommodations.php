@@ -4,23 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tripistry - Accommodations</title>
-    <link rel="stylesheet" href="accommodations.css">
     <link rel="stylesheet" href="../../css/navbar.css">
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="accommodations.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <?php include("../navbar.php"); ?>
-    
-    <div class="container" style="margin-top: 140px;">
-        <h2 class="accommodations-title">Accommodations</h2>
-        <p class="accommodations-subtitle">Find Your Perfect Stay</p>
+
+    <div class="container">
+        <div class="page-header">
+            <p class="r">EXPLORE</p>
+            <h2 class="accommodations-title">Accommodations</h2>
+            <p class="accommodations-subtitle">Find your perfect stay across Africa and beyond.</p>
+        </div>
+
         <div class="filters">
             <div class="filter-group">
-                <label  class="label">Price Per Night</label>
+                <label class="label">MAX PRICE / NIGHT</label>
                 <input type="range" id="max-price" min="0" max="5000" value="5000">
                 <span id="max-price-value">R5000</span>
             </div>
-            
             <div class="filter-group">
+                <label class="label">TYPE</label>
                 <div class="type-filters">
                     <button class="type-btn active" data-type="all">All</button>
                     <button class="type-btn" data-type="Hotel">Hotel</button>
@@ -32,11 +39,13 @@
 
         <div class="accommodation-grid" id="accommodations"></div>
     </div>
+
     <div class="pagination-container">
-        <button id="prevBtn" class="pagination-btn">Previous</button>
+        <button id="prevBtn" class="pagination-btn">← Previous</button>
         <span id="pageInfo" class="page-info">Page 1 of 1</span>
-        <button id="nextBtn" class="pagination-btn">Next</button>
+        <button id="nextBtn" class="pagination-btn">Next →</button>
     </div>
+
     <script src="accommodations.js"></script>
 </body>
 </html>
