@@ -975,7 +975,7 @@ private function updatePackage($data)
         SET title=?, dest_id=?, price=?, quantity=?, status=?, expiry_date=?, description=?
         WHERE package_id = ? AND agent_id = ?
     ");
-    $stmt->bind_param("sidsssii", $title, $destId, $price, $quantity, $status, $expiry, $desc, $packageId, $agentId);
+    $stmt->bind_param("sidisssii", $title, $destId, $price, $quantity, $status, $expiry, $desc, $packageId, $agentId);
     $stmt->execute();
     $stmt->close();
 

@@ -11,6 +11,7 @@
     <?php include("../navbar.php"); ?>
     
     <div class="container" style="margin-top: 140px;">
+        <p class="r">EXPLORE</p>
         <h2 class="restaurants-title">Restaurants</h2>
         <p class="restaurants-subtitle">Discover the Best Places to Eat</p>
         <div class="filters">

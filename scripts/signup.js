@@ -20,6 +20,7 @@ const agencyName = document.getElementById("agency-name");
 const agencyEmail = document.getElementById("agency-email");
 const agencyPassword = document.getElementById("agency-password");
 const registrationNum = document.getElementById("registration-num");
+const agenterr = document.getElementById("registration-num-error");
 
 // functions to handle switching user login and signup
 
@@ -119,7 +120,8 @@ form.addEventListener("submit", (e) => {
         const regNum = document.getElementById("registration-num").value.trim();
 
         if (!agencyName || !email || !password || !regNum) {
-            alert("All agency fields are required");// since we dont have error elements for agency form, using alert for now
+            //alert("All agency fields are required");// since we dont have error elements for agency form, using alert for now
+            agenterr.textContent = "All agency fields are required";
             return;
         }
 
@@ -165,14 +167,18 @@ form.addEventListener("submit", (e) => {
                 username: formData.username,
                 user_type: formData.user_type
             }));
-            window.location.href = "/traveller/";
+            //alert("Registration works");//For testing purposes
+            window.location.href = "login.html";
         } else {
+            //alert(data.message || "Registration failed");//for testing purposes
+            console.error("Registration failed:", data);
             passwordError.textContent = data.data;
         }
     })
     .catch(err => {
         console.error(err);
-        alert("Error connecting to server.");///catch stmtgit
+        //alert("Error connecting to server.");///catch stmt
+        console.error("Error connecting to server.", err);
     });
 });
 

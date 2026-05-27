@@ -101,7 +101,7 @@ function renderAttractions(list) {
         ? `<span class="free">Free</span>`
         : `R${parseFloat(attr.fee).toLocaleString()}`;
     div.innerHTML = `
-            <img src="${attr.img_url || "https://via.placeholder.com/400x220"}" alt="${attr.name}">
+            
             <div class="attraction-info">
                 <h3>${attr.name}</h3>
                 <p class="location">${attr.city || ""}, ${attr.country || ""}</p>

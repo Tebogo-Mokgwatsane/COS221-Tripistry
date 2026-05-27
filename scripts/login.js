@@ -62,7 +62,7 @@ function handleLogin() {
     const password = document.getElementById('password').value.trim();
 
     if (!email || !password) {
-        alert("Please fill in all fields");
+        //alert("Please fill in all fields");
         return;
     }
 
@@ -93,7 +93,7 @@ function handleLogin() {
 
             //User type should match selected tab
             if ((selectedType === "traveller" && userType !== "traveller") || (selectedType === "agency" && (userType !== "travel_agent"))) {
-                alert("Wrong account type. Please select the correct tab.");
+               // alert("Wrong account type. Please select the correct tab.");
                 return;
             }
 
@@ -103,14 +103,11 @@ function handleLogin() {
                 user_type: userType,
                 email: data.data.email,
                 fname: data.data.username.split(" ")[0],
-                apikey: data.data.apikey,
-                email: data.data.email,
+                apikey: data.data.apikey
             }));
 
             // Store API key in cookie
             document.cookie = `apiKey=${data.data.apikey}; path=/; max-age=18000`;//expires in 5hrs
-
-
             if (userType === "travel_agent") {
                 window.location.href = "agency/index.php";
             } else {
@@ -118,12 +115,14 @@ function handleLogin() {
             }
 
         } else {
-            alert(data.message || "Login failed");
+           // alert(data.message || "Login failed");
+           console.error("Login failed:", data);
+           passwordError.textContent = "Invalid email or password";
         }
     })
     .catch(err => {
         console.error(err);
         console.error("The raw server login response was:", err);
-        alert("Error connecting to server. Please try again.");
+        //alert("Error connecting to server. Please try again.");
     });
 }

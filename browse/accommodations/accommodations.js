@@ -112,7 +112,7 @@ function renderAccommodations(list) {
     const div = document.createElement("div");
     div.className = "accommodation-item";
     div.innerHTML = `
-      <img src="${acc.img_url || "https://via.placeholder.com/400x220"}" alt="${acc.acc_name}">
+      
       <div class="accommodation-info">
         <h3>${acc.acc_name}</h3>
         <p class="location">${acc.city}, ${acc.country}</p>

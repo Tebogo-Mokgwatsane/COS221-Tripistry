@@ -5,9 +5,7 @@ if (!id) window.location.href = "index.php";
 
 async function loadPackage() {
     try {
-
-        const res = await fetch('/api.php', {
-
+        const res = await fetch('/COS221-Tripistry/api.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ type: "GetPackage", package_id: id })
@@ -37,7 +35,7 @@ function renderHero(p) {
     const imgContainer = document.querySelector(".package-img-container");
     if (p.img_url) {
         imgContainer.style.cssText += `
-            background-image: url('/${p.img_url}');
+            background-image: url('/COS221-Tripistry/${p.img_url}');
             background-size: cover;
             background-position: center;
         `;
@@ -155,7 +153,7 @@ function renderRestaurants(restaurants) {
         el.className = "accommodation-card";
         el.innerHTML = `
             <div class="accommodation-img">
-                <img src="${r.img_url ? '/' + r.img_url : 'https://placehold.co/120x100?text=Food'}"
+                <img src="${r.img_url ? '/COS221-Tripistry/' + r.img_url : 'https://placehold.co/120x100?text=Food'}"
                      alt="${r.name}"
                      onerror="this.src='https://placehold.co/120x100?text=Food'">
             </div>
@@ -224,7 +222,7 @@ function renderSidebar(p) {
 const bookBtn = document.querySelector(".book-btn");
 if (bookBtn) {
     bookBtn.addEventListener("click", () => {
-        window.location.href = `/traveller/booking.php?package_id=${id}`;
+        window.location.href = `/COS221-Tripistry/traveller/booking.php?package_id=${id}`;
     });
 }
 
@@ -233,14 +231,14 @@ if (favBtn) {
     favBtn.addEventListener("click", () => {
         const apiKey = document.cookie.match(/apiKey=([^;]+)/)?.[1];
         if (!apiKey) { 
-            window.location.href = "/login.html"; 
+            window.location.href = "/COS221-Tripistry/login.html"; 
             return; 
         }
 
         favBtn.textContent = "Saving...";
         favBtn.disabled = true;
 
-        fetch("/api.php", {
+        fetch("/COS221-Tripistry/api.php", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ 

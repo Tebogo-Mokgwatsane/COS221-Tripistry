@@ -1,4 +1,3 @@
-
 let destinations = [];
 let currentPage = 1;
 const itemsPerPage = 12;
@@ -17,11 +16,10 @@ const showDestinations = (destinations) => {
     const destinationsDiv = document.createElement("div");
     destinationsDiv.classList.add("destination-item");
     destinationsDiv.innerHTML = `
-      <img class="destination-image" src="${destination.img_url}" alt="${destination.city}">
       <div class="destination-info">
         <h1>${destination.city}</h1>
         <div class="destination-header">
-          <img src="../../img/icons/map.svg" alt="map icon" class="icon">
+          <img src="/COS221-Tripistry/img/icons/map-pin.svg" alt="map icon" class="icon">
           <span>${destination.country}</span>
         </div>
       <p>${destination.description}</p>
@@ -84,7 +82,7 @@ const loadPage = () => {
   document.getElementById("destinations").innerHTML =
     `<p style="color:#888;">Loading destinations...</p>`;
 
-  fetch("../../api.php", {
+  fetch("/COS221-Tripistry/api.php", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({

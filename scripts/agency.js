@@ -76,23 +76,12 @@ function loadDestinations() {
     })
     .then(r => r.json())
     .then(data => {
-        if (data.status !== "success") {
-            console.log(data);
-            return;
-        }
-
-        const seen = new Set();
-
+        if (data.status !== "success") return;
         data.data.forEach(dest => {
-            if (!seen.has(dest.dest_id)) {
-                seen.add(dest.dest_id);
-
-                const opt = document.createElement("option");
-                opt.value = dest.dest_id;
-                opt.textContent = `${dest.destination_city}, ${dest.destination_country}`;
-
-                pkgDest.appendChild(opt);
-            }
+            const opt = document.createElement("option");
+            opt.value = dest.dest_id;
+            opt.textContent = `${dest.city}, ${dest.country}`;
+            pkgDest.appendChild(opt);
         });
     })
     .catch(err => console.error("Failed to load destinations:", err));
@@ -288,7 +277,7 @@ modalOverlay.addEventListener("click", e => {
 });
 
 // ── Submit create / edit ──────────────────────────────────────
-modalSubmit.addEventListener("click", () => {
+modalSubmit.addEventListener("click",  () => {
     modalError.textContent = "";
 
     if (!pkgTitle.value.trim())  { modalError.textContent = "Title is required.";       return; }
@@ -326,6 +315,8 @@ modalSubmit.addEventListener("click", () => {
     modalSubmit.disabled    = true;
     modalSubmit.textContent = "Saving...";
 
+    
+
     // No Content-Type header — browser sets it automatically for FormData
     fetch(API_BASE, {
         method: "POST",
@@ -352,7 +343,7 @@ modalSubmit.addEventListener("click", () => {
 });
 
 // ── Delete modal ──────────────────────────────────────────────
-function openDeleteModal(pkgId, title) {
+ function openDeleteModal(pkgId, title) {
     deletingPkgId = pkgId;
     deletePkgName.textContent = title;
     deleteOverlay.style.display = "flex";
@@ -375,6 +366,8 @@ deleteConfirm.addEventListener("click", () => {
 
     deleteConfirm.disabled    = true;
     deleteConfirm.textContent = "Deleting...";
+
+    
 
     fetch(API_BASE, {
         method: "POST",

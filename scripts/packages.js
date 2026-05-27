@@ -1,4 +1,4 @@
-const user = JSON.parse(localStorage.getItem("user")) || {};
+//const user = JSON.parse(localStorage.getItem("user")) || {};
 
 
 if(!user){ user = JSON.parse(localStorage.getItem("user")) || {};}
@@ -46,8 +46,107 @@ soloBtn.addEventListener("click", (e) => {
     }
 });
 
+let packages =[];
+
 // some mock data
-let packages = [];
+// let packages = [
+//   {
+//     package_id: 1,
+//     image_url: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e",
+//     in_stock: true,
+//     rating: 4.9,
+//     agency: "CAPE TOWN TOURS",
+//     location: "Cape Town, South Africa",
+//     title: "Table Mountain Adventure",
+//     package_type: "group",
+//     nights: "5 nights",
+//     price: 6125
+//   },
+//   {
+//     package_id: 2,
+//     image_url: "https://images.unsplash.com/photo-1516026672322-bc52d61a55d5",
+//     in_stock: false,
+//     rating: 4.7,
+//     agency: "WILD ESCAPES",
+//     location: "Kruger National Park, South Africa",
+//     title: "Big Five Safari Experience",
+//     package_type: "group",
+//     nights: "3 nights",
+//     price: 9850
+//   },
+//   {
+//     package_id: 3,
+//     image_url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
+//     in_stock: true,
+//     rating: 4.8,
+//     agency: "OCEANIC GETAWAYS",
+//     location: "Durban, South Africa",
+//     title: "Beachfront Relaxation Tour",
+//     package_type: "solo",
+//     nights: "7 nights",
+//     price: 4999
+//   },
+//   {
+//     package_id: 4,
+//     image_url: "https://images.unsplash.com/photo-1493246507139-91e8fad9978e",
+//     in_stock: true,
+//     rating: 5.0,
+//     agency: "JOZI TRAVEL CO.",
+//     location: "Johannesburg, South Africa",
+//     title: "City Lights Weekend",
+//     package_type: "group",
+//     nights: "2 nights",
+//     price: 2450
+//   },
+//   {
+//     package_id: 5,
+//     image_url: "https://images.unsplash.com/photo-1521295121783-8a321d551ad2",
+//     in_stock: true,
+//     rating: 4.6,
+//     agency: "MOUNTAIN TRAILS",
+//     location: "Drakensberg, South Africa",
+//     title: "Hiking & Camping Escape",
+//     package_type: "solo",
+//     nights: "4 nights",
+//     price:5300
+//   },
+//   {
+//     package_id: 6,
+//     image_url: "https://images.unsplash.com/photo-1470770841072-f978cf4d019e",
+//     in_stock: true,
+//     rating: 4.9,
+//     agency: "SUNSET VOYAGES",
+//     location: "Garden Route, South Africa",
+//     title: "Garden Route Discovery",
+//     package_type: "group",
+//     nights: "6 nights",
+//     price: 8700
+//   },
+//   {
+//     package_id: 7,
+//     image_url: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee",
+//     in_stock: true,
+//     rating: 4.5,
+//     agency: "CITYSCAPE TOURS",
+//     location: "Pretoria, South Africa",
+//     title: "Historical Landmarks Tour",
+//     package_type: "solo",
+//     nights: "1 night",
+//     price: 1799
+//   },
+//   {
+//     package_id: 8,
+//     image_url: "https://images.unsplash.com/photo-1469474968028-56623f02e42e",
+//     in_stock: false,
+//     rating: 4.8,
+//     agency: "BY AFRICAN SUN TRAVEL",
+//     location: "Limpopo, South Africa",
+//     title: "Luxury Bush Retreat",
+//     package_type: "group",
+//     nights: "8 nights",
+//     price: 12400
+//   }
+// ];
 
 
 
@@ -201,6 +300,7 @@ const renderPackages = (packagesArray, firstRender = false) => {
                         <span>${package.rating}</span>
                     </div>
                 </div>
+                    
             </div>
             <div class="card-text">
                 <p class="agency-name">${package.agency}</p>
@@ -233,3 +333,49 @@ const renderPackages = (packagesArray, firstRender = false) => {
 
     })
 }
+
+
+async function loadPackages() {
+    const apiKey = document.cookie.match(/apiKey=([^;]+)/)?.[1];
+
+    try {
+        const res = await fetch('/COS221-Tripistry/api.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                type: "Search", 
+                query: "",        // empty = return all packages
+                api_key: apiKey 
+            })
+        });
+
+        const data = await res.json();
+        if (data.status !== "success") {
+            cardsContainer.innerHTML = `<p class="not-found">Failed to load packages.</p>`;
+            return;
+        }
+
+        // Search already returns the right field names
+        packages = data.data.map(p => ({
+            package_id:   p.package_id,
+            image_url:    "/COS221-Tripistry/" + (p.image_url || "img/placeholder.jpg"),
+            in_stock:     !!p.in_stock,
+            rating:       parseFloat(p.rating) || 0,
+            agency:       p.agency || "UNKNOWN",
+            location:     p.location || "",
+            title:        p.title,
+            package_type: p.package_type || "solo",
+            nights:       "",   // not in DB yet
+            price:        parseFloat(p.price)
+        }));
+
+        filteredPackages = [...packages];
+        renderPackages(packages, true);
+
+    } catch (err) {
+        console.error("Failed to load packages:", err);
+        cardsContainer.innerHTML = `<p class="not-found">Could not connect to server.</p>`;
+    }
+}
+
+loadPackages();
