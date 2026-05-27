@@ -168,11 +168,17 @@ form.addEventListener("submit", (e) => {
                 user_type: formData.user_type
             }));
             //alert("Registration works");//For testing purposes
+            if (formData.user_type === "travel_agent") {
+                window.location.href = "agency/index.php";
+            } else if (formData.user_type === "traveller"){
+                window.location.href = "traveller/index.php";
+            } else {
             window.location.href = "login.html";
+            }
         } else {
             //alert(data.message || "Registration failed");//for testing purposes
             console.error("Registration failed:", data);
-            passwordError.textContent = data.data;
+            agenterr.textContent = "Invalid or unlicensed registration number provided.";
         }
     })
     .catch(err => {

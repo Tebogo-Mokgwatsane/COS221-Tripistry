@@ -68,7 +68,7 @@ ul {
 
 .login-section {
     display: flex;
-    gap: 20px;
+    gap: 7px;
 }
 
 .login-section a, #username-container {

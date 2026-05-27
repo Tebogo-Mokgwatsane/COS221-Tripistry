@@ -24,15 +24,12 @@
                     <li>
                         <a href="/COS221-Tripistry/traveller/index.php">Packages</a>
                     </li>
-                    <!-- <li>
-                        <a href="bookings.php">Bookings</a>
-                    </li> -->
                     <li>
                         <a href="/COS221-Tripistry/traveller/favourites.php">Favourites</a>
                     </li>
-                    <li>
+                    <!--<li>
                         <a href="../../traveller/booking.php">Bookings</a>
-                    </li>
+                    </li> -->
                     <li>
                         <a href="../../traveller/favourites.php">Favourites</a>
                     </li>

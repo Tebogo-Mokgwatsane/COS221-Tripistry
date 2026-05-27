@@ -3,7 +3,7 @@
 // agency.js — Agency dashboard logic
 // ============================================================
 
-const API_BASE = "/api.php";
+const API_BASE = "../api.php";
 
 // ── Guard: agencies only ─────────────────────────────────────
 const currentUser = JSON.parse(localStorage.getItem("user") || "{}");

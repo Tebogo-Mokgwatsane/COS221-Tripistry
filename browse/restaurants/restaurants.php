@@ -4,16 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tripistry - Restaurants</title>
-    <link rel="stylesheet" href="restaurants.css">
     <link rel="stylesheet" href="../../css/navbar.css">
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="restaurants.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <?php include("../navbar.php"); ?>
     
-    <div class="container" style="margin-top: 140px;">
+    <div class="container">
+        <div class="restaurants-header">
         <p class="r">EXPLORE</p>
         <h2 class="restaurants-title">Restaurants</h2>
         <p class="restaurants-subtitle">Discover the Best Places to Eat</p>
+        </div>
         <div class="filters">
             <div class="filter-group">
                 <label class="label">Average Price</label>

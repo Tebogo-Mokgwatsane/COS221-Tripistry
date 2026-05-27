@@ -1,3 +1,7 @@
+<?php
+require_once '../auth.php';
+requireRole('traveller');
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -51,7 +55,7 @@
             </div>
         </div>
     </div>
-    <!-- <script src="../scripts/traveller.js"></script> -->
+    <script src="../scripts/traveller.js"></script> 
     <script src="../scripts/packages.js"></script>
 </body>
 </html>

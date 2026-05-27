@@ -1,3 +1,7 @@
+<?php
+require_once '../auth.php';
+requireRole('traveller');
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,7 +35,7 @@
             </div>
             <h2>No bookings yet</h2>
             <p>Once you book a package it will appear here for you to review.</p>
-            <a href="packages.php" class="cta-btn">Browse Packages</a>
+            <a href="index.php" class="cta-btn">Browse Packages</a>
         </div>
     </div>
 

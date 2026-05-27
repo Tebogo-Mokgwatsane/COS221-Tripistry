@@ -1,5 +1,3 @@
-//const user = JSON.parse(localStorage.getItem("user")) || {};
-
 
 if(!user){ user = JSON.parse(localStorage.getItem("user")) || {};}
 
@@ -246,7 +244,7 @@ inStockOnly.addEventListener("change", (e) => {
 
 async function performSearch(query) {
     try {
-        const res = await fetch('/api.php', {
+        const res = await fetch('../api.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ type: "Search", query: query })
@@ -256,6 +254,10 @@ async function performSearch(query) {
 
         if (data.status === "success") {
             allPackages = data.data || [];
+            allPackages.forEach((package) => {
+                if(!package.activities)package.activities = [];
+                if(!package.activities.length)package.activities.length = 0;
+            });
             renderPackages(allPackages, true);
             packages = allPackages;
             filteredPackages = allPackages;
@@ -287,7 +289,7 @@ const renderPackages = (packagesArray, firstRender = false) => {
         packageCard.classList.add("package-card");
         packageCard.innerHTML = `
             <div class="card-img-container">
-                <img src="/${package.image_url}" alt="${package.title}">  
+                <img src="${package.image_url}" alt="${package.title}">  
                 <div class="availability-rating">
                     <div class="availability ${package.in_stock ? "in-stock" : "out-of-stock"}">
                         <span class="dot">•</span>
@@ -360,13 +362,14 @@ async function loadPackages() {
             package_id:   p.package_id,
             image_url:    "/COS221-Tripistry/" + (p.image_url || "img/placeholder.jpg"),
             in_stock:     !!p.in_stock,
-            rating:       parseFloat(p.rating) || 0,
+            rating:       parseFloat(p.rating) || 5,
             agency:       p.agency || "UNKNOWN",
             location:     p.location || "",
             title:        p.title,
             package_type: p.package_type || "solo",
             nights:       "",   // not in DB yet
-            price:        parseFloat(p.price)
+            price:        parseFloat(p.price),
+            activities:   p.activities || [] 
         }));
 
         filteredPackages = [...packages];

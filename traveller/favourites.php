@@ -1,3 +1,7 @@
+<?php
+require_once '../auth.php';
+requireRole('traveller');
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

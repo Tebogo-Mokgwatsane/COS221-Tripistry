@@ -27,7 +27,7 @@ requireRole('travel_agent');
                 <p class="sub">Manage your packages and grow your business.</p>
             </div>
             <button class="create-btn" id="create-package-btn">
-                <img src="/img/icons/plus.svg" alt="plus">
+                <img src="../img/icons/plus.svg" alt="plus">
                 Create Package
             </button>
         </div>

@@ -1,8 +1,12 @@
+<?php
+require_once '../auth.php';
+requireRole('traveller');
+?>
 <!DOCTYPE html>
 <html>
     <head>
         <title>Tripistry</title>
-        <link rel="stylesheet" href="../css/Booking.css">
+        <link rel="stylesheet" href="../css/booking.css">
     </head>
     <body>
         <h1><big>Package Booking</big></h1>

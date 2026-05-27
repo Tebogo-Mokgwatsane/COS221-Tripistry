@@ -45,17 +45,27 @@ function requireRole(string $requiredRole): void {
 }
 
 function redirectToLogin(string $message = ""): void {
+    session_start();
+    session_destroy();
+
+    // Clear API key cookie
+    setcookie("apiKey", "", time() - 3600, "/");
     $base = '/COS221-Tripistry';
     if ($message) {
-        header("Location: {$base}/Tripistry/login.html?error=" . urlencode($message));
+        header("Location: {$base}/login.html?error=" . urlencode($message));
     } else {
-        header("Location: {$base}/Tripistry/login.html");
+        header("Location: {$base}/login.html");
     }
     exit;
 }
 
 function redirectWrongRole(string $actualRole): void {
     $base = '/COS221-Tripistry';
+    session_start();
+    session_destroy();
+
+    // Clear API key cookie
+    setcookie("apiKey", "", time() - 3600, "/");
     if ($actualRole === 'traveller') {
         // Agency tried to access traveller page — send to agency dashboard
         header("Location: {$base}/agency/index.php?error=access_denied");
@@ -63,5 +73,6 @@ function redirectWrongRole(string $actualRole): void {
         // Traveller tried to access agency page — send to traveller dashboard
         header("Location: {$base}/traveller/index.php?error=access_denied");
     }
+exit;
     exit;
 }
