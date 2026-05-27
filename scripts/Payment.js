@@ -65,7 +65,7 @@ function handlePayment()
                             response.textContent = `Payment successful. You will be redirected to your bookings in ${seconds} seconds`;
                             if (seconds <= 0){
                                 clearInterval(countdown);
-                                window.location.href = "/traveller/bookings.html";
+                                window.location.href = "/traveller/reviews.php";
                             }
 
                         }, 1000);

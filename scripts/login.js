@@ -100,13 +100,16 @@ function handleLogin() {
             // Save to localStorage
             localStorage.setItem('user', JSON.stringify({
                 username: data.data.username,
-                user_type: userType
+                user_type: userType,
+                email: data.data.email,
+                fname: data.data.username.split(" ")[0],
+                apikey: data.data.apikey,
+                email: data.data.email,
             }));
 
             // Store API key in cookie
             document.cookie = `apiKey=${data.data.apikey}; path=/; max-age=18000`;//expires in 5hrs
 
-            alert("Welcome back, " + data.data.username + "!");
 
             if (userType === "travel_agent") {
                 window.location.href = "agency/index.php";

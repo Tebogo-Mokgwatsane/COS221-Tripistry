@@ -27,7 +27,7 @@ requireRole('travel_agent');
                 <p class="sub">Manage your packages and grow your business.</p>
             </div>
             <button class="create-btn" id="create-package-btn">
-                <img src="../img/icons/plus.svg" alt="plus">
+                <img src="/img/icons/plus.svg" alt="plus">
                 Create Package
             </button>
         </div>
@@ -150,6 +150,13 @@ requireRole('travel_agent');
                     <label class="label">DESCRIPTION</label>
                     <textarea id="pkg-desc" placeholder="Describe your package..." rows="4"></textarea>
                 </div>
+                <div class="modal-field full">
+    <label class="label">PACKAGE IMAGE</label>
+    <input type="file" id="pkg-image" accept="image/*">
+    <img id="pkg-image-preview" src="" alt="Preview" 
+         style="display:none;margin-top:8px;width:100%;max-height:180px;object-fit:cover;border-radius:8px;">
+    <p style="font-size:12px;color:gray;margin-top:4px;">JPG, PNG or WebP. Max 2MB.</p>
+</div>
                 <!-- Group Package -->
                 <div class="modal-field full">
                     <div class="toggle-row">
@@ -197,5 +204,18 @@ requireRole('travel_agent');
     </div>
 
     <script src="../scripts/agency.js"></script>
+<script>
+document.getElementById("pkg-image").addEventListener("change", function () {
+    const preview = document.getElementById("pkg-image-preview");
+    const file = this.files[0];
+    if (file) {
+        preview.src = URL.createObjectURL(file);
+        preview.style.display = "block";
+    } else {
+        preview.src = "";
+        preview.style.display = "none";
+    }
+});
+</script>
 </body>
 </html>

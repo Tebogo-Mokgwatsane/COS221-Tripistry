@@ -1,250 +1,270 @@
 const params = new URLSearchParams(window.location.search);
 const id = params.get("package_id");
 
-const getPackageInfo = async () => {
+if (!id) window.location.href = "index.php";
+
+async function loadPackage() {
     try {
-        const res = await fetch('../api.php', {
+
+        const res = await fetch('/api.php', {
+
             method: 'POST',
-            headers: { 'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                type: "GetPackage",
-                package_id: id
-            })
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ type: "GetPackage", package_id: id })
         });
 
         const data = await res.json();
-        console.log(data);
-        
+        if (data.status !== "success") {
+            document.querySelector(".package-page").innerHTML = `<p>Package not found.</p>`;
+            return;
+        }
+
+        const p = data.data;
+        renderHero(p);
+        renderActivities(p.activities);
+        renderFlights(p.flights);
+        renderRestaurants(p.restaurants);
+        renderReviews(p.reviews);
+        renderSidebar(p);
+
     } catch (err) {
-        console.log(err)
+        console.error("Failed to load package:", err);
     }
 }
 
-getPackageInfo();
-
-const activities = [
-    {
-        day: 1,
-        title: "Cape Town Arrival",
-        activities: [
-          {
-            time: "14:00",
-            activity: "Airport welcome",
-            description: "Meet the group and transfer to the hotel."
-          },
-          {
-            time: "17:00",
-            activity: "Camps Bay sunset",
-            description: "Relax by the beach and enjoy ocean views."
-          }
-        ]
-
-    },
-
-    {
-        day: 2,
-        title: "Table Mountain Adventure",
-        activities: [
-        {
-            time: "08:00",
-            activity: "Table Mountain cableway",
-            description: "Ride to the summit for panoramic city views."
-        },
-        {
-            time: "10:30",
-            activity: "Guided mountain walk",
-            description: "Explore scenic trails and viewpoints."
-        },
-        {
-            time: "13:00",
-            activity: "Picnic at the top",
-            description: "Enjoy lunch overlooking Cape Town."
-        },
-        {
-            time: "18:30",
-            activity: "Dinner at the V&A Waterfront",
-            description: "Enjoy local seafood and live music."
-        }
-        ]
-    },
-
-    {
-        day: 3,
-        title: "Cape Peninsula Tour",
-        activities: [
-        {
-            time: "07:30",
-            activity: "Chapman’s Peak drive",
-            description: "Travel along one of the world’s most scenic roads."
-        },
-        {
-            time: "10:00",
-            activity: "Cape Point visit",
-            description: "Explore the dramatic cliffs and lighthouse."
-        },
-        {
-            time: "13:00",
-            activity: "Boulders Beach penguins",
-            description: "See the famous African penguin colony."
-        },
-        {
-            time: "17:00",
-            activity: "Fish and chips by the harbour",
-            description: "Enjoy fresh seafood in Simon’s Town."
-        }
-        ]
-    },
-
-    {
-        day: 4,
-        title: "Wine Tram Experience",
-        activities: [
-        {
-            time: "09:00",
-            activity: "Travel to Franschhoek",
-            description: "Journey into the Cape Winelands."
-        },
-        {
-            time: "11:00",
-            activity: "Wine tram tour",
-            description: "Visit multiple wine estates by tram."
-        },
-        {
-            time: "13:30",
-            activity: "Wine tasting lunch",
-            description: "Pair local wines with gourmet dishes."
-        },
-        {
-            time: "18:00",
-            activity: "Return to Cape Town",
-            description: "Relax after a full day in the vineyards."
-        }
-        ]
-    },
-
-    {
-        day: 5,
-        title: "Adventure Day",
-        activities: [
-        {
-            time: "08:00",
-            activity: "Paragliding from Signal Hill",
-            description: "Soar above the coastline and city skyline."
-        },
-        {
-            time: "12:00",
-            activity: "Bo-Kaap exploration",
-            description: "Visit the colourful streets and local cafés."
-        },
-        {
-            time: "16:00",
-            activity: "Sunset catamaran cruise",
-            description: "Cruise along the Atlantic coastline."
-        }
-        ]
-    },
-
-    {
-        day: 6,
-        title: "Safari Experience",
-        activities: [
-        {
-            time: "05:30",
-            activity: "Early safari departure",
-            description: "Travel to a nearby private game reserve."
-        },
-        {
-            time: "09:00",
-            activity: "Morning game drive",
-            description: "Spot lions, elephants, rhinos, and giraffes."
-        },
-        {
-            time: "13:00",
-            activity: "Bush lunch",
-            description: "Enjoy lunch surrounded by nature."
-        },
-        {
-            time: "16:00",
-            activity: "Second game drive",
-            description: "Look for wildlife during golden hour."
-        }
-        ]
-    },
-
-    {
-        day: 7,
-        title: "Culture & Food",
-        activities: [
-        {
-            time: "09:00",
-            activity: "District Six Museum",
-            description: "Learn about Cape Town’s history and culture."
-        },
-        {
-            time: "12:00",
-            activity: "Cape Malay cooking class",
-            description: "Cook traditional South African dishes."
-        },
-        {
-            time: "18:30",
-            activity: "Braai night",
-            description: "Enjoy a classic South African barbecue experience."
-        }
-        ]
-    },
-
-    {
-        day: 8,
-        title: "Relax & Departure",
-        activities: [
-        {
-            time: "08:00",
-            activity: "Sea Point promenade walk",
-            description: "Enjoy a peaceful morning by the ocean."
-        },
-        {
-            time: "11:00",
-            activity: "Last-minute shopping",
-            description: "Browse local crafts and souvenirs."
-        },
-        {
-            time: "15:00",
-            activity: "Airport transfer",
-            description: "Depart Cape Town with unforgettable memories."
-        }
-        ]
+// ── Hero section ─────────────────────────────────────────────
+function renderHero(p) {
+    const imgContainer = document.querySelector(".package-img-container");
+    if (p.img_url) {
+        imgContainer.style.cssText += `
+            background-image: url('/${p.img_url}');
+            background-size: cover;
+            background-position: center;
+        `;
     }
-];
 
-const timeline = document.getElementById("timeline");
+    document.querySelector(".package-details h1").textContent = p.title;
+    document.querySelector(".location span").textContent = p.location;
 
-activities.forEach((day) => {
-    const card = document.createElement("div");
-    card.className = "day-card";
-    const activitiesCard = day.activities.map((item) => `
-        <div class="day-activity">
-          <div class="activity-time">${item.time}</div>
-          <div class="divider"></div>
-
-          <div class="activity-content">
-            <h2>${item.activity}</h2>
-            <p>${item.description}</p>
-          </div>
-        </div>
-      `).join("");
-
-      card.innerHTML = `
-        <div class="day-number">${day.day}</div>
-
-        <div class="day-label">Day ${day.day}</div>
-        <h2 class="day-title">${day.title}</h2>
-
-        <div class="activities-count">
-          ${day.activities.length} activities
-        </div>
-
-        ${activitiesCard}
-      `;
-
-      timeline.appendChild(card);
+    const expiry = new Date(p.expiry_date).toLocaleDateString("en-ZA", {
+        year: "numeric", month: "long", day: "numeric"
     });
+    document.querySelector(".expires span").textContent = `Expires ${expiry}`;
+
+    // In stock sticker
+    const inStockEl = document.querySelector(".in-stock");
+    inStockEl.querySelector("span").textContent = p.stock_text;
+    inStockEl.style.display = p.in_stock ? "flex" : "none";
+
+    // Group package sticker
+    const groupEl = document.querySelector(".group-package");
+    groupEl.style.display = p.is_group_package ? "flex" : "none";
+
+    // Description
+    document.querySelector(".trip-description").textContent =
+        p.description || "No description available.";
+}
+
+// ── Activities timeline ───────────────────────────────────────
+function renderActivities(activities) {
+    const timeline = document.getElementById("timeline");
+    timeline.innerHTML = "";
+
+    if (!activities || activities.length === 0) {
+        timeline.innerHTML = `<p style="color:gray;font-size:14px;">No activities listed.</p>`;
+        return;
+    }
+
+    // Group flat array by day_number
+    const days = {};
+    activities.forEach(a => {
+        if (!days[a.day_number]) days[a.day_number] = [];
+        days[a.day_number].push(a);
+    });
+
+    Object.keys(days).sort((a, b) => a - b).forEach(dayNum => {
+        const list = days[dayNum];
+        const card = document.createElement("div");
+        card.className = "day-card";
+
+        card.innerHTML = `
+            <div class="day-number">${dayNum}</div>
+            <div class="day-label">Day ${dayNum}</div>
+            <div class="activities-count">${list.length} activit${list.length === 1 ? "y" : "ies"}</div>
+            ${list.map(a => `
+                <div class="day-activity">
+                    <div class="activity-time">${a.activity_time || ""}</div>
+                    <div class="divider"></div>
+                    <div class="activity-content">
+                        <h2>${a.activity_name}</h2>
+                        <p>${a.description || ""}</p>
+                    </div>
+                </div>
+            `).join("")}
+        `;
+        timeline.appendChild(card);
+    });
+}
+
+// ── Flights ───────────────────────────────────────────────────
+function renderFlights(flights) {
+    const section = document.querySelector(".flight-card");
+    if (!section) return;
+
+    if (!flights || flights.length === 0) {
+        section.innerHTML = `<p style="color:gray;font-size:14px;">No flights included.</p>`;
+        return;
+    }
+
+    section.innerHTML = flights.map(f => `
+        <div class="flight-top">
+            <h2>${f.airline_name}</h2>
+            <div class="flight-badge">${f.class || "Economy"}</div>
+        </div>
+        <div class="flight-route">
+            <div class="airport">
+                <div class="airport-code">${f.departure_airport}</div>
+                <div style="font-size:12px;color:gray;">${f.departure_datetime || ""}</div>
+            </div>
+            <div class="flight-line"></div>
+            <div class="airport">
+                <div class="airport-code">${f.arrival_airport}</div>
+                <div style="font-size:12px;color:gray;">${f.arrival_datetime || ""}</div>
+            </div>
+        </div>
+    `).join("<hr style='margin:16px 0;border:none;border-top:1px solid #eee;'>");
+}
+
+// ── Restaurants ───────────────────────────────────────────────
+function renderRestaurants(restaurants) {
+    const heading = document.querySelector(".section-title:last-of-type");
+    const card = document.querySelector(".accommodation-card:last-of-type");
+    if (!card) return;
+
+    if (!restaurants || restaurants.length === 0) {
+        card.innerHTML = `<p style="color:gray;font-size:14px;padding:16px;">No dining picks listed.</p>`;
+        return;
+    }
+
+    // Replace the single hardcoded card with all restaurants
+    const container = card.parentNode;
+    card.remove();
+
+    restaurants.forEach(r => {
+        const el = document.createElement("div");
+        el.className = "accommodation-card";
+        el.innerHTML = `
+            <div class="accommodation-img">
+                <img src="${r.img_url ? '/' + r.img_url : 'https://placehold.co/120x100?text=Food'}"
+                     alt="${r.name}"
+                     onerror="this.src='https://placehold.co/120x100?text=Food'">
+            </div>
+            <div class="accommodation-content">
+                <div class="accommodation-top">
+                    <div>
+                        <div class="accommodation-type">${r.type || "RESTAURANT"}</div>
+                        <div class="accommodation-name">${r.name}</div>
+                    </div>
+                    <div class="accommodation-rating">★ ${r.rating || "N/A"}</div>
+                </div>
+                <p class="accommodation-description">${r.details || ""}</p>
+            </div>
+        `;
+        container.appendChild(el);
+    });
+}
+
+// ── Reviews ───────────────────────────────────────────────────
+function renderReviews(reviews) {
+    const section = document.getElementById("reviews-section");
+    if (!section) return;
+    section.innerHTML = "";
+
+    if (!reviews || reviews.length === 0) {
+        section.innerHTML = `<p style="color:gray;font-size:14px;">No reviews yet.</p>`;
+        return;
+    }
+
+    reviews.forEach(r => {
+        const initials = (r.traveller_name || "?")
+            .split(" ").map(w => w[0]).join("").toUpperCase().slice(0, 2);
+
+        const stars = "★".repeat(r.rating) + "☆".repeat(5 - r.rating);
+        const date = new Date(r.review_date).toLocaleDateString("en-ZA", {
+            year: "numeric", month: "short", day: "numeric"
+        });
+
+        const card = document.createElement("div");
+        card.className = "review-card";
+        card.innerHTML = `
+            <div class="review-top">
+                <div class="avatar">${initials}</div>
+                <div>
+                    <div class="review-name">${r.traveller_name || "Anonymous"}</div>
+                    <div class="review-meta">
+                        <span class="review-stars">${stars}</span> · ${date}
+                    </div>
+                </div>
+            </div>
+            <div class="review-text">${r.comment || "No comment provided."}</div>
+        `;
+        section.appendChild(card);
+    });
+}
+
+// ── Sidebar ───────────────────────────────────────────────────
+function renderSidebar(p) {
+    const priceEl = document.querySelector(".sidebar-price");
+    if (priceEl) {
+        priceEl.innerHTML = `R${parseFloat(p.price).toLocaleString("en-ZA")} <span>/ person</span>`;
+    }
+}
+
+// ── Book & Favourite buttons ──────────────────────────────────
+const bookBtn = document.querySelector(".book-btn");
+if (bookBtn) {
+    bookBtn.addEventListener("click", () => {
+        window.location.href = `/traveller/booking.php?package_id=${id}`;
+    });
+}
+
+const favBtn = document.querySelector(".fav-btn");
+if (favBtn) {
+    favBtn.addEventListener("click", () => {
+        const apiKey = document.cookie.match(/apiKey=([^;]+)/)?.[1];
+        if (!apiKey) { 
+            window.location.href = "/login.html"; 
+            return; 
+        }
+
+        favBtn.textContent = "Saving...";
+        favBtn.disabled = true;
+
+        fetch("/api.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ 
+                type:       "AddFavourite", 
+                api_key:    apiKey, 
+                package_id: id 
+            })
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.status === "success") {
+                favBtn.textContent = "♥ Saved to Favourites";
+                favBtn.style.color = "pink";
+            } else {
+                favBtn.textContent = "Add to favourites";
+                favBtn.disabled = false;
+                alert(data.data || data.message || "Could not save.");
+            }
+        })
+        .catch(() => {
+            favBtn.textContent = "Add to favourites";
+            favBtn.disabled = false;
+            alert("Server error. Please try again.");
+        });
+    });
+}
+loadPackage();

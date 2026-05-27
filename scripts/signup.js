@@ -159,18 +159,20 @@ form.addEventListener("submit", (e) => {
     .then(data => {
         if (data.status === "success") {
             localStorage.setItem('user', JSON.stringify({
+                fname: data.data.username.split(" ")[0],
+                apikey: data.data.apikey,
+                email: data.data.email,
                 username: formData.username,
                 user_type: formData.user_type
             }));
-            alert("Registration works");//For testing purposes
-            window.location.href = "login.html";
+            window.location.href = "/traveller/";
         } else {
-            alert(data.message || "Registration failed");//for testing purposes
+            passwordError.textContent = data.data;
         }
     })
     .catch(err => {
         console.error(err);
-        alert("Error connecting to server.");///catch stmt
+        alert("Error connecting to server.");///catch stmtgit
     });
 });
 

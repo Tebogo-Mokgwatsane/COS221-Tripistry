@@ -73,7 +73,12 @@ function checkBooking()
         }
     };
 
-    req.open("POST","../api.php", true);
+
+    req.open("POST","/api.php", true);
+
+
+   
+
     req.setRequestHeader("Content-Type", "application/json");
     var body = {
         type: "CheckBooking",
@@ -82,14 +87,19 @@ function checkBooking()
     };
     req.send(JSON.stringify(body));
 }
-function confirmBooking()
+
+    function confirmBooking()
 {
+    if (!user || !user.email) {
+        window.location.href = "/login.html";
+        return;
+    }
+
     var quantity = Number(document.getElementById("quantity").value);
     var response = document.getElementById("response");
     var paymentLink = document.getElementById("paymentLink");
 
     paymentLink.style.display = "none";
-
 
     if (quantity <= 0)
     {
@@ -97,12 +107,14 @@ function confirmBooking()
         response.style.color = "red";
         return;
     }
+
     if (bookingAvailable == false)
     {
         response.textContent = "Please check package availability first.";
         response.style.color = "red";
         return;
     }
+
     var req = new XMLHttpRequest();
     req.onreadystatechange = function()
     {
@@ -115,20 +127,23 @@ function confirmBooking()
 
                 if (ob.status == "success")
                 {
-                    response.textContent = "Booking successful. You can now proceed to payment.";
+                    response.textContent = "✓ Booking Confirmed! You can now proceed to payment.";
                     response.style.color = "green";
+                    response.style.fontWeight = "bold";
+                    response.style.fontSize = "18px";
                     paymentLink.style.display = "block";
 
-                    var booking=ob.data.Booking_id;
+                    var booking = ob.data.Booking_id;
                     localStorage.setItem("bookingResponse", JSON.stringify(ob));
-                    localStorage.setItem("bookingTotalPrice",ob.data.total_price);
-                    localStorage.setItem("Booking_id",booking);
-                    
+                    localStorage.setItem("bookingTotalPrice", ob.data.total_price);
+                    localStorage.setItem("Booking_id", booking);
                 }
                 else
                 {
-                    response.textContent = ob.message;
+                    response.textContent = ob.data || ob.message || "Booking failed.";
                     response.style.color = "red";
+                    response.style.fontWeight = "normal";
+                    response.style.fontSize = "16px";
                     paymentLink.style.display = "none";
                 }
             }
@@ -137,7 +152,7 @@ function confirmBooking()
                 try
                 {
                     var errorOb = JSON.parse(req.responseText);
-                    response.textContent = errorOb.message;
+                    response.textContent = errorOb.data || errorOb.message || "Booking failed.";
                 }
                 catch(e)
                 {
@@ -145,17 +160,25 @@ function confirmBooking()
                 }
 
                 response.style.color = "red";
+                response.style.fontWeight = "normal";
+                response.style.fontSize = "16px";
                 paymentLink.style.display = "none";
             }
         }
     };
-    req.open("POST","../api.php", true);
+
+
+    req.open("POST", "/api.php", true);
+
+    req.open("POST", "/api.php", true);
+
     req.setRequestHeader("Content-Type", "application/json");
+
     var body = {
-        type: "Booking",
-        Email: user.email,
+        type:       "Booking",
+        Email:      user.email,
         package_id: package_id,
-        Quantity: quantity
+        Quantity:   quantity
     };
 
     req.send(JSON.stringify(body));
@@ -182,7 +205,9 @@ function packageInfo()
                 {
                     title.textContent = ob.data.title;
                     description.textContent = ob.data.description;
-                    image.src = ob.data.img_url || 'default-placeholder.png';
+
+                    image.src = "/" +ob.data.img_url;
+
                     image.alt = ob.data.title;
                 }
                 else
@@ -211,7 +236,11 @@ function packageInfo()
         }
     };
 
-    req.open("POST", "../api.php", true);
+
+    req.open("POST", "/api.php", true);
+
+
+  
     req.setRequestHeader("Content-Type", "application/json");
 
     var body = 
